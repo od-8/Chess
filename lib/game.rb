@@ -7,4 +7,17 @@ class Game
     @player2 = Player.new(name2, "black")
     @board = Board.new
   end
+
+  def take_a_go
+    puts "Input position"
+    input = gets.chomp.downcase
+
+    board.move(to_coordinate(input[0]), input[1].to_i - 1)
+  end
+
+  def to_coordinate(letter)
+    alphabet = ("a".."z").to_a
+
+    alphabet.find_index(letter)
+  end
 end

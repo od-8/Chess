@@ -16,22 +16,31 @@ class Board
     add_peices
   end
 
-  def print_board # rubocop:disable Metrics/MethodLength
+  def print_board # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
     puts ""
-    puts "+---+---+---+---+---+---+---+---+"
-    board.reverse.each do |row|
+    puts "  +---+---+---+---+---+---+---+---+"
+    board.reverse.each_with_index do |row, index|
+      print "#{8 - index} |"
       row.each do |peice|
-        print "| #{peice.peice} " unless peice.nil?
-        print "|   " if peice.nil?
+        print " #{peice.peice} |" unless peice.nil?
+        print "   |" if peice.nil?
       end
-      print "|"
       puts ""
-      puts "+---+---+---+---+---+---+---+---+"
+      puts "  +---+---+---+---+---+---+---+---+"
     end
+    puts "    a   b   c   d   e   f   g   h"
     puts ""
   end
 
   def legal_position(row, column, color)
     true if board[row][column].nil? || board[row][column].color != color
+  end
+
+  def move(row, column)
+    peice = board[column][row]
+    p column
+    p row
+
+    @board = peice.move(row, column, peice, @board)
   end
 end
