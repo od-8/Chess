@@ -8,18 +8,20 @@ class Game
     @board = Board.new
   end
 
-  def take_a_go
+  def take_a_go # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
     3.times do
-    board.print_board
-    print "Input position of the peice you want to move: ".colorize(:red)
-    peice_position = gets.chomp.downcase
-    puts ""
-    print "Input position you would like to move this peice: "
-    move_position = gets.chomp.downcase
-    peice_cords = to_coordinate(peice_position)
-    move_cords = to_coordinate(move_position)
+      board.print_board
+      print "Input position of the peice you want to move: ".colorize(:green)
+      peice_position = gets.chomp.downcase
+      puts ""
+      print "Input position you would like to move this peice: ".colorize(:green)
+      move_position = gets.chomp.downcase
+      peice_cords = to_coordinate(peice_position)
+      move_cords = to_coordinate(move_position)
 
-    board.move(peice_cords, move_cords)
+      board.move(peice_cords, move_cords)
+
+      print "\e[23A\e[J"
     end
   end
 

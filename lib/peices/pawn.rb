@@ -10,7 +10,7 @@ class Pawn
   end
 
   def move(peice_cords, move_cords, board, peice)
-    if legal_move?(peice_cords, move_cords)
+    if legal_move?(peice_cords, move_cords) && unocupided_square?(move_cords[0], move_cords[1], peice, board)
       board[move_cords[0]][move_cords[1]] = peice
       board[peice_cords[0]][peice_cords[1]] = nil
     else
@@ -22,6 +22,12 @@ class Pawn
   def legal_move?(peice_cords, move_cords)
     return true if (move_cords[0] == peice_cords[0] + 1) ||
                    move_cords[0] == peice_cords[0] + 2 && peice_cords[0] == 1
+
+    false
+  end
+
+  def unocupided_square?(row, column, peice, board)
+    return true unless board[row][column]&.color == peice.color
 
     false
   end
