@@ -36,11 +36,11 @@ class Board
     true if board[row][column].nil? || board[row][column].color != color
   end
 
-  def move(row, column)
-    peice = board[column][row]
-    p column
-    p row
+  def move(peice_cords, move_cords)
+    row = peice_cords[0]
+    column = peice_cords[1]
+    peice = board[row][column]
 
-    @board = peice.move(row, column, peice, @board)
+    @board = peice.move(peice_cords, move_cords, @board, peice)
   end
 end

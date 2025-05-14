@@ -9,10 +9,20 @@ class Pawn
     @peice = peice
   end
 
-  def move(row, column, peice, board)
-    board[column + 1][row] = peice
-    # p board[column][row + 1]
-    board[column][row] = nil
+  def move(peice_cords, move_cords, board, peice)
+    if legal_move?(peice_cords, move_cords)
+      board[move_cords[0]][move_cords[1]] = peice
+      board[peice_cords[0]][peice_cords[1]] = nil
+    else
+      puts "Invalid move"
+    end
     board
+  end
+
+  def legal_move?(peice_cords, move_cords)
+    return true if (move_cords[0] == peice_cords[0] + 1) ||
+                   move_cords[0] == peice_cords[0] + 2 && peice_cords[0] == 1
+
+    false
   end
 end
