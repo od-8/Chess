@@ -9,16 +9,18 @@ class Pawn
     @symbol = symbol
     @color = color
     @peice = peice
+    @board = nil
   end
 
   def move(peice_cords, move_cords, board, peice)
-    if legal_move?(peice_cords, move_cords, peice) && unocupided_square?(move_cords[0], move_cords[1], peice, board)
-      board[move_cords[0]][move_cords[1]] = peice
-      board[peice_cords[0]][peice_cords[1]] = nil
+    @board = board
+    if legal_move?(peice_cords, move_cords, peice) && unocupided_square?(move_cords[0], move_cords[1], peice)
+      @board[move_cords[0]][move_cords[1]] = peice
+      @board[peice_cords[0]][peice_cords[1]] = nil
     else
       puts "Invalid move"
     end
-    board
+    @board
   end
 
   def legal_move?(peice_cords, move_cords, peice)
@@ -29,8 +31,8 @@ class Pawn
     false
   end
 
-  def unocupided_square?(row, column, peice, board)
-    return true unless board[row][column]&.color == peice.color
+  def unocupided_square?(row, column, peice)
+    return true unless @board[row][column]&.color == peice.color
 
     false
   end
@@ -43,11 +45,17 @@ class Pawn
     if peice.color == "white"
       possible_moves << [x + 1, y] if (x + 1).between?(0, 7) && y.between?(0, 7)
       possible_moves << [x + 2, y] if (x + 2).between?(0, 7) && y.between?(0, 7)
+      possible_moves << [x + 1, y] if (x + 2).between?(0, 7) && y.between?(0, 7) && @board[x + 1][y]&.color == "black"
+      possible_moves << [x + 1, y - 1] if (x + 1).between?(0, 7) && (y - 1).between?(0, 7) && @board[x + 1][y - 1]&.color == "black"
+      possible_moves << [x + 1, y + 1] if (x + 1).between?(0, 7) && (y + 1).between?(0, 7) && @board[x + 1][y + 1]&.color == "black"
     end
 
     if peice.color == "black"
       possible_moves << [x - 1, y] if (x - 1).between?(0, 7) && y.between?(0, 7)
       possible_moves << [x - 2, y] if (x - 2).between?(0, 7) && y.between?(0, 7)
+      possible_moves << [x - 1, y] if (x + 2).between?(0, 7) && y.between?(0, 7) && @board[x - 1][y]&.color == "white"
+      possible_moves << [x - 1, y - 1] if (x + 1).between?(0, 7) && (y - 1).between?(0, 7) && @board[x - 1][y - 1]&.color == "white"
+      possible_moves << [x - 1, y + 1] if (x + 1).between?(0, 7) && (y + 1).between?(0, 7) && @board[x - 1][y + 1]&.color == "white"
     end
 
     possible_moves
