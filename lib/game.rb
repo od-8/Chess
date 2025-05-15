@@ -9,7 +9,7 @@ class Game
   end
 
   def take_a_go # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
-    3.times do
+    10.times do
       board.print_board
       print "Input position of the peice you want to move: ".colorize(:green)
       peice_position = gets.chomp.downcase
@@ -21,7 +21,7 @@ class Game
 
       board.move(peice_cords, move_cords)
 
-      print "\e[23A\e[J"
+      # print "\e[23A\e[J"
     end
   end
 

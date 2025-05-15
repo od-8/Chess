@@ -1,5 +1,8 @@
+require_relative "move_functionality"
+
 # Contains all the methods for the knight peices
 class Knight
+  include MoveFunctions
   attr_accessor :symbol, :peice, :color
 
   def initialize(symbol, color, peice)
@@ -18,14 +21,7 @@ class Knight
     board
   end
 
-  def legal_move?(peice_cords, move_cords)
-    legal_moves = possible_position(peice_cords)
-    return true if legal_moves.include?([move_cords[0], move_cords[1]])
-
-    false
-  end
-
-  def possible_position(cords) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/PerceivedComplexity
+  def possible_positions(cords) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/PerceivedComplexity
     x = cords[0]
     y = cords[1]
     possible_moves = []
@@ -47,11 +43,5 @@ class Knight
     possible_moves << [x + 2, y + 1] if (x + 2).between?(0, 7) && (y + 1).between?(0, 7)
 
     possible_moves
-  end
-
-  def unocupided_square?(row, column, peice, board)
-    return true unless board[row][column]&.color == peice.color
-
-    false
   end
 end
