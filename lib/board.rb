@@ -11,8 +11,8 @@ class Board
   include BoardSetup
   attr_accessor :board
 
-  def initialize
-    @board = Array.new(8) { Array.new(8) }
+  def initialize(board = Array.new(8) { Array.new(8) })
+    @board = board
     add_peices
   end
 
@@ -37,10 +37,18 @@ class Board
   end
 
   def move(peice_cords, move_cords)
-    row = peice_cords[0]
-    column = peice_cords[1]
-    peice = board[row][column]
+    peice = @board[peice_cords[0]][peice_cords[1]]
 
-    @board = peice.move(peice_cords, move_cords, @board, peice)
+    @board = peice.move(@board, peice, peice_cords, move_cords)
+  end
+
+  def valid_move?(cords)
+    return true if cords[0].between?(0, 7) && cords[1].between?(0, 7)
+
+    false
+  end
+
+  def game_over?
+    false
   end
 end

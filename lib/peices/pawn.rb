@@ -1,18 +1,17 @@
-require_relative "move_functionality"
+# require_relative "move_functionality"
 
 # Contains all the methods for the pawn peice
 class Pawn
-  include MoveFunctions
-  attr_accessor :symbol, :peice, :color
+  # include MoveFunctions
+  attr_accessor :peice, :color
 
-  def initialize(symbol, color, peice)
-    @symbol = symbol
-    @color = color
+  def initialize(peice, color)
     @peice = peice
+    @color = color
     @board = nil
   end
 
-  def move(peice_cords, move_cords, board, peice)
+  def move(board, peice, peice_cords, move_cords)
     @board = board
     if legal_move?(peice_cords, move_cords, peice) && unocupided_square?(move_cords[0], move_cords[1], peice)
       @board[move_cords[0]][move_cords[1]] = peice
@@ -24,9 +23,11 @@ class Pawn
   end
 
   def legal_move?(peice_cords, move_cords, peice)
-    legal_moves = possible_positions(peice_cords, peice)
+    legal_moves = possible_positions(peice, peice_cords)
 
-    return true if legal_moves.include?([move_cords[0], move_cords[1]])
+    legal_moves.each do |moves|
+      return true if moves.include?([move_cords[0], move_cords[1]])
+    end
 
     false
   end
@@ -37,27 +38,58 @@ class Pawn
     false
   end
 
-  def possible_positions(cords, peice) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/PerceivedComplexity
-    x = cords[0]
-    y = cords[1]
+  # Returns all possible positions for pawn to go to
+  def possible_positions(peice, peice_cords)
     possible_moves = []
 
     if peice.color == "white"
-      possible_moves << [x + 1, y] if (x + 1).between?(0, 7) && y.between?(0, 7)
-      possible_moves << [x + 2, y] if (x + 2).between?(0, 7) && y.between?(0, 7)
-      possible_moves << [x + 1, y] if (x + 2).between?(0, 7) && y.between?(0, 7) && @board[x + 1][y]&.color == "black"
-      possible_moves << [x + 1, y - 1] if (x + 1).between?(0, 7) && (y - 1).between?(0, 7) && @board[x + 1][y - 1]&.color == "black"
-      possible_moves << [x + 1, y + 1] if (x + 1).between?(0, 7) && (y + 1).between?(0, 7) && @board[x + 1][y + 1]&.color == "black"
+      possible_moves << white_forward(peice_cords)
+      possible_moves << white_take(peice_cords)
+    elsif peice.color == "black"
+      possible_moves << black_forward(peice_cords)
+      possible_moves << black_take(peice_cords)
     end
 
-    if peice.color == "black"
-      possible_moves << [x - 1, y] if (x - 1).between?(0, 7) && y.between?(0, 7)
-      possible_moves << [x - 2, y] if (x - 2).between?(0, 7) && y.between?(0, 7)
-      possible_moves << [x - 1, y] if (x + 2).between?(0, 7) && y.between?(0, 7) && @board[x - 1][y]&.color == "white"
-      possible_moves << [x - 1, y - 1] if (x + 1).between?(0, 7) && (y - 1).between?(0, 7) && @board[x - 1][y - 1]&.color == "white"
-      possible_moves << [x - 1, y + 1] if (x + 1).between?(0, 7) && (y + 1).between?(0, 7) && @board[x - 1][y + 1]&.color == "white"
-    end
+    possible_moves
+  end
 
+  # Forward moves method for white
+  def white_forward(cords)
+    x = cords[0]
+    y = cords[1]
+    possible_moves = []
+    possible_moves << [x + 1, y] if (x + 1).between?(0, 7)
+    possible_moves << [x + 2, y] if (x + 2).between?(0, 7) && x == 1
+    possible_moves
+  end
+
+  # Forward moves method for black
+  def black_forward(cords)
+    x = cords[0]
+    y = cords[1]
+    possible_moves = []
+    possible_moves << [x - 1, y] if (x - 1).between?(0, 7)
+    possible_moves << [x - 2, y] if (x - 2).between?(0, 7) && x == 6
+    possible_moves
+  end
+
+  # Taking method for white peices
+  def white_take(cords) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
+    x = cords[0]
+    y = cords[1]
+    possible_moves = []
+    possible_moves << [x + 1, y - 1] if (x + 1).between?(0, 7) && (y - 1).between?(0, 7) && @board[x + 1][y - 1]&.color == "black"
+    possible_moves << [x + 1, y + 1] if (x + 1).between?(0, 7) && (y + 1).between?(0, 7) && @board[x + 1][y + 1]&.color == "black"
+    possible_moves
+  end
+
+  # Taking method for black peices
+  def black_take(cords) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
+    x = cords[0]
+    y = cords[1]
+    possible_moves = []
+    possible_moves << [x - 1, y - 1]  if (x - 1).between?(0, 7) && (y - 1).between?(0, 7) && @board[x - 1][y - 1]&.color == "white"
+    possible_moves << [x +- 1, y + 1] if (x - 1).between?(0, 7) && (y + 1).between?(0, 7) && @board[x - 1][y + 1]&.color == " white"
     possible_moves
   end
 end

@@ -5,6 +5,6 @@ require "colorize"
 
 game = Game.new("jim", "bob")
 
-game.take_a_go
+game.play_game
 
 game.board.print_board

@@ -3,15 +3,16 @@ require_relative "move_functionality"
 # Contains all the methods for the knight peices
 class Knight
   include MoveFunctions
-  attr_accessor :symbol, :peice, :color
+  attr_accessor :peice, :color
 
-  def initialize(symbol, color, peice)
-    @symbol = symbol
-    @color = color
+  def initialize(peice, color)
     @peice = peice
+    @color = color
+    @board = nil
   end
 
-  def move(peice_cords, move_cords, board, peice)
+  def move(board, peice, peice_cords, move_cords)
+    @board = board
     if legal_move?(peice_cords, move_cords) && unocupided_square?(move_cords[0], move_cords[1], peice, board)
       board[move_cords[0]][move_cords[1]] = peice
       board[peice_cords[0]][peice_cords[1]] = nil
