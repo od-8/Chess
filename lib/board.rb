@@ -16,6 +16,7 @@ class Board
     add_peices
   end
 
+  # Prints the board so it is easy to understand and looks good
   def print_board # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
     puts ""
     puts "  +---+---+---+---+---+---+---+---+"
@@ -32,22 +33,21 @@ class Board
     puts ""
   end
 
-  def legal_position(row, column, color)
-    true if board[row][column].nil? || board[row][column].color != color
-  end
-
+  # Calls the move method on whichever peice is selected
   def move(peice_cords, move_cords)
     peice = @board[peice_cords[0]][peice_cords[1]]
 
     @board = peice.move(@board, peice, peice_cords, move_cords)
   end
 
+  # Makes sure the coordinates are valid
   def valid_move?(cords)
     return true if cords[0].between?(0, 7) && cords[1].between?(0, 7)
 
     false
   end
 
+  # Checks if the game is over
   def game_over?
     false
   end

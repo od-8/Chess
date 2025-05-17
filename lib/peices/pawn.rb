@@ -2,7 +2,6 @@
 
 # Contains all the methods for the pawn peice
 class Pawn
-  # include MoveFunctions
   attr_accessor :peice, :color
 
   def initialize(peice, color)
@@ -13,7 +12,7 @@ class Pawn
 
   def move(board, peice, peice_cords, move_cords)
     @board = board
-    if legal_move?(peice_cords, move_cords, peice) && unocupided_square?(move_cords[0], move_cords[1], peice)
+    if legal_move?(peice_cords, move_cords, peice) && unocupided_square?(move_cords, peice)
       @board[move_cords[0]][move_cords[1]] = peice
       @board[peice_cords[0]][peice_cords[1]] = nil
     else
@@ -25,15 +24,13 @@ class Pawn
   def legal_move?(peice_cords, move_cords, peice)
     legal_moves = possible_positions(peice, peice_cords)
 
-    legal_moves.each do |moves|
-      return true if moves.include?([move_cords[0], move_cords[1]])
-    end
+    return true if legal_moves.include?([move_cords[0], move_cords[1]])
 
     false
   end
 
-  def unocupided_square?(row, column, peice)
-    return true unless @board[row][column]&.color == peice.color
+  def unocupided_square?(move_cords, peice)
+    return true unless @board[move_cords[0]][move_cords[1]]&.color == peice.color
 
     false
   end
@@ -43,11 +40,11 @@ class Pawn
     possible_moves = []
 
     if peice.color == "white"
-      possible_moves << white_forward(peice_cords)
-      possible_moves << white_take(peice_cords)
+      white_forward(peice_cords).each { |cords| possible_moves << cords }
+      white_take(peice_cords).each { |cords| possible_moves << cords }
     elsif peice.color == "black"
-      possible_moves << black_forward(peice_cords)
-      possible_moves << black_take(peice_cords)
+      black_forward(peice_cords).each { |cords| possible_moves << cords }
+      black_take(peice_cords).each { |cords| possible_moves << cords }
     end
 
     possible_moves

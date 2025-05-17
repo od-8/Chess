@@ -21,12 +21,12 @@ class Game
       coordinates = player_turn
 
       board.move(coordinates[0], coordinates[1])
-      print "\e[24A\e[J"
+      # print "\e[22A\e[J"
       board.print_board
     end
   end
 
-  # This method turns the user input into usable coordiantes and checks if their valid
+  # This method turns the user input into usable coordiantes and checks if they're valid
   def player_turn
     coordinates = []
 

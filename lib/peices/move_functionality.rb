@@ -8,8 +8,8 @@ module MoveFunctions
     false
   end
 
-  def unocupided_square?(row, column, peice, board)
-    return true unless board[row][column]&.color == peice.color
+  def unocupided_square?(move_cords, peice)
+    return true unless @board[move_cords[0]][move_cords[1]]&.color == peice.color
 
     false
   end

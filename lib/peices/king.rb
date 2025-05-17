@@ -13,13 +13,13 @@ class King
 
   def move(board, peice, peice_cords, move_cords)
     @board = board
-    if legal_move?(peice_cords, move_cords) && unocupided_square?(move_cords[0], move_cords[1], peice, board)
-      board[move_cords[0]][move_cords[1]] = peice
-      board[peice_cords[0]][peice_cords[1]] = nil
+    if legal_move?(peice_cords, move_cords) && unocupided_square?(move_cords, peice)
+      @board[move_cords[0]][move_cords[1]] = peice
+      @board[peice_cords[0]][peice_cords[1]] = nil
     else
       puts "Invalid move"
     end
-    board
+    @board
   end
 
   def possible_positions(cords) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/PerceivedComplexity
@@ -28,16 +28,16 @@ class King
     possible_moves = []
 
     # All possible moves for king forward
-    possible_moves << [x + 1, y] if (x + 1).between?(0, 7) && y.between?(0, 7)
+    possible_moves << [x + 1, y] if (x + 1).between?(0, 7)
     possible_moves << [x + 1, y - 1] if (x + 1).between?(0, 7) && (y - 1).between?(0, 7)
     possible_moves << [x + 1, y + 1] if (x + 1).between?(0, 7) && (y + 1).between?(0, 7)
 
     # All possible moves for king sideways
-    possible_moves << [x, y - 1] if x.between?(0, 7) && (y - 1).between?(0, 7)
-    possible_moves << [x, y + 1] if x.between?(0, 7) && (y + 1).between?(0, 7)
+    possible_moves << [x, y - 1] if (y - 1).between?(0, 7)
+    possible_moves << [x, y + 1] if (y + 1).between?(0, 7)
 
     # All possible moves for king backwards
-    possible_moves << [x - 1, y] if (x - 1).between?(0, 7) && y.between?(0, 7)
+    possible_moves << [x - 1, y] if (x - 1).between?(0, 7)
     possible_moves << [x - 1, y - 1] if (x - 1).between?(0, 7) && (y - 1).between?(0, 7)
     possible_moves << [x - 1, y + 1] if (x - 1).between?(0, 7) && (y + 1).between?(0, 7)
 
