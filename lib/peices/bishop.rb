@@ -20,9 +20,9 @@ class Bishop
   end
 
   def legal_move?(peice_cords, move_cords)
-    result = possible_positions(peice_cords, move_cords)
+    legal_moves = possible_positions(peice_cords)
 
-    return true if result == true
+    return true if legal_moves.include?([move_cords[0], move_cords[1]])
 
     false
   end
@@ -33,52 +33,74 @@ class Bishop
     false
   end
 
-  def possible_positions(peice_cords, move_cords)
-    left_up = left_upwards?(peice_cords, move_cords)
-    right_up = right_upwards?(peice_cords, move_cords)
-    left_down = left_downwards?(peice_cords, move_cords)
-    right_down = right_downwards?(peice_cords, move_cords)
+  def possible_positions(peice_cords)
+    all_possible_moves = []
 
-    true if [left_up, right_up, left_down, right_down].any? { |result| result == true }
+    left_upwards_positions(peice_cords).each { |cords| all_possible_moves << cords }
+    right_upwards_positions(peice_cords).each { |cords| all_possible_moves << cords }
+    left_downwards_positions(peice_cords).each { |cords| all_possible_moves << cords }
+    right_downwards_positions(peice_cords).each { |cords| all_possible_moves << cords }
+
+    all_possible_moves
   end
 
-  # Method that allows bishop to move upwards to the left
-  def left_upwards?(peice_cords, move_cords)
+  # Returns all bishop moves upwards and to the left [x + 1, y - 1]
+  def left_upwards_positions(peice_cords) # rubocop:disable Metrics/AbcSize
+    positions = []
     loop do
       peice_cords = [peice_cords[0] + 1, peice_cords[1] - 1]
-      return true if peice_cords == move_cords
-      break unless @board[peice_cords[0]][peice_cords[1]].nil?
+      # Breaks if it reaches target point or reaches one of its own color peices
+      break if @board[peice_cords[0]][peice_cords[1]]&.color == color
+
+      positions << peice_cords
+      # Breaks if the peice is not nil and is not the same color, e.x if white bishop, breaks if color of peice is black
+      break if !@board[peice_cords[0]][peice_cords[1]].nil? && @board[peice_cords[0]][peice_cords[1]]&.color != color
     end
-    false
+    positions
   end
 
-  # Method that allows bishop to move upwards to the right
-  def right_upwards?(peice_cords, move_cords)
+  # Returns all bishop moves upwards and to the right [x + 1, y + 1]
+  def right_upwards_positions(peice_cords) # rubocop:disable Metrics/AbcSize
+    positions = []
     loop do
       peice_cords = [peice_cords[0] + 1, peice_cords[1] + 1]
-      return true if peice_cords == move_cords
-      break unless @board[peice_cords[0]][peice_cords[1]].nil?
+      # Breaks if it reaches target point or reaches one of its own color peices
+      break if peice_cords[0] > 7 || @board[peice_cords[0]][peice_cords[1]]&.color == color
+
+      positions << peice_cords
+      # Breaks if the peice is not nil and is not the same color, e.x if white bishop, breaks if color of peice is black
+      break if !@board[peice_cords[0]][peice_cords[1]].nil? && @board[peice_cords[0]][peice_cords[1]]&.color != color
     end
-    false
+    positions
   end
 
-  # Method that allows bishop to move downwards to the left
-  def left_downwards?(peice_cords, move_cords)
+  # Returns all bishop moves downwards and to the left [x - 1, y - 1]
+  def left_downwards_positions(peice_cords) # rubocop:disable Metrics/AbcSize
+    positions = []
     loop do
       peice_cords = [peice_cords[0] - 1, peice_cords[1] - 1]
-      return true if peice_cords == move_cords
-      break unless @board[peice_cords[0]][peice_cords[1]].nil?
+      # Breaks if it reaches target point or reaches one of its own color peices
+      break if @board[peice_cords[0]][peice_cords[1]]&.color == color
+
+      positions << peice_cords
+      # Breaks if the peice is not nil and is not the same color, e.x if white bishop, breaks if color of peice is black
+      break if !@board[peice_cords[0]][peice_cords[1]].nil? && @board[peice_cords[0]][peice_cords[1]]&.color != color
     end
-    false
+    positions
   end
 
-  # Method that allows bishop to move downwards to the right
-  def right_downwards?(peice_cords, move_cords)
+  # # Returns all bishop moves downwards and to the right [x - 1, y + 1]
+  def right_downwards_positions(peice_cords) # rubocop:disable Metrics/AbcSize
+    positions = []
     loop do
       peice_cords = [peice_cords[0] - 1, peice_cords[1] + 1]
-      return true if peice_cords == move_cords
-      break unless @board[peice_cords[0]][peice_cords[1]].nil?
+      # Breaks if it reaches target point or reaches one of its own color peices
+      break if @board[peice_cords[0]][peice_cords[1]]&.color == color
+
+      positions << peice_cords
+      # Breaks if the peice is not nil and is not the same color, e.x if white bishop, breaks if color of peice is black
+      break if !@board[peice_cords[0]][peice_cords[1]].nil? && @board[peice_cords[0]][peice_cords[1]]&.color != color
     end
-    false
+    positions
   end
 end
