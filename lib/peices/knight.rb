@@ -1,4 +1,4 @@
-require_relative "move_functionality"
+require_relative "../helper_methods/peices_helper_methods/move_functionality"
 
 # Contains all the methods for the knight peices
 class Knight

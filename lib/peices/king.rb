@@ -1,4 +1,4 @@
-require_relative "move_functionality"
+require_relative "../helper_methods/peices_helper_methods/move_functionality"
 
 # Contains all the peices for the rook peice
 class King

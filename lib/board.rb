@@ -4,7 +4,7 @@ require_relative "peices/rook"
 require_relative "peices/bishop"
 require_relative "peices/knight"
 require_relative "peices/pawn"
-require_relative "board_setup_module"
+require_relative "helper_methods/board_helper_methods/board_setup_module"
 
 # Contains the board and all of its methods
 class Board

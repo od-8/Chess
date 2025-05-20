@@ -1,5 +1,3 @@
-# require_relative "move_functionality"
-
 # Contains all the methods for the pawn peice
 class Pawn
   attr_accessor :peice, :color
