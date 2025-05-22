@@ -3,7 +3,7 @@ class Player
   attr_accessor :name, :color
 
   def initialize(name, color)
-    @name = name.capitalize
-    @color = color.downcase
+    @name = name
+    @color = color
   end
 end

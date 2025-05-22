@@ -13,12 +13,10 @@ class Knight
 
   def move(board, peice, peice_cords, move_cords)
     @board = board
-    if legal_move?(peice_cords, move_cords) && unocupided_square?(move_cords, peice)
-      @board[move_cords[0]][move_cords[1]] = peice
-      @board[peice_cords[0]][peice_cords[1]] = nil
-    else
-      puts "Invalid move"
-    end
+    return "invalid" unless legal_move?(peice_cords, move_cords) && unocupided_square?(move_cords, peice)
+
+    @board[move_cords[0]][move_cords[1]] = peice
+    @board[peice_cords[0]][peice_cords[1]] = nil
     @board
   end
 

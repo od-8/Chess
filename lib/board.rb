@@ -42,13 +42,15 @@ class Board
 
   # Makes sure the coordinates are valid
   def valid_move?(cords)
-    return true if cords[0].between?(0, 7) && cords[1].between?(0, 7)
+    letter = cords[0]
+    number = cords[1].to_i - 1
+    return true if letter.between?("a", "h") && number.between?(0, 7)
 
     false
   end
 
-  # Checks if the game is over
-  def game_over?
+  # Checks if it is checkmate
+  def checkmate?
     false
   end
 end
