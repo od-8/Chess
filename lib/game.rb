@@ -23,7 +23,7 @@ class Game
       coordinates = legal_inputs
 
       board.move(coordinates[0], coordinates[1])
-      print "\e[#{coordinates[2]}A\e[J"
+      # print "\e[#{coordinates[2]}A\e[J"
       board.print_board
     end
   end

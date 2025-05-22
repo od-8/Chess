@@ -1,8 +1,13 @@
 require_relative "../helper_methods/peices_helper_methods/move_functionality"
+require_relative "../helper_methods/peices_helper_methods/pawn_move_functionality"
+require_relative "../helper_methods/peices_helper_methods/knight_move_functionality"
+require_relative "../helper_methods/peices_helper_methods/bishob_move_functionality"
+require_relative "../helper_methods/peices_helper_methods/rook_move_functionality"
 
 # Contains all the peices for the rook peice
 class King
   include MoveFunctions
+  include KnightMoveFunctions
   attr_accessor :peice, :color
 
   def initialize(peice, color)
@@ -42,5 +47,40 @@ class King
     possible_moves << [x - 1, y + 1] if (x - 1).between?(0, 7) && (y + 1).between?(0, 7)
 
     possible_moves
+  end
+
+  def in_check_positions?(cords)
+    true if knight_check?(cords)
+  end
+
+  def pawn_check
+    # do later
+  end
+
+  def knight_check?(peice_cords)
+    positions = knight_possible_positions(peice_cords)
+    p positions
+
+    positions.each do |cords|
+      # if @board[peice_cords[0]][peice_cords[1]]&.color == "white"
+      #   puts "reaches 1"
+      #   return true if @board[cords[0]][cords[1]]&.peice == "\u2658"
+      # end
+      return true if @board[cords[0]][cords[1]]&.peice == "\u2658"
+
+      if @board[peice_cords[0]][peice_cords[1]]&.color == "black"
+        return true if @board[cords[0]][cords[1]]&.peice == "\u265e"
+      end
+    end
+    puts "reachs 2"
+    false
+  end
+
+  def bishop_check?
+    
+  end
+
+  def rook_check?
+    
   end
 end

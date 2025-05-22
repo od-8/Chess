@@ -83,8 +83,8 @@ class Pawn
     x = cords[0]
     y = cords[1]
     possible_moves = []
-    possible_moves << [x - 1, y - 1]  if (x - 1).between?(0, 7) && (y - 1).between?(0, 7) && @board[x - 1][y - 1]&.color == "white"
-    possible_moves << [x +- 1, y + 1] if (x - 1).between?(0, 7) && (y + 1).between?(0, 7) && @board[x - 1][y + 1]&.color == " white"
+    possible_moves << [x - 1, y - 1] if (x - 1).between?(0, 7) && (y - 1).between?(0, 7) && @board[x - 1][y - 1]&.color == "white"
+    possible_moves << [x - 1, y + 1] if (x - 1).between?(0, 7) && (y + 1).between?(0, 7) && @board[x - 1][y + 1]&.color == " white"
     possible_moves
   end
 end

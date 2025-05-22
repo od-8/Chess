@@ -9,6 +9,7 @@ require_relative "helper_methods/board_helper_methods/board_setup_module"
 # Contains the board and all of its methods
 class Board
   include BoardSetup
+  include KnightMoveFunctions
   attr_accessor :board
 
   def initialize(board = Array.new(8) { Array.new(8) })
@@ -38,6 +39,11 @@ class Board
     peice = @board[peice_cords[0]][peice_cords[1]]
 
     @board = peice.move(@board, peice, peice_cords, move_cords)
+
+    if (peice.peice == "\u265a") && peice.in_check_positions?(peice_cords)
+      puts "lets goooo"
+      puts "With great power comes great responsiblity"
+    end
   end
 
   # Makes sure the coordinates are valid
