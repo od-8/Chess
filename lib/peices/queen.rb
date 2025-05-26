@@ -1,11 +1,6 @@
-require_relative "../helper_methods/peices_helper_methods/move_functionality"
-require_relative "../helper_methods/peices_helper_methods/bishob_move_functionality"
-require_relative "../helper_methods/peices_helper_methods/rook_move_functionality"
+
 # Contains all the methods for the queen peice
 class Queen
-  include MoveFunctions
-  include BishopMoveMethods
-  include RookMoveMethods
   attr_accessor :peice, :color
 
   def initialize(peice, color)

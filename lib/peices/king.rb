@@ -1,13 +1,5 @@
-require_relative "../helper_methods/peices_helper_methods/move_functionality"
-require_relative "../helper_methods/peices_helper_methods/pawn_move_functionality"
-require_relative "../helper_methods/peices_helper_methods/knight_move_functionality"
-require_relative "../helper_methods/peices_helper_methods/bishob_move_functionality"
-require_relative "../helper_methods/peices_helper_methods/rook_move_functionality"
-
 # Contains all the peices for the rook peice
 class King
-  include MoveFunctions
-  include KnightMoveFunctions
   attr_accessor :peice, :color
 
   def initialize(peice, color)

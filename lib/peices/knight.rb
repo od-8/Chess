@@ -1,28 +1,21 @@
-require_relative "../helper_methods/peices_helper_methods/move_functionality"
-
 # Contains all the methods for the knight peices
 class Knight
-  include MoveFunctions
   attr_accessor :peice, :color
 
   def initialize(peice, color)
     @peice = peice
     @color = color
-    @board = nil
   end
 
-  def move(board, peice, peice_cords, move_cords)
-    @board = board
-    return "invalid" unless legal_move?(peice_cords, move_cords) && unocupided_square?(move_cords, peice)
+  def legal_move?(_board, _peice, peice_cords, move_cords)
+    legal_moves = possible_positions(peice_cords[0], peice_cords[1])
 
-    @board[move_cords[0]][move_cords[1]] = peice
-    @board[peice_cords[0]][peice_cords[1]] = nil
-    @board
+    return true if legal_moves.include?(move_cords)
+
+    false
   end
 
-  def possible_positions(cords) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/PerceivedComplexity
-    x = cords[0]
-    y = cords[1]
+  def possible_positions(x, y) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity,Naming/MethodParameterName
     possible_moves = []
 
     # All the possible moves above where the night is currently

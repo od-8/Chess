@@ -1,15 +1,14 @@
+require_relative "helper_methods/board_helper_methods/board_setup_module"
 require_relative "peices/king"
 require_relative "peices/queen"
 require_relative "peices/rook"
 require_relative "peices/bishop"
 require_relative "peices/knight"
 require_relative "peices/pawn"
-require_relative "helper_methods/board_helper_methods/board_setup_module"
 
 # Contains the board and all of its methods
 class Board
   include BoardSetup
-  include KnightMoveFunctions
   attr_accessor :board
 
   def initialize(board = Array.new(8) { Array.new(8) })
@@ -36,13 +35,13 @@ class Board
 
   # Calls the move method on whichever peice is selected
   def move(peice_cords, move_cords)
-    peice = @board[peice_cords[0]][peice_cords[1]]
+    piece = @board[peice_cords[0]][peice_cords[1]]
 
-    @board = peice.move(@board, peice, peice_cords, move_cords)
-
-    if (peice.peice == "\u265a") && peice.in_check_positions?(peice_cords)
-      puts "lets goooo"
-      puts "With great power comes great responsiblity"
+    if piece.legal_move?(@board, piece, peice_cords, move_cords) && unnocupied_square?(piece, move_cords)
+      @board[move_cords[0]][move_cords[1]] = piece
+      @board[peice_cords[0]][peice_cords[1]] = nil
+    else
+      puts "Invalid move"
     end
   end
 
@@ -57,6 +56,12 @@ class Board
 
   # Checks if it is checkmate
   def checkmate?
+    false
+  end
+
+  def unnocupied_square?(piece, move_cords)
+    return true unless board[move_cords[0]][move_cords[1]]&.color == piece.color
+
     false
   end
 end

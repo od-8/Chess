@@ -32,6 +32,7 @@ class Game
   def legal_inputs # rubocop:disable Metrics/MethodLength
     invalid_moves = 21
     coordinates = []
+
     loop do
       take_input.each { |cords| coordinates << cords }
       invalid_moves += 2
@@ -41,13 +42,14 @@ class Game
       puts "Input valid positions"
       puts ""
     end
+
     coordinates.map! { |cords| to_coordinate(cords) }
     coordinates << invalid_moves
   end
 
   # Gets the peice the user would like to move and where they would like to move it
   def take_input
-    print " #{current_player.name} ,input position of the peice you would like to move: "
+    print " #{current_player.name}, input position of the peice you would like to move: "
     peice_position = gets.chomp.downcase
     puts ""
     print " #{current_player.name}, input position of where you would like to move that peice: "
