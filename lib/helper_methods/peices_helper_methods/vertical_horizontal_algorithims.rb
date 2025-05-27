@@ -1,5 +1,5 @@
-# Contains the vertical and horizontal methods for the bishop and queen
-
+# Contains the vertical and horizontal algorithims
+# Used for check, rook moving, queen moving
 module VerticalHorizontalAlgorithims
   # All rook moves going straight up
   def upwards_positions(board, x, y) # rubocop:disable Naming/MethodParameterName

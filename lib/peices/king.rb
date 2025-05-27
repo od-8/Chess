@@ -1,3 +1,5 @@
+require_relative "../helper_methods/peices_helper_methods/pawn_capturing"
+
 # Contains all the peices for the rook peice
 class King
   attr_accessor :peice, :color

@@ -1,4 +1,5 @@
-# Contains the diagonal methods for the bishop and queen
+# Contains the diagonal algorithims
+# Used for check, bishop moving, queen moving
 module DiagonalAlgorithims
   # All bishop moves upwards and to the left
   def left_upwards_positions(board, x, y) # rubocop:disable Metrics/AbcSize,Naming/MethodParameterName,Metrics/CyclomaticComplexity

@@ -23,14 +23,14 @@ class Game
       coordinates = legal_inputs
 
       board.move(coordinates[0], coordinates[1])
-      # print "\e[#{coordinates[2]}A\e[J"
+      print "\e[#{coordinates[2]}A\e[J"
       board.print_board
     end
   end
 
   # Checks if the input is valid then turns it into actual coordiantes
   def legal_inputs # rubocop:disable Metrics/MethodLength
-    invalid_moves = 21
+    invalid_moves = 20
     coordinates = []
 
     loop do

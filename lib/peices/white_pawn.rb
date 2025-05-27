@@ -1,5 +1,8 @@
+require_relative "../helper_methods/peices_helper_methods/pawn_capturing"
+
 # Contains all the methods for the white pawns
 class WhitePawn
+  include PawnCapturing
   attr_accessor :peice, :color
 
   def initialize(piece, color)
@@ -20,7 +23,7 @@ class WhitePawn
 
     forward_positions(peice_cords[0], peice_cords[1]).each { |cords| all_possible_moves << cords }
     double_forward_positions(board, peice_cords[0], peice_cords[1]).each { |cords| all_possible_moves << cords }
-    take_positions(board, peice_cords[0], peice_cords[1]).each { |cords| all_possible_moves << cords }
+    white_take_positions(board, peice_cords[0], peice_cords[1]).each { |cords| all_possible_moves << cords }
 
     all_possible_moves
   end
@@ -39,14 +42,5 @@ class WhitePawn
     possible_moves << [x + 2, y] if board[x + 1][y]&.color != color && x == 1
 
     possible_moves
-  end
-
-  def take_positions(board, x, y) # rubocop:disable Naming/MethodParameterName,Metrics/AbcSize
-    all_possible_moves = []
-
-    all_possible_moves << [x + 1, y + 1] if board[x + 1][y + 1]&.color == "black"
-    all_possible_moves << [x + 1, y - 1] if board[x + 1][y - 1]&.color == "black"
-
-    all_possible_moves
   end
 end
