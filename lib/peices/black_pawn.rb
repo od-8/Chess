@@ -1,0 +1,52 @@
+# Contains all the methods for the black pawns
+class BlackPawn
+  attr_accessor :peice, :color
+
+  def initialize(piece, color)
+    @peice = piece
+    @color = color
+  end
+
+  def legal_move?(board, peice_cords, move_cords)
+    legal_moves = possible_positions(board, peice_cords)
+
+    return true if legal_moves.include?(move_cords)
+
+    false
+  end
+
+  def possible_positions(board, peice_cords)
+    all_possible_moves = []
+
+    forward_positions(peice_cords[0], peice_cords[1]).each { |cords| all_possible_moves << cords }
+    double_forward_positions(board, peice_cords[0], peice_cords[1]).each { |cords| all_possible_moves << cords }
+    take_positions(board, peice_cords[0], peice_cords[1]).each { |cords| all_possible_moves << cords }
+
+    all_possible_moves
+  end
+
+  def forward_positions(x, y) # rubocop:disable Naming/MethodParameterName
+    all_possible_moves = []
+
+    all_possible_moves << [x - 1, y] if (x - 1).between?(0, 7)
+
+    all_possible_moves
+  end
+
+  def double_forward_positions(board, x, y) # rubocop:disable Naming/MethodParameterName
+    all_possible_moves = []
+
+    all_possible_moves << [x - 2, y] if board[x - 1][y]&.color != "black" && x == 6
+
+    all_possible_moves
+  end
+
+  def take_positions(board, x, y) # rubocop:disable Naming/MethodParameterName,Metrics/AbcSize
+    all_possible_moves = []
+
+    all_possible_moves << [x - 1, y + 1] if board[x - 1][y + 1]&.color == "white"
+    all_possible_moves << [x - 1, y - 1] if board[x - 1][y - 1]&.color == "white"
+
+    all_possible_moves
+  end
+end

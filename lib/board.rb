@@ -4,7 +4,8 @@ require_relative "peices/queen"
 require_relative "peices/rook"
 require_relative "peices/bishop"
 require_relative "peices/knight"
-require_relative "peices/pawn"
+require_relative "peices/white_pawn"
+require_relative "peices/black_pawn"
 
 # Contains the board and all of its methods
 class Board
@@ -37,7 +38,7 @@ class Board
   def move(peice_cords, move_cords)
     piece = @board[peice_cords[0]][peice_cords[1]]
 
-    if piece.legal_move?(@board, piece, peice_cords, move_cords) && unnocupied_square?(piece, move_cords)
+    if piece.legal_move?(@board, peice_cords, move_cords) && unnocupied_square?(piece, move_cords)
       @board[move_cords[0]][move_cords[1]] = piece
       @board[peice_cords[0]][peice_cords[1]] = nil
     else

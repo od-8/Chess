@@ -7,7 +7,7 @@ class Knight
     @color = color
   end
 
-  def legal_move?(_board, _peice, peice_cords, move_cords)
+  def legal_move?(_board, peice_cords, move_cords)
     legal_moves = possible_positions(peice_cords[0], peice_cords[1])
 
     return true if legal_moves.include?(move_cords)

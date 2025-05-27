@@ -12,7 +12,7 @@ class Queen
     @color = color
   end
 
-  def legal_move?(board, _peice, peice_cords, move_cords)
+  def legal_move?(board, peice_cords, move_cords)
     legal_moves = possible_positions(board, peice_cords)
 
     return true if legal_moves.include?(move_cords)

@@ -42,8 +42,8 @@ module BoardSetup
 
   def add_pawns
     8.times do |index = 0|
-      board[1][index] = Pawn.new("\u265f", "white")
-      board[6][index] = Pawn.new("\u2659", "black")
+      board[1][index] = WhitePawn.new("\u265f", "white")
+      board[6][index] = BlackPawn.new("\u2659", "black")
     end
   end
 end
