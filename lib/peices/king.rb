@@ -5,23 +5,17 @@ class King
   def initialize(peice, color)
     @peice = peice
     @color = color
-    @board = nil
   end
 
-  def move(board, peice, peice_cords, move_cords)
-    @board = board
-    if legal_move?(peice_cords, move_cords) && unocupided_square?(move_cords, peice)
-      @board[move_cords[0]][move_cords[1]] = peice
-      @board[peice_cords[0]][peice_cords[1]] = nil
-    else
-      puts "Invalid move"
-    end
-    @board
+  def legal_move?(_board, _peice, peice_cords, move_cords)
+    legal_moves = possible_positions(peice_cords[0], peice_cords[1])
+
+    return true if legal_moves.include?(move_cords)
+
+    false
   end
 
-  def possible_positions(cords) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/PerceivedComplexity
-    x = cords[0]
-    y = cords[1]
+  def possible_positions(x, y) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity,Naming/MethodParameterName
     possible_moves = []
 
     # All possible moves for king forward
@@ -42,7 +36,7 @@ class King
   end
 
   def in_check_positions?(cords)
-    true if knight_check?(cords)
+    true if pawn_check(cords) || knight_check?(cords) || diagonal_check?(cords) || vertical_horizontal_check?(cords)
   end
 
   def pawn_check
@@ -50,29 +44,14 @@ class King
   end
 
   def knight_check?(peice_cords)
-    positions = knight_possible_positions(peice_cords)
-    p positions
-
-    positions.each do |cords|
-      # if @board[peice_cords[0]][peice_cords[1]]&.color == "white"
-      #   puts "reaches 1"
-      #   return true if @board[cords[0]][cords[1]]&.peice == "\u2658"
-      # end
-      return true if @board[cords[0]][cords[1]]&.peice == "\u2658"
-
-      if @board[peice_cords[0]][peice_cords[1]]&.color == "black"
-        return true if @board[cords[0]][cords[1]]&.peice == "\u265e"
-      end
-    end
-    puts "reachs 2"
-    false
+    # do later
   end
 
-  def bishop_check?
-    
+  def diagonal_check_check?(peice_cords)
+    # do later
   end
 
-  def rook_check?
-    
+  def vertical_horizontal_check?(peice_cords)
+    # do later
   end
 end

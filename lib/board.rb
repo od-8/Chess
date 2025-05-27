@@ -45,23 +45,15 @@ class Board
     end
   end
 
-  # Makes sure the coordinates are valid
-  def valid_move?(cords)
-    letter = cords[0]
-    number = cords[1].to_i - 1
-    return true if letter.between?("a", "h") && number.between?(0, 7)
+  # Check if squre is occupied by same color peice
+  def unnocupied_square?(piece, move_cords)
+    return true unless board[move_cords[0]][move_cords[1]]&.color == piece.color
 
     false
   end
 
   # Checks if it is checkmate
   def checkmate?
-    false
-  end
-
-  def unnocupied_square?(piece, move_cords)
-    return true unless board[move_cords[0]][move_cords[1]]&.color == piece.color
-
     false
   end
 end

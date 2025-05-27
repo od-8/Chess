@@ -69,8 +69,13 @@ class Game
     [cords[1].to_i - 1, alphabet.find_index(cords[0])]
   end
 
+  # Makes sure the coordinates are valid
   def valid_move?(cords)
-    board.valid_move?(cords)
+    letter = cords[0]
+    number = cords[1].to_i - 1
+    return true if letter.between?("a", "h") && number.between?(0, 7)
+
+    false
   end
 
   def checkmate?
