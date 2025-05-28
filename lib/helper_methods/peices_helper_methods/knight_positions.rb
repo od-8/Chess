@@ -1,7 +1,8 @@
 # Contains the methods for where the knight can go
 # Used for check and knight moving
 module KnightPositions
-  def possible_positions(x, y) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity,Naming/MethodParameterName
+  # All legal moves for the knight peice
+  def possible_knight_moves(x, y) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity,Naming/MethodParameterName
     possible_moves = []
 
     # All the possible moves above where the night is currently

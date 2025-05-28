@@ -3,29 +3,20 @@ require_relative "../helper_methods/peices_helper_methods/diagonal_algorithims"
 # Contains all the methods for the bishop peices
 class Bishop
   include DiagonalAlgorithims
-  attr_accessor :peice, :color
 
-  def initialize(peice, color)
-    @peice = peice
+  attr_accessor :name, :symbol, :color
+
+  def initialize(name, symbol, color)
+    @name = name
+    @symbol = symbol
     @color = color
   end
 
-  def legal_move?(board, peice_cords, move_cords)
-    legal_moves = possible_positions(board, peice_cords)
+  def legal_move?(board, piece_cords, move_cords)
+    legal_moves = possible_bishop_moves(board, piece_cords)
 
     return true if legal_moves.include?(move_cords)
 
     false
-  end
-
-  def possible_positions(board, peice_cords) # rubocop:disable Metrics/AbcSize
-    all_possible_moves = []
-
-    left_upwards_positions(board, peice_cords[0], peice_cords[1]).each { |cords| all_possible_moves << cords }
-    right_upwards_positions(board, peice_cords[0], peice_cords[1]).each { |cords| all_possible_moves << cords }
-    left_downwards_positions(board, peice_cords[0], peice_cords[1]).each { |cords| all_possible_moves << cords }
-    right_downwards_positions(board, peice_cords[0], peice_cords[1]).each { |cords| all_possible_moves << cords }
-
-    all_possible_moves
   end
 end

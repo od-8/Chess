@@ -1,15 +1,27 @@
 # Contains the diagonal algorithims
 # Used for check, bishop moving, queen moving
 module DiagonalAlgorithims
+  # All legal moves a bishop can make
+  def possible_bishop_moves(board, piece_cords) # rubocop:disable Metrics/AbcSize
+    possible_moves = []
+
+    left_upwards_positions(board, piece_cords[0], piece_cords[1]).each { |cords| possible_moves << cords }
+    right_upwards_positions(board, piece_cords[0], piece_cords[1]).each { |cords| possible_moves << cords }
+    left_downwards_positions(board, piece_cords[0], piece_cords[1]).each { |cords| possible_moves << cords }
+    right_downwards_positions(board, piece_cords[0], piece_cords[1]).each { |cords| possible_moves << cords }
+
+    possible_moves
+  end
+
   # All bishop moves upwards and to the left
   def left_upwards_positions(board, x, y) # rubocop:disable Metrics/AbcSize,Naming/MethodParameterName,Metrics/CyclomaticComplexity
     positions = []
 
     loop do
-      peice_cords = [x += 1, y -= 1]
+      piece_cords = [x += 1, y -= 1]
       break if x > 7 || y.negative? || board[x][y]&.color == color
 
-      positions << peice_cords
+      positions << piece_cords
       break if !board[x][y].nil? && board[x][y]&.color != color
     end
 
@@ -21,10 +33,10 @@ module DiagonalAlgorithims
     positions = []
 
     loop do
-      peice_cords = [x += 1, y += 1]
+      piece_cords = [x += 1, y += 1]
       break if x > 7 || y > 7 || board[x][y]&.color == color
 
-      positions << peice_cords
+      positions << piece_cords
       break if !board[x][y].nil? && board[x][y]&.color != color
     end
 
@@ -36,10 +48,10 @@ module DiagonalAlgorithims
     positions = []
 
     loop do
-      peice_cords = [x -= 1, y -= 1]
+      piece_cords = [x -= 1, y -= 1]
       break if x.negative? || y.negative? || board[x][y]&.color == color
 
-      positions << peice_cords
+      positions << piece_cords
       break if !board[x][y].nil? && board[x][y]&.color != color
     end
 
@@ -51,10 +63,10 @@ module DiagonalAlgorithims
     positions = []
 
     loop do
-      peice_cords = [x -= 1, y += 1]
+      piece_cords = [x -= 1, y += 1]
       break if x.negative? || y > 7 || board[x][y]&.color == color
 
-      positions << peice_cords
+      positions << piece_cords
       break if !board[x][y].nil? && board[x][y]&.color != color
     end
 

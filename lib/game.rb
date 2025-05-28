@@ -2,7 +2,7 @@
 class Game
   attr_accessor :board, :player1, :player2, :current_player
 
-  def initialize(name1 = "player1", name2 = "player2")
+  def initialize(name1 = "Jim", name2 = "John")
     @player1 = Player.new(name1, "white")
     @player2 = Player.new(name2, "black")
     @board = Board.new
@@ -23,7 +23,7 @@ class Game
       coordinates = legal_inputs
 
       board.move(coordinates[0], coordinates[1])
-      print "\e[#{coordinates[2]}A\e[J"
+      # print "\e[#{coordinates[2]}A\e[J"  # Will be used later for printing nicely
       board.print_board
     end
   end
@@ -37,12 +37,14 @@ class Game
       take_input.each { |cords| coordinates << cords }
       invalid_moves += 2
 
+      # Checks to make sure both of the coordinates are valid
       break if valid_move?(coordinates[0]) && valid_move?(coordinates[1])
 
       puts "Input valid positions"
       puts ""
     end
 
+    # Turns the coordinates into actual, usable coordinates, [a, 1] becomes [0, 0]
     coordinates.map! { |cords| to_coordinate(cords) }
     coordinates << invalid_moves
   end
@@ -50,19 +52,20 @@ class Game
   # Gets the peice the user would like to move and where they would like to move it
   def take_input
     print " #{current_player.name}, input position of the peice you would like to move: "
-    peice_position = gets.chomp.downcase
+    piece_cords = gets.chomp.downcase
     puts ""
     print " #{current_player.name}, input position of where you would like to move that peice: "
-    move_position = gets.chomp.downcase
+    move_cords = gets.chomp.downcase
 
-    [peice_position, move_position]
+    [piece_cords, move_cords] # Coordiantes of the peice the player is moving and where they are moving it to
   end
 
+  # Updates turn from player 1 to player 2
   def update_turn
     @current_player = current_player == player1 ? player2 : player1
   end
 
-  # Turns coordinates like a1 into [0, 0]
+  # Turns coordinates like [a, 1] into [0, 0]
   def to_coordinate(cords)
     alphabet = ("a".."h").to_a
 

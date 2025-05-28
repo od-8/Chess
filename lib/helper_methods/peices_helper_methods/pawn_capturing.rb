@@ -1,6 +1,7 @@
 # Contains the methods for pawn capturing
 # Used for check and pawn capturing
 module PawnCapturing
+  # Allows white pawn to take up and across from itself
   def white_take_positions(board, x, y) # rubocop:disable Naming/MethodParameterName,Metrics/AbcSize
     all_possible_moves = []
 
@@ -10,6 +11,7 @@ module PawnCapturing
     all_possible_moves
   end
 
+  # Allows black pawn to take up and across from itself
   def black_take_positions(board, x, y) # rubocop:disable Naming/MethodParameterName,Metrics/AbcSize
     all_possible_moves = []
 
