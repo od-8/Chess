@@ -89,22 +89,7 @@ class Board
   end
 
   def in_check(cords)
-    puts "CHECK!" if knight_check?(cords)
-  end
-
-  # Checks if king is in check from kngiht
-  def knight_check?(king_cords) # rubocop:disable Metrics/AbcSize
-    knight_check_positions = possible_knight_moves(king_cords[1], king_cords[0])
-    king = board[king_cords[0]][king_cords[1]]
-
-    # Takes the current position of the king and check if there are any knight checking it
-    knight_check_positions.each do |check_position|
-      piece = board[check_position[0]][check_position[1]]
-
-      return true if piece&.name == "knight" && king.color != piece.color
-    end
-
-    false
+    board[cords[0]][cords[1]].in_check?(board, cords)
   end
 
   # To do

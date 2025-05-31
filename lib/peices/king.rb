@@ -45,4 +45,37 @@ class King
 
     possible_moves
   end
+
+  def in_check?(board, cords)
+    puts "CHECK" if knight_check?(board, cords) || bishop_check?(board, cords)
+  end
+
+  # Checks if king is in check from kngiht
+  def knight_check?(board, king_cords)
+    knight_check_positions = possible_knight_moves(king_cords[0], king_cords[1])
+    king = board[king_cords[0]][king_cords[1]]
+
+    # Takes the current position of the king and check if there are any knight checking it
+    knight_check_positions.each do |check_position|
+      piece = board[check_position[0]][check_position[1]]
+
+      return true if piece&.name == "knight" && king.color != piece.color
+    end
+
+    false
+  end
+
+  # Checks if king is in check from bishop
+  def bishop_check?(board, king_cords)
+    bishop_check_positions = possible_bishop_moves(board, king_cords)
+    king = board[king_cords[0]][king_cords[1]]
+
+    bishop_check_positions.each do |check_position|
+      piece = board[check_position[0]][check_position[1]]
+
+      return true if piece&.name == "bishop" && king.color != piece.color
+    end
+
+    false
+  end
 end
