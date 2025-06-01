@@ -47,7 +47,9 @@ class King
   end
 
   def in_check?(board, cords)
-    puts "CHECK" if knight_check?(board, cords) || bishop_check?(board, cords)
+    if pawn_check?(board, cords) || knight_check?(board, cords) || diagonal_check?(board, cords) || inline_check?(board, cords) # rubocop:disable Layout/LineLength
+      puts "CHECK muthapucka"
+    end
   end
 
   # Checks if king is in check from kngiht
@@ -66,14 +68,44 @@ class King
   end
 
   # Checks if king is in check from bishop
-  def bishop_check?(board, king_cords)
-    bishop_check_positions = possible_bishop_moves(board, king_cords)
+  def diagonal_check?(board, king_cords)
+    diagonal_check_positions = possible_bishop_moves(board, king_cords)
     king = board[king_cords[0]][king_cords[1]]
 
-    bishop_check_positions.each do |check_position|
+    diagonal_check_positions.each do |check_position|
       piece = board[check_position[0]][check_position[1]]
 
-      return true if piece&.name == "bishop" && king.color != piece.color
+      return true if %w[bishop queen].include?(piece&.name) && king.color != piece.color
+    end
+
+    false
+  end
+
+  def inline_check?(board, king_cords)
+    inline_check_positions = possible_rook_moves(board, king_cords)
+    king = board[king_cords[0]][king_cords[1]]
+
+    inline_check_positions.each do |check_position|
+      piece = board[check_position[0]][check_position[1]]
+
+      return true if %w[rook queen].include?(piece&.name) && king.color != piece.color
+    end
+
+    false
+  end
+
+  def pawn_check?(board, king_cords) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+    king = board[king_cords[0]][king_cords[1]]
+    pawn_check_positions = if king&.color == "white"
+                             white_take_positions(board, king_cords[0], king_cords[1])
+                           else
+                             black_take_positions(board, king_cords[0], king_cords[1])
+                           end
+
+    pawn_check_positions.each do |check_position|
+      piece = board[check_position[0]][check_position[1]]
+
+      return true if piece&.name == "pawn" && king.color != piece.color
     end
 
     false

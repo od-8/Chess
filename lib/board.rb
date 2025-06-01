@@ -1,11 +1,4 @@
-# Peice move functionality
 require_relative "helper_methods/board_helper_methods/board_setup_module"
-require_relative "helper_methods/peices_helper_methods/vertical_horizontal_algorithims"
-require_relative "helper_methods/peices_helper_methods/diagonal_algorithims"
-require_relative "helper_methods/peices_helper_methods/knight_positions"
-require_relative "helper_methods/peices_helper_methods/pawn_capturing"
-
-# Peices
 require_relative "peices/king"
 require_relative "peices/queen"
 require_relative "peices/rook"
@@ -17,11 +10,6 @@ require_relative "peices/black_pawn"
 # Contains the board and all of its methods
 class Board
   include BoardSetup
-
-  include VerticalHorizontalAlgorithims
-  include DiagonalAlgorithims
-  include KnightPositions
-  include PawnCapturing
 
   attr_accessor :board, :white_king_cords, :black_king_cords
 
@@ -52,9 +40,6 @@ class Board
   def move(piece_cords, move_cords) # rubocop:disable Metrics/AbcSize
     piece = board[piece_cords[0]][piece_cords[1]] # Gets the peice the player would like to move
 
-    in_check(white_king_cords)
-    in_check(black_king_cords)
-
     # Checks if the peice can move there and it isnt occupied by a friendly, if so it moves there
     if piece.legal_move?(board, piece_cords, move_cords) && unnocupied_square?(piece, move_cords)
 
@@ -67,6 +52,9 @@ class Board
     else
       puts "Invalid move"
     end
+
+    in_check(white_king_cords)
+    in_check(black_king_cords)
   end
 
   # Check if squre is occupied by same color peice
@@ -91,9 +79,4 @@ class Board
   def in_check(cords)
     board[cords[0]][cords[1]].in_check?(board, cords)
   end
-
-  # To do
-  # - Check from bishop
-  # - Check from Rook
-  # - Check from Pawn
 end
