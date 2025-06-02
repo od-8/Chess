@@ -25,8 +25,8 @@ class Queen
   def possible_queen_moves(board, piece_cords)
     possible_moves = []
 
-    possible_bishop_moves(board, piece_cords).each { |cords| possible_moves << cords }
-    possible_rook_moves(board, piece_cords).each { |cords| possible_moves << cords }
+    possible_bishop_moves(board, piece_cords, color).each { |cords| possible_moves << cords }
+    possible_rook_moves(board, piece_cords, color).each { |cords| possible_moves << cords }
 
     possible_moves
   end

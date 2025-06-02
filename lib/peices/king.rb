@@ -5,11 +5,6 @@ require_relative "../helper_methods/peices_helper_methods/vertical_horizontal_al
 
 # Contains methods for king moving and check
 class King
-  include VerticalHorizontalAlgorithims
-  include DiagonalAlgorithims
-  include KnightPositions
-  include PawnCapturing
-
   attr_accessor :name, :symbol, :color
 
   def initialize(name, symbol, color)
@@ -46,68 +41,76 @@ class King
     possible_moves
   end
 
-  def in_check?(board, cords)
-    if pawn_check?(board, cords) || knight_check?(board, cords) || diagonal_check?(board, cords) || inline_check?(board, cords) # rubocop:disable Layout/LineLength
-      puts "CHECK muthapucka"
-    end
-  end
+  # def in_check?(board, cords)
+  #   if pawn_check?(board, cords) || knight_check?(board, cords) || diagonal_check?(board, cords) || inline_check?(board, cords) # rubocop:disable Layout/LineLength
+  #     true
+  #   end
+  # end
 
-  # Checks if king is in check from kngiht
-  def knight_check?(board, king_cords)
-    knight_check_positions = possible_knight_moves(king_cords[0], king_cords[1])
-    king = board[king_cords[0]][king_cords[1]]
+  # # Checks if king is in check from kngiht
+  # def knight_check?(board, king_cords)
+  #   knight_check_positions = possible_knight_moves(king_cords[0], king_cords[1])
+  #   king = board[king_cords[0]][king_cords[1]]
 
-    # Takes the current position of the king and check if there are any knight checking it
-    knight_check_positions.each do |check_position|
-      piece = board[check_position[0]][check_position[1]]
+  #   # Takes the current position of the king and check if there are any knight checking it
+  #   knight_check_positions.each do |check_position|
+  #     piece = board[check_position[0]][check_position[1]]
 
-      return true if piece&.name == "knight" && king.color != piece.color
-    end
+  #     return true if piece&.name == "knight" && king.color != piece.color
+  #   end
 
-    false
-  end
+  #   false
+  # end
 
-  # Checks if king is in check from bishop
-  def diagonal_check?(board, king_cords)
-    diagonal_check_positions = possible_bishop_moves(board, king_cords)
-    king = board[king_cords[0]][king_cords[1]]
+  # # Checks if king is in check from bishop
+  # def diagonal_check?(board, king_cords)
+  #   diagonal_check_positions = possible_bishop_moves(board, king_cords)
+  #   king = board[king_cords[0]][king_cords[1]]
 
-    diagonal_check_positions.each do |check_position|
-      piece = board[check_position[0]][check_position[1]]
+  #   diagonal_check_positions.each do |check_position|
+  #     piece = board[check_position[0]][check_position[1]]
 
-      return true if %w[bishop queen].include?(piece&.name) && king.color != piece.color
-    end
+  #     return true if %w[bishop queen].include?(piece&.name) && king.color != piece.color
+  #   end
 
-    false
-  end
+  #   false
+  # end
 
-  def inline_check?(board, king_cords)
-    inline_check_positions = possible_rook_moves(board, king_cords)
-    king = board[king_cords[0]][king_cords[1]]
+  # def inline_check?(board, king_cords)
+  #   inline_check_positions = possible_rook_moves(board, king_cords)
+  #   king = board[king_cords[0]][king_cords[1]]
 
-    inline_check_positions.each do |check_position|
-      piece = board[check_position[0]][check_position[1]]
+  #   inline_check_positions.each do |check_position|
+  #     piece = board[check_position[0]][check_position[1]]
 
-      return true if %w[rook queen].include?(piece&.name) && king.color != piece.color
-    end
+  #     return true if %w[rook queen].include?(piece&.name) && king.color != piece.color
+  #   end
 
-    false
-  end
+  #   false
+  # end
 
-  def pawn_check?(board, king_cords) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
-    king = board[king_cords[0]][king_cords[1]]
-    pawn_check_positions = if king&.color == "white"
-                             white_take_positions(board, king_cords[0], king_cords[1])
-                           else
-                             black_take_positions(board, king_cords[0], king_cords[1])
-                           end
+  # def pawn_check?(board, king_cords) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+  #   king = board[king_cords[0]][king_cords[1]]
+  #   pawn_check_positions = if king&.color == "white"
+  #                            white_take_positions(board, king_cords[0], king_cords[1])
+  #                          else
+  #                            black_take_positions(board, king_cords[0], king_cords[1])
+  #                          end
 
-    pawn_check_positions.each do |check_position|
-      piece = board[check_position[0]][check_position[1]]
+  #   pawn_check_positions.each do |check_position|
+  #     piece = board[check_position[0]][check_position[1]]
 
-      return true if piece&.name == "pawn" && king.color != piece.color
-    end
+  #     return true if piece&.name == "pawn" && king.color != piece.color
+  #   end
 
-    false
-  end
+  #   false
+  # end
+
+  # def checkmate?(board, king_cords)
+  #   possible_moves = possible_positions(king_cords[0], king_cords[1])
+
+  #   possible_moves.each do |move_cords|
+      
+  #   end
+  # end
 end

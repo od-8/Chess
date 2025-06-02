@@ -13,7 +13,7 @@ class Rook
   end
 
   def legal_move?(board, piece_cords, move_cords)
-    legal_moves = possible_rook_moves(board, piece_cords)
+    legal_moves = possible_rook_moves(board, piece_cords, color)
 
     return true if legal_moves.include?(move_cords)
 

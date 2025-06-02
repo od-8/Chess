@@ -2,19 +2,19 @@
 # Used for check, bishop moving, queen moving
 module DiagonalAlgorithims
   # All legal moves a bishop can make
-  def possible_bishop_moves(board, piece_cords) # rubocop:disable Metrics/AbcSize
+  def possible_bishop_moves(board, piece_cords, color) # rubocop:disable Metrics/AbcSize
     possible_moves = []
 
-    left_upwards_positions(board, piece_cords[0], piece_cords[1]).each { |cords| possible_moves << cords }
-    right_upwards_positions(board, piece_cords[0], piece_cords[1]).each { |cords| possible_moves << cords }
-    left_downwards_positions(board, piece_cords[0], piece_cords[1]).each { |cords| possible_moves << cords }
-    right_downwards_positions(board, piece_cords[0], piece_cords[1]).each { |cords| possible_moves << cords }
+    left_upwards_positions(board, piece_cords[0], piece_cords[1], color).each { |cords| possible_moves << cords }
+    right_upwards_positions(board, piece_cords[0], piece_cords[1], color).each { |cords| possible_moves << cords }
+    left_downwards_positions(board, piece_cords[0], piece_cords[1], color).each { |cords| possible_moves << cords }
+    right_downwards_positions(board, piece_cords[0], piece_cords[1], color).each { |cords| possible_moves << cords }
 
     possible_moves
   end
 
   # All bishop moves upwards and to the left
-  def left_upwards_positions(board, x, y) # rubocop:disable Metrics/AbcSize,Naming/MethodParameterName,Metrics/CyclomaticComplexity
+  def left_upwards_positions(board, x, y, color) # rubocop:disable Naming/MethodParameterName,Metrics/CyclomaticComplexity
     positions = []
 
     loop do
@@ -29,7 +29,7 @@ module DiagonalAlgorithims
   end
 
   # All bishop moves upwards and to the right
-  def right_upwards_positions(board, x, y) # rubocop:disable Naming/MethodParameterName,Metrics/AbcSize,Metrics/CyclomaticComplexity
+  def right_upwards_positions(board, x, y, color) # rubocop:disable Naming/MethodParameterName,Metrics/CyclomaticComplexity
     positions = []
 
     loop do
@@ -44,7 +44,7 @@ module DiagonalAlgorithims
   end
 
   # All bishop moves downwards and to the left
-  def left_downwards_positions(board, x, y) # rubocop:disable Naming/MethodParameterName,Metrics/AbcSize,Metrics/CyclomaticComplexity
+  def left_downwards_positions(board, x, y, color) # rubocop:disable Naming/MethodParameterName,Metrics/AbcSize,Metrics/CyclomaticComplexity
     positions = []
 
     loop do
@@ -59,7 +59,7 @@ module DiagonalAlgorithims
   end
 
   # All bishop moves downwards and to the right
-  def right_downwards_positions(board, x, y) # rubocop:disable Metrics/AbcSize,Naming/MethodParameterName,Metrics/CyclomaticComplexity
+  def right_downwards_positions(board, x, y, color) # rubocop:disable Naming/MethodParameterName,Metrics/CyclomaticComplexity
     positions = []
 
     loop do

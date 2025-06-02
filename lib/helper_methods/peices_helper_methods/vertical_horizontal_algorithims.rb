@@ -2,19 +2,19 @@
 # Used for check, rook moving, queen moving
 module VerticalHorizontalAlgorithims
   # All legal moves a rook can make
-  def possible_rook_moves(board, piece_cords) # rubocop:disable Metrics/AbcSize
+  def possible_rook_moves(board, piece_cords, color) # rubocop:disable Metrics/AbcSize
     possible_moves = []
 
-    upwards_positions(board, piece_cords[0], piece_cords[1]).each { |cords| possible_moves << cords }
-    downwards_positions(board, piece_cords[0], piece_cords[1]).each { |cords| possible_moves << cords }
-    left_positions(board, piece_cords[0], piece_cords[1]).each { |cords| possible_moves << cords }
-    right_positions(board, piece_cords[0], piece_cords[1]).each { |cords| possible_moves << cords }
+    upwards_positions(board, piece_cords[0], piece_cords[1], color).each { |cords| possible_moves << cords }
+    downwards_positions(board, piece_cords[0], piece_cords[1], color).each { |cords| possible_moves << cords }
+    left_positions(board, piece_cords[0], piece_cords[1], color).each { |cords| possible_moves << cords }
+    right_positions(board, piece_cords[0], piece_cords[1], color).each { |cords| possible_moves << cords }
 
     possible_moves
   end
 
   # All rook moves going straight up
-  def upwards_positions(board, x, y) # rubocop:disable Naming/MethodParameterName
+  def upwards_positions(board, x, y, color) # rubocop:disable Naming/MethodParameterName
     positions = []
 
     loop do
@@ -29,7 +29,7 @@ module VerticalHorizontalAlgorithims
   end
 
   # All rook moves going straight down
-  def downwards_positions(board, x, y) # rubocop:disable Metrics/AbcSize,Naming/MethodParameterName
+  def downwards_positions(board, x, y, color) # rubocop:disable Naming/MethodParameterName
     positions = []
 
     loop do
@@ -44,7 +44,7 @@ module VerticalHorizontalAlgorithims
   end
 
   # All rook moves going straight to the left
-  def left_positions(board, x, y) # rubocop:disable Metrics/AbcSize,Naming/MethodParameterName
+  def left_positions(board, x, y, color) # rubocop:disable Naming/MethodParameterName
     positions = []
 
     loop do
@@ -59,7 +59,7 @@ module VerticalHorizontalAlgorithims
   end
 
   # All rook moves going straight to the right
-  def right_positions(board, x, y) # rubocop:disable Naming/MethodParameterName
+  def right_positions(board, x, y, color) # rubocop:disable Naming/MethodParameterName
     positions = []
 
     loop do

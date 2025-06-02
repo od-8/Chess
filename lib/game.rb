@@ -18,7 +18,7 @@ class Game
 
   # This repeates until someone wins
   def game_loop
-    until checkmate?
+    while true
       update_turn
       coordinates = legal_inputs
 
