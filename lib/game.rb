@@ -7,6 +7,8 @@ class Game
     @player2 = Player.new(name2, "black")
     @board = Board.new
     @current_player = @player1
+    @white_king_cords = [0, 3]
+    @black_king_cords = [7, 3]
   end
 
   # The method for actually playing the game
@@ -17,32 +19,38 @@ class Game
   end
 
   # This repeates until someone wins
-  def game_loop
+  def game_loop # rubocop:disable Metrics/AbcSize
     loop do
-      coordinates = legal_inputs
+      piece_cords, move_cords, _invalid_moves = legal_input
+      piece = board.board[piece_cords[0]][piece_cords[1]]
 
-      next unless board.same_color?(coordinates[0], current_player.color)
+      next unless piece.legal_move?(board.board, piece_cords, move_cords)
 
-      board.move(coordinates[0], coordinates[1])
-      print "\e[#{coordinates[2]}A\e[J"  # Will be used later for printing nicely
+      # Updates the position of the king if its being moved
+      board.update_king_position(piece, move_cords) if piece&.name == "king"
+
+      board.move(piece_cords, move_cords)
+
       board.print_board
       update_turn
     end
   end
 
   # Checks if the input is valid then turns it into actual coordiantes
-  def legal_inputs # rubocop:disable Metrics/MethodLength
+  def legal_input
     invalid_moves = 22
     cords = []
-    
+
     loop do
       cords = take_input
       invalid_moves += 3
 
-      break if legal_move?(cords[0]) && legal_move?(cords[1])
-    end
+      next unless legal_move?(cords[0]) && legal_move?(cords[1])
 
-    cords.map! { |position| to_cords(position)}
+      cords.map! { |position| to_cords(position) }
+
+      break if correct_color?(cords[0], current_player.color)
+    end
     cords << invalid_moves
   end
 
@@ -53,7 +61,7 @@ class Game
     print " #{current_player.name}, input position of where you would like to move that peice: "
     move_cords = gets.chomp.downcase
     puts ""
-    
+
     [piece_cords, move_cords] # Coordiantes of the peice the player is moving and where they are moving it to
   end
 
@@ -69,7 +77,7 @@ class Game
     [cords[1].to_i - 1, alphabet.find_index(cords[0])]
   end
 
-  # Makes sure both cords are between 0 and 7 and the length of the cords is 2
+  # Makes sure both cords are valid and are at 2 long
   def legal_move?(cords)
     letter = cords[0]
     number = cords[1].to_i - 1
@@ -79,7 +87,13 @@ class Game
     false
   end
 
+  def correct_color?(cords, color)
+    board.same_color?(cords, color)
+  end
+
   def checkmate?
     board.checkmate?
   end
+
+  # print "\e[#{coordinates[2]}A\e[J" # Will be used later for printing nicely
 end

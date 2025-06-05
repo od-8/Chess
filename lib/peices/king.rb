@@ -2,9 +2,11 @@ require_relative "../helper_methods/peices_helper_methods/pawn_capturing"
 require_relative "../helper_methods/peices_helper_methods/knight_positions"
 require_relative "../helper_methods/peices_helper_methods/diagonal_algorithims"
 require_relative "../helper_methods/peices_helper_methods/vertical_horizontal_algorithims"
+require_relative "../helper_methods/peices_helper_methods/king_positions"
 
 # Contains methods for king moving and check
 class King
+  include KingPositions
   attr_accessor :name, :symbol, :color
 
   def initialize(name, symbol, color)

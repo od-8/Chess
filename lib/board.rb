@@ -28,8 +28,8 @@ class Board # rubocop:disable Metrics/ClassLength
 
   def initialize(board = Array.new(8) { Array.new(8) })
     @board = board
-    @white_king_cords = [0, 3]
-    @black_king_cords = [7, 3]
+    # @white_king_cords = [0, 3]
+    # @black_king_cords = [7, 3]
     add_peices
   end
 
@@ -56,23 +56,18 @@ class Board # rubocop:disable Metrics/ClassLength
   end
 
   # Calls the move method on whichever peice is selected
-  def move(piece_cords, move_cords) # rubocop:disable Metrics/AbcSize
+  def move(piece_cords, move_cords)
     piece = board[piece_cords[0]][piece_cords[1]] # Gets the peice the player would like to move
 
-    # Checks if the peice can move there and it isnt occupied by a friendly, if so it moves there
-    if piece.legal_move?(board, piece_cords, move_cords) && unnocupied_square?(piece, move_cords)
+    @board[move_cords[0]][move_cords[1]] = piece
+    @board[piece_cords[0]][piece_cords[1]] = nil
+  end
 
-      # Updates the position of the king if its being moved
-      update_king_position(piece, move_cords) if piece.name == "king"
+  def reverse_move(piece_cords, move_cords)
+    piece = board[piece_cords[0]][piece_cords[1]] # Gets the peice the player would like to move
 
-      @board[move_cords[0]][move_cords[1]] = piece
-      @board[piece_cords[0]][piece_cords[1]] = nil
-
-    else
-      puts "Invalid move"
-    end
-
-    check_and_checkmate
+    @board[move_cords[0]][move_cords[1]] = nil
+    @board[piece_cords[0]][piece_cords[1]] = piece
   end
 
   # Check if squre is occupied by same color peice
@@ -89,17 +84,17 @@ class Board # rubocop:disable Metrics/ClassLength
     self.black_king_cords = move_cords if piece.color == "black"
   end
 
-  def check_and_checkmate
-    if in_check?(white_king_cords, "white")
-      puts "Check"
-      puts "Checkmate" if checkmate?(white_king_cords, "white")
-    end
+  # def check_and_checkmate
+  #   if in_check?(white_king_cords, "white")
+  #     puts "Check"
+  #     puts "Checkmate" if checkmate?(white_king_cords, "white")
+  #   end
 
-    if in_check?(black_king_cords, "black") # rubocop:disable Style/GuardClause
-      puts "Check"
-      puts "Checkmate" if checkmate?(black_king_cords, "black")
-    end
-  end
+  #   if in_check?(black_king_cords, "black")
+  #     puts "Check"
+  #     puts "Checkmate" if checkmate?(black_king_cords, "black")
+  #   end
+  # end
 
   def in_check?(cords, color)
     if pawn_check?(board, cords, color) || knight_check?(board, cords, color) || diagonal_check?(board, cords, color) || inline_check?(board, cords, color) # rubocop:disable Layout/LineLength
