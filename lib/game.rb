@@ -24,9 +24,10 @@ class Game
       piece_cords, move_cords, _invalid_moves = legal_input
       piece = board.board[piece_cords[0]][piece_cords[1]]
 
-      next unless piece.legal_move?(board.board, piece_cords, move_cords)
+      next unless piece.legal_move?(board.board, piece_cords, move_cords) && unnocupied_square?(piece, move_cords)
 
-      # Updates the position of the king if its being moved
+      # next if in_check?(@white_king_cords, "white") || in_check?(@black_king_cords, "black")
+
       board.update_king_position(piece, move_cords) if piece&.name == "king"
 
       board.move(piece_cords, move_cords)
@@ -91,9 +92,25 @@ class Game
     board.same_color?(cords, color)
   end
 
+  def unnocupied_square?(piece, move_cords)
+    board.unnocupied_square?(piece, move_cords)
+  end
+
+  def in_check?(cords, color)
+    board.in_check?(cords, color)
+  end
+
   def checkmate?
     board.checkmate?
   end
 
   # print "\e[#{coordinates[2]}A\e[J" # Will be used later for printing nicely
 end
+
+# Check if king is in check pre move
+#  - if true list all possible moves for king and peices that can block
+#  - if false carry on as usual
+
+# Check if king is in check post move
+#  - if true reverse move and get them to take go again
+#  - if false carry on as usual

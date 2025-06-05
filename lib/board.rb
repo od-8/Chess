@@ -84,17 +84,11 @@ class Board # rubocop:disable Metrics/ClassLength
     self.black_king_cords = move_cords if piece.color == "black"
   end
 
-  # def check_and_checkmate
-  #   if in_check?(white_king_cords, "white")
-  #     puts "Check"
-  #     puts "Checkmate" if checkmate?(white_king_cords, "white")
-  #   end
+  def when_check(board, cords, color)
+    king_moves = possible_king_moves(cords[0], cords[1])
 
-  #   if in_check?(black_king_cords, "black")
-  #     puts "Check"
-  #     puts "Checkmate" if checkmate?(black_king_cords, "black")
-  #   end
-  # end
+    king_moves.select! { |move| board[move[0]][move[1]]&.color != color && in_check?(move, color) == false }
+  end
 
   def in_check?(cords, color)
     if pawn_check?(board, cords, color) || knight_check?(board, cords, color) || diagonal_check?(board, cords, color) || inline_check?(board, cords, color) # rubocop:disable Layout/LineLength

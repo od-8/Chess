@@ -23,7 +23,7 @@ class WhitePawn
   def pawn_move_positions(board, peice_cords)
     all_possible_moves = []
 
-    move_one_forward(peice_cords[0], peice_cords[1]).each { |cords| all_possible_moves << cords }
+    move_one_forward(board, peice_cords[0], peice_cords[1]).each { |cords| all_possible_moves << cords }
     move_two_forward(board, peice_cords[0], peice_cords[1]).each { |cords| all_possible_moves << cords }
     white_take_positions(board, peice_cords[0], peice_cords[1]).each { |cords| all_possible_moves << cords }
 
@@ -31,10 +31,10 @@ class WhitePawn
   end
 
   # Method for basic pawn movement, up 1 square
-  def move_one_forward(x, y) # rubocop:disable Naming/MethodParameterName
+  def move_one_forward(board, x, y) # rubocop:disable Naming/MethodParameterName
     all_possible_moves = []
 
-    all_possible_moves << [x + 1, y] if (x + 1).between?(0, 7)
+    all_possible_moves << [x + 1, y] if (x + 1).between?(0, 7) && board[x][y].nil?
 
     all_possible_moves
   end
