@@ -19,16 +19,17 @@ class Game
   end
 
   # This repeates until someone wins
-  def game_loop # rubocop:disable Metrics/AbcSize
+  def game_loop # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
     loop do
       piece_cords, move_cords, _invalid_moves = legal_input
       piece = board.board[piece_cords[0]][piece_cords[1]]
 
       next unless piece.legal_move?(board.board, piece_cords, move_cords) && unnocupied_square?(piece, move_cords)
 
-      # next if in_check?(@white_king_cords, "white") || in_check?(@black_king_cords, "black")
-
       board.update_king_position(piece, move_cords) if piece&.name == "king"
+
+      p board.when_check(board.board, piece_cords, "white") if in_check?(@white_king_cords, "white")
+      p board.when_check(board.board, piece_cords, "black") if in_check?(@black_king_cords, "black")
 
       board.move(piece_cords, move_cords)
 

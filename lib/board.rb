@@ -87,7 +87,7 @@ class Board # rubocop:disable Metrics/ClassLength
   def when_check(board, cords, color)
     king_moves = possible_king_moves(cords[0], cords[1])
 
-    king_moves.select! { |move| board[move[0]][move[1]]&.color != color && in_check?(move, color) == false }
+    king_moves.reject { |move| board[move[0]][move[1]]&.color == color  }
   end
 
   def in_check?(cords, color)
