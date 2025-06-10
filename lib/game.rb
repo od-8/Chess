@@ -28,13 +28,24 @@ class Game
 
       board.update_king_position(piece, move_cords) if piece&.name == "king"
 
-      p board.when_check(board.board, piece_cords, "white") if in_check?(@white_king_cords, "white")
-      p board.when_check(board.board, piece_cords, "black") if in_check?(@black_king_cords, "black")
+      update_turn
 
       board.move(piece_cords, move_cords)
 
+      p in_check?(@white_king_cords, "white")
+      p in_check?(@black_king_cords, "black")
+
+      if in_check?(@white_king_cords, "white")
+        board.reverse_move(piece_cords, move_cords)
+        next
+      end
+
+      if in_check?(@black_king_cords, "black")
+        board.reverse_move(piece_cords, move_cords)
+        next
+      end
+
       board.print_board
-      update_turn
     end
   end
 
