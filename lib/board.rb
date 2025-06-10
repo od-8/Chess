@@ -77,13 +77,6 @@ class Board # rubocop:disable Metrics/ClassLength
     false
   end
 
-  # Updates king cords when king is moved
-  def update_king_position(piece, move_cords)
-    self.white_king_cords = move_cords if piece.color == "white"
-
-    self.black_king_cords = move_cords if piece.color == "black"
-  end
-
   def when_check(board, cords, color)
     king_moves = possible_king_moves(cords[0], cords[1])
 

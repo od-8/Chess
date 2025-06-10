@@ -34,7 +34,7 @@ class BlackPawn
   def move_one_forward(board, x, y) # rubocop:disable Naming/MethodParameterName
     all_possible_moves = []
 
-    all_possible_moves << [x - 1, y] if (x - 1).between?(0, 7) && board[x][y].nil?
+    all_possible_moves << [x - 1, y] if (x - 1).between?(0, 7) # && board[x][y].nil?
 
     all_possible_moves
   end
@@ -43,7 +43,7 @@ class BlackPawn
   def move_two_forward(board, x, y) # rubocop:disable Naming/MethodParameterName
     all_possible_moves = []
 
-    all_possible_moves << [x - 2, y] if board[x - 1][y]&.color != color && x == 6
+    all_possible_moves << [x - 2, y] if board[x - 1][y].nil? && x == 6
 
     all_possible_moves
   end

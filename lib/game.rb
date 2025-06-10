@@ -19,33 +19,37 @@ class Game
   end
 
   # This repeates until someone wins
-  def game_loop # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+  def game_loop # rubocop:disable Metrics/AbcSize,Metrics/MethodLength,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
     loop do
       piece_cords, move_cords, _invalid_moves = legal_input
       piece = board.board[piece_cords[0]][piece_cords[1]]
 
       next unless piece.legal_move?(board.board, piece_cords, move_cords) && unnocupied_square?(piece, move_cords)
 
-      board.update_king_position(piece, move_cords) if piece&.name == "king"
-
-      update_turn
+      update_king_position(piece, move_cords) if piece&.name == "king"
 
       board.move(piece_cords, move_cords)
 
       p in_check?(@white_king_cords, "white")
       p in_check?(@black_king_cords, "black")
+      puts ""
 
-      if in_check?(@white_king_cords, "white")
+      if current_player.color == "white" && in_check?(@white_king_cords, "white")
         board.reverse_move(piece_cords, move_cords)
         next
       end
 
-      if in_check?(@black_king_cords, "black")
+      if current_player.color == "black" && in_check?(@black_king_cords, "black")
         board.reverse_move(piece_cords, move_cords)
         next
       end
+
+      p in_check?(@white_king_cords, "white")
+      p in_check?(@black_king_cords, "black")
+      puts ""
 
       board.print_board
+      update_turn
     end
   end
 
@@ -114,6 +118,13 @@ class Game
 
   def checkmate?
     board.checkmate?
+  end
+
+  # Updates king cords when king is moved
+  def update_king_position(piece, move_cords)
+    @white_king_cords = move_cords if piece.color == "white"
+
+    @black_king_cords = move_cords if piece.color == "black"
   end
 
   # print "\e[#{coordinates[2]}A\e[J" # Will be used later for printing nicely
