@@ -64,7 +64,7 @@ class Board # rubocop:disable Metrics/ClassLength
   end
 
   def reverse_move(piece_cords, move_cords)
-    piece = board[piece_cords[0]][piece_cords[1]] # Gets the peice the player would like to move
+    piece = board[move_cords[0]][move_cords[1]] # Gets the peice the player would like to move
 
     @board[move_cords[0]][move_cords[1]] = nil
     @board[piece_cords[0]][piece_cords[1]] = piece

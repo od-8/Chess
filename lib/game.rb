@@ -26,13 +26,13 @@ class Game
 
       next unless piece.legal_move?(board.board, piece_cords, move_cords) && unnocupied_square?(piece, move_cords)
 
-      update_king_position(piece, move_cords) if piece&.name == "king"
-
       board.move(piece_cords, move_cords)
 
-      p in_check?(@white_king_cords, "white")
-      p in_check?(@black_king_cords, "black")
-      puts ""
+      # p board.board[piece_cords[0]][piece_cords[1]]
+      # p board.board[move_cords[0]][move_cords[1]]
+
+      # p in_check?(@black_king_cords, "black")
+      # puts ""
 
       if current_player.color == "white" && in_check?(@white_king_cords, "white")
         board.reverse_move(piece_cords, move_cords)
@@ -44,9 +44,10 @@ class Game
         next
       end
 
-      p in_check?(@white_king_cords, "white")
-      p in_check?(@black_king_cords, "black")
-      puts ""
+      # p board.board[piece_cords[0]][piece_cords[1]]
+      # p board.board[move_cords[0]][move_cords[1]]
+
+      update_king_position(piece, move_cords) if piece&.name == "king"
 
       board.print_board
       update_turn
