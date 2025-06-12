@@ -1,6 +1,7 @@
+require "colorize"
 # Contains the game and all of its methods for playing the game
 class Game
-  attr_accessor :board, :player1, :player2, :current_player
+  attr_accessor :board, :player1, :player2, :current_player, :white_king_cords, :black_king_cords
 
   def initialize(name1 = "Jim", name2 = "John")
     @player1 = Player.new(name1, "white")
@@ -11,50 +12,52 @@ class Game
     @black_king_cords = [7, 3]
   end
 
-  # The method for actually playing the game
+  # Method for playing the game, handles the game loop and asks for another game
   def play_game
     board.print_board
 
     game_loop
+
+    # Ask for another game
   end
 
-  # This repeates until someone wins
-  def game_loop # rubocop:disable Metrics/AbcSize,Metrics/MethodLength,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
+  # The handles the user move, updating the current player, check and checkmate
+  def game_loop
+    loop do
+      move_loop
+
+      board.print_board
+
+      puts "Black king is in check".colorize(:red) if in_check?(black_king_cords, "black")
+      puts "White king is in check".color(:red) if in_check?(white_king_cords, "white")
+
+      puts ""
+      update_turn
+    end
+  end
+
+  # This repeates until player enters a legal move
+  def move_loop # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
     loop do
       piece_cords, move_cords, _invalid_moves = legal_input
       piece = board.board[piece_cords[0]][piece_cords[1]]
 
       next unless piece.legal_move?(board.board, piece_cords, move_cords) && unnocupied_square?(piece, move_cords)
 
-      board.move(piece_cords, move_cords)
-
-      # p board.board[piece_cords[0]][piece_cords[1]]
-      # p board.board[move_cords[0]][move_cords[1]]
-
-      # p in_check?(@black_king_cords, "black")
-      # puts ""
-
-      if current_player.color == "white" && in_check?(@white_king_cords, "white")
-        board.reverse_move(piece_cords, move_cords)
-        next
-      end
-
-      if current_player.color == "black" && in_check?(@black_king_cords, "black")
-        board.reverse_move(piece_cords, move_cords)
-        next
-      end
-
-      # p board.board[piece_cords[0]][piece_cords[1]]
-      # p board.board[move_cords[0]][move_cords[1]]
-
       update_king_position(piece, move_cords) if piece&.name == "king"
 
-      board.print_board
-      update_turn
+      board.move(piece_cords, move_cords)
+
+      if invalid_move?(white_king_cords, "white") || invalid_move?(black_king_cords, "black")
+        board.reverse_move(piece_cords, move_cords)
+        next
+      end
+
+      break
     end
   end
 
-  # Checks if the input is valid then turns it into actual coordiantes
+  # This repeats until a players cords are valid then turns them into usable cords
   def legal_input
     invalid_moves = 22
     cords = []
@@ -80,22 +83,10 @@ class Game
     move_cords = gets.chomp.downcase
     puts ""
 
-    [piece_cords, move_cords] # Coordiantes of the peice the player is moving and where they are moving it to
+    [piece_cords, move_cords]
   end
 
-  # Updates turn from player 1 to player 2
-  def update_turn
-    @current_player = current_player == player1 ? player2 : player1
-  end
-
-  # Turns coordinates like [a, 1] into [0, 0]
-  def to_cords(cords)
-    alphabet = ("a".."h").to_a
-
-    [cords[1].to_i - 1, alphabet.find_index(cords[0])]
-  end
-
-  # Makes sure both cords are valid and are at 2 long
+  # Makes sure both cords are valid and have a length of 2
   def legal_move?(cords)
     letter = cords[0]
     number = cords[1].to_i - 1
@@ -105,20 +96,33 @@ class Game
     false
   end
 
+  # Turns coordinates like [a, 1] into [0, 0]
+  def to_cords(cords)
+    alphabet = ("a".."h").to_a
+
+    [cords[1].to_i - 1, alphabet.find_index(cords[0])]
+  end
+
+  # Checks to make sure the player is choosing their color pieces only
   def correct_color?(cords, color)
     board.same_color?(cords, color)
   end
 
+  # Updates turn from player 1 to player 2
+  def update_turn
+    @current_player = current_player == player1 ? player2 : player1
+  end
+
+  # Checks if the player is allowed to make that move, depends on if there in check and its there go
+  def invalid_move?(king_cords, color)
+    return true if current_player.color == color && in_check?(king_cords, color)
+
+    false
+  end
+
+  # Checks to make sure the place the player would like to move their piece is empty
   def unnocupied_square?(piece, move_cords)
     board.unnocupied_square?(piece, move_cords)
-  end
-
-  def in_check?(cords, color)
-    board.in_check?(cords, color)
-  end
-
-  def checkmate?
-    board.checkmate?
   end
 
   # Updates king cords when king is moved
@@ -128,13 +132,15 @@ class Game
     @black_king_cords = move_cords if piece.color == "black"
   end
 
+  # Checks if the player is in check
+  def in_check?(cords, color)
+    board.in_check?(cords, color)
+  end
+
+  # Checks if the player is in checkmate
+  def checkmate?(king_cords, color)
+    board.checkmate?(king_cords, color)
+  end
+
   # print "\e[#{coordinates[2]}A\e[J" # Will be used later for printing nicely
 end
-
-# Check if king is in check pre move
-#  - if true list all possible moves for king and peices that can block
-#  - if false carry on as usual
-
-# Check if king is in check post move
-#  - if true reverse move and get them to take go again
-#  - if false carry on as usual

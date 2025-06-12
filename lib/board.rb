@@ -16,7 +16,7 @@ require_relative "peices/white_pawn"
 require_relative "peices/black_pawn"
 
 # Contains the board and all of its methods
-class Board # rubocop:disable Metrics/ClassLength
+class Board
   include BoardSetup
   include KingPositions
   include VerticalHorizontalAlgorithims
@@ -28,8 +28,6 @@ class Board # rubocop:disable Metrics/ClassLength
 
   def initialize(board = Array.new(8) { Array.new(8) })
     @board = board
-    # @white_king_cords = [0, 3]
-    # @black_king_cords = [7, 3]
     add_peices
   end
 
@@ -49,22 +47,24 @@ class Board # rubocop:disable Metrics/ClassLength
     puts ""
   end
 
+  # Makes sure the player is moving their color pieces
   def same_color?(piece_cords, player_color)
     return true if board[piece_cords[0]][piece_cords[1]]&.color == player_color
 
     false
   end
 
-  # Calls the move method on whichever peice is selected
+  # Moves the piece to where the player wants
   def move(piece_cords, move_cords)
-    piece = board[piece_cords[0]][piece_cords[1]] # Gets the peice the player would like to move
+    piece = board[piece_cords[0]][piece_cords[1]]
 
     @board[move_cords[0]][move_cords[1]] = piece
     @board[piece_cords[0]][piece_cords[1]] = nil
   end
 
+  # Reverse #move, is used if player makes an illegal move
   def reverse_move(piece_cords, move_cords)
-    piece = board[move_cords[0]][move_cords[1]] # Gets the peice the player would like to move
+    piece = board[move_cords[0]][move_cords[1]]
 
     @board[move_cords[0]][move_cords[1]] = nil
     @board[piece_cords[0]][piece_cords[1]] = piece
@@ -77,13 +77,7 @@ class Board # rubocop:disable Metrics/ClassLength
     false
   end
 
-  def when_check(board, cords, color)
-    king_moves = possible_king_moves(cords[0], cords[1])
-
-    king_moves.reject! { |move| board[move[0]][move[1]]&.color == color }
-    king_moves.select { |move| in_check?(move, color) == false }
-  end
-
+  # Checks if king is in check
   def in_check?(cords, color)
     if pawn_check?(board, cords, color) || knight_check?(board, cords, color) || diagonal_check?(board, cords, color) || inline_check?(board, cords, color) # rubocop:disable Layout/LineLength
       return true
@@ -92,13 +86,14 @@ class Board # rubocop:disable Metrics/ClassLength
     false
   end
 
+  # Checks if king is in checkmate
   def checkmate?(king_cords, color)
     king_moves = possible_king_moves(king_cords[0], king_cords[1])
 
     king_moves.all? { |move| board[move[0]][move[1]]&.color == color || in_check?(move, color) == true }
   end
 
-  # Checks if their is a check from a pawn
+  # Checks if there is a check from a pawn
   def pawn_check?(board, piece_cords, color)
     pawn_check_positions = if color == "white"
                              white_take_positions(board, piece_cords[0], piece_cords[1])
@@ -115,11 +110,10 @@ class Board # rubocop:disable Metrics/ClassLength
     false
   end
 
-  # Checks if king is in check from a kngiht
+  # Checks if there is a check from a kngiht
   def knight_check?(board, piece_cords, color)
     knight_check_positions = possible_knight_moves(piece_cords[0], piece_cords[1])
 
-    # Takes the current position of the king and check if there are any knight checking it
     knight_check_positions.each do |check_position|
       piece = board[check_position[0]][check_position[1]]
 
@@ -129,7 +123,7 @@ class Board # rubocop:disable Metrics/ClassLength
     false
   end
 
-  # Checks if king is in check from a bishop or diagonal by queen
+  # Checks if there is a check from a bishop or from queen
   def diagonal_check?(board, king_cords, color)
     diagonal_check_positions = possible_bishop_moves(board, king_cords, color)
 
@@ -142,7 +136,7 @@ class Board # rubocop:disable Metrics/ClassLength
     false
   end
 
-  # Checks if king is in check from rook or inline by queen
+  # Checks if there is a check from a rook or queen
   def inline_check?(board, king_cords, color)
     inline_check_positions = possible_rook_moves(board, king_cords, color)
 
