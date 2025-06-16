@@ -1,6 +1,7 @@
 # Helper methods
 require_relative "helper_methods/board_helper_methods/board_setup_module"
-require_relative "helper_methods/peices_helper_methods/pawn_capturing"
+require_relative "helper_methods/peices_helper_methods/white_pawn_positions"
+require_relative "helper_methods/peices_helper_methods/black_pawn_positions"
 require_relative "helper_methods/peices_helper_methods/knight_positions"
 require_relative "helper_methods/peices_helper_methods/diagonal_algorithims"
 require_relative "helper_methods/peices_helper_methods/vertical_horizontal_algorithims"
@@ -47,13 +48,6 @@ class Board
     puts ""
   end
 
-  # Makes sure the player is moving their color pieces
-  def same_color?(piece_cords, player_color)
-    return true if board[piece_cords[0]][piece_cords[1]]&.color == player_color
-
-    false
-  end
-
   # Moves the piece to where the player wants
   def move(piece_cords, move_cords)
     piece = board[piece_cords[0]][piece_cords[1]]
@@ -62,7 +56,7 @@ class Board
     @board[piece_cords[0]][piece_cords[1]] = nil
   end
 
-  # Reverse #move, is used if player makes an illegal move
+  # Reverse's #move, is used if player makes an illegal move
   def reverse_move(piece_cords, move_cords)
     piece = board[move_cords[0]][move_cords[1]]
 
@@ -84,13 +78,6 @@ class Board
     end
 
     false
-  end
-
-  # Checks if king is in checkmate
-  def checkmate?(king_cords, color)
-    king_moves = possible_king_moves(king_cords[0], king_cords[1])
-
-    king_moves.all? { |move| board[move[0]][move[1]]&.color == color || in_check?(move, color) == true }
   end
 
   # Checks if there is a check from a pawn
@@ -148,4 +135,20 @@ class Board
 
     false
   end
+
+  # Checks if king is in checkmate
+  def checkmate?
+    # something
+  end
 end
+
+# loop throught the bood
+# add all black pieces to an array
+# loop throught the array
+# loop through each one of the pieces
+# check if any of them can stop check
+# return the moves that stop check for that piece
+# do that for all pieces
+# if no moves returned then its checkmate
+########################################################
+# check if the king has no moves, if true then go to next step, if false not checkmate

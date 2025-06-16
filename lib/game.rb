@@ -1,12 +1,13 @@
 require "colorize"
+
 # Contains the game and all of its methods for playing the game
 class Game
   attr_accessor :board, :player1, :player2, :current_player, :white_king_cords, :black_king_cords
 
   def initialize(name1 = "Jim", name2 = "John")
+    @board = Board.new
     @player1 = Player.new(name1, "white")
     @player2 = Player.new(name2, "black")
-    @board = Board.new
     @current_player = @player1
     @white_king_cords = [0, 3]
     @black_king_cords = [7, 3]
@@ -22,14 +23,21 @@ class Game
   end
 
   # The handles the user move, updating the current player, check and checkmate
-  def game_loop
+  def game_loop # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
     loop do
       move_loop
 
       board.print_board
 
-      puts "Black king is in check".colorize(:red) if in_check?(black_king_cords, "black")
-      puts "White king is in check".color(:red) if in_check?(white_king_cords, "white")
+      if in_check?(black_king_cords, "black")
+        puts "Black king is in check".colorize(:red)
+        puts "Black king is in checkmate".colorize(:red) if checkmate?(black_king_cords, "black")
+      end
+
+      if in_check?(white_king_cords, "white")
+        puts "White king is in check".colorize(:red)
+        puts "White king is in checkmate".colorize(:green) if checkmate?(white_king_cords, "white")
+      end
 
       puts ""
       update_turn
@@ -37,7 +45,7 @@ class Game
   end
 
   # This repeates until player enters a legal move
-  def move_loop # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+  def move_loop # rubocop:disable Metrics/AbcSize,Metrics/MethodLength"
     loop do
       piece_cords, move_cords, _invalid_moves = legal_input
       piece = board.board[piece_cords[0]][piece_cords[1]]
@@ -70,7 +78,7 @@ class Game
 
       cords.map! { |position| to_cords(position) }
 
-      break if correct_color?(cords[0], current_player.color)
+      break if correct_color?(cords[0])
     end
     cords << invalid_moves
   end
@@ -104,8 +112,11 @@ class Game
   end
 
   # Checks to make sure the player is choosing their color pieces only
-  def correct_color?(cords, color)
-    board.same_color?(cords, color)
+  # Makes sure the player is moving their color pieces
+  def correct_color?(piece_cords)
+    return true if board.board[piece_cords[0]][piece_cords[1]]&.color == current_player.color
+
+    false
   end
 
   # Updates turn from player 1 to player 2
@@ -138,8 +149,9 @@ class Game
   end
 
   # Checks if the player is in checkmate
-  def checkmate?(king_cords, color)
-    board.checkmate?(king_cords, color)
+  def checkmate?(king_cords, color) # rubocop:disable Lint/UnusedMethodArgument
+    false
+    # board.checkmate?(king_cords, color)
   end
 
   # print "\e[#{coordinates[2]}A\e[J" # Will be used later for printing nicely
