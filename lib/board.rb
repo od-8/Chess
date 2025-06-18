@@ -29,6 +29,8 @@ class Board
 
   def initialize(board = Array.new(8) { Array.new(8) })
     @board = board
+    @white_king_cords = [0, 3]
+    @black_king_cords = [7, 3]
     add_peices
   end
 
@@ -137,8 +139,40 @@ class Board
   end
 
   # Checks if king is in checkmate
-  def checkmate?
-    # something
+  def checkmate?(king_cords, color) # rubocop:disable Metrics/MethodLength,Metrics/CyclomaticComplexity
+    board.each_with_index do |row, row_index|
+      row.each_with_index do |piece, piece_index|
+        next unless piece&.color == color
+
+        piece_cords = [row_index, piece_index]
+        puts piece.name
+        case piece.name
+        when "pawn"
+          # do something
+        when "knight"
+          move_places(piece_cords, possible_knight_moves(piece_cords[0], piece_cords[1]), king_cords, color)
+        when "bishop"
+          move_places(piece_cords, possible_bishop_moves(board, piece_cords, piece.color), king_cords, color)
+        when "rook"
+          move_places(piece_cords, possible_rook_moves(board, piece_cords, piece.color), king_cords, color)
+        end
+      end
+    end
+  end
+
+  def move_places(piece_cords, possible_moves, king_cords, color)
+    valid_moves = []
+
+    possible_moves.each do |move_cords|
+      break if move_cords.empty?
+
+      move(piece_cords, move_cords)
+      valid_moves << move_cords unless in_check?(king_cords, color)
+      reverse_move(piece_cords, move_cords)
+    end
+
+    p valid_moves
+    puts ""
   end
 end
 

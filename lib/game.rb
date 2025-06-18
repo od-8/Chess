@@ -31,12 +31,14 @@ class Game
 
       if in_check?(black_king_cords, "black")
         puts "Black king is in check".colorize(:red)
-        puts "Black king is in checkmate".colorize(:red) if checkmate?(black_king_cords, "black")
+        # puts "Black king is in checkmate".colorize(:red) if checkmate?(black_king_cords, "black")
+        checkmate?(black_king_cords, "black")
       end
 
       if in_check?(white_king_cords, "white")
         puts "White king is in check".colorize(:red)
-        puts "White king is in checkmate".colorize(:green) if checkmate?(white_king_cords, "white")
+        # puts "White king is in checkmate".colorize(:green) if checkmate?(white_king_cords, "white")
+        checkmate?(white_king_cords, "white")
       end
 
       puts ""
@@ -149,9 +151,9 @@ class Game
   end
 
   # Checks if the player is in checkmate
-  def checkmate?(king_cords, color) # rubocop:disable Lint/UnusedMethodArgument
-    false
-    # board.checkmate?(king_cords, color)
+  def checkmate?(king_cords, color)
+    # false
+    board.checkmate?(king_cords, color)
   end
 
   # print "\e[#{coordinates[2]}A\e[J" # Will be used later for printing nicely
