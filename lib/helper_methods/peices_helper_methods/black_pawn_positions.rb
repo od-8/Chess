@@ -14,7 +14,7 @@ module PawnCapturing
   def black_move_two_forward(board, x, y) # rubocop:disable Naming/MethodParameterName
     all_possible_moves = []
 
-    all_possible_moves << [x - 2, y] if board[x - 1][y].nil? && x == 6
+    all_possible_moves << [x - 2, y] if board[x - 1][y].nil? && x == 6 && board[x - 2][y].nil?
 
     all_possible_moves
   end

@@ -25,12 +25,11 @@ class Board
   include KnightPositions
   include PawnCapturing
 
-  attr_accessor :board, :white_king_cords, :black_king_cords
+  attr_accessor :board, :last_taken_piece
 
   def initialize(board = Array.new(8) { Array.new(8) })
     @board = board
-    @white_king_cords = [0, 3]
-    @black_king_cords = [7, 3]
+    @last_taken_piece = nil
     add_peices
   end
 
@@ -54,6 +53,7 @@ class Board
   def move(piece_cords, move_cords)
     piece = board[piece_cords[0]][piece_cords[1]]
 
+    @last_taken_piece = board[move_cords[0]][move_cords[1]]
     @board[move_cords[0]][move_cords[1]] = piece
     @board[piece_cords[0]][piece_cords[1]] = nil
   end
@@ -62,7 +62,7 @@ class Board
   def reverse_move(piece_cords, move_cords)
     piece = board[move_cords[0]][move_cords[1]]
 
-    @board[move_cords[0]][move_cords[1]] = nil
+    @board[move_cords[0]][move_cords[1]] = last_taken_piece
     @board[piece_cords[0]][piece_cords[1]] = piece
   end
 
@@ -139,24 +139,42 @@ class Board
   end
 
   # Checks if king is in checkmate
-  def checkmate?(king_cords, color) # rubocop:disable Metrics/MethodLength,Metrics/CyclomaticComplexity
+  def checkmate?(king_cords, color)
     board.each_with_index do |row, row_index|
       row.each_with_index do |piece, piece_index|
         next unless piece&.color == color
 
-        piece_cords = [row_index, piece_index]
-        puts piece.name
-        case piece.name
-        when "pawn"
-          # do something
-        when "knight"
-          move_places(piece_cords, possible_knight_moves(piece_cords[0], piece_cords[1]), king_cords, color)
-        when "bishop"
-          move_places(piece_cords, possible_bishop_moves(board, piece_cords, piece.color), king_cords, color)
-        when "rook"
-          move_places(piece_cords, possible_rook_moves(board, piece_cords, piece.color), king_cords, color)
-        end
+        piece_handler(piece, [row_index, piece_index], king_cords, color)
       end
+    end
+  end
+
+  def piece_handler(piece, piece_cords, king_cords, color)
+    p piece.name
+    case piece.name
+    when "pawn"
+      pawn_handler(piece, piece_cords, king_cords, color)
+    when "knight"
+      move_places(piece_cords, possible_knight_moves(piece_cords[0], piece_cords[1]), king_cords, color)
+    when "bishop"
+      move_places(piece_cords, possible_bishop_moves(board, piece_cords, piece.color), king_cords, color)
+    when "rook"
+      move_places(piece_cords, possible_rook_moves(board, piece_cords, piece.color), king_cords, color)
+    when "queen"
+      move_places(piece_cords, possible_bishop_moves(board, piece_cords, piece.color), king_cords, color)
+      move_places(piece_cords, possible_rook_moves(board, piece_cords, piece.color), king_cords, color)
+    end
+  end
+
+  def pawn_handler(piece, piece_cords, king_cords, color) # rubocop:disable Metrics/AbcSize
+    if piece.color == "white"
+      move_places(piece_cords, white_move_one_forward(piece_cords[0], piece_cords[1]), king_cords, color)
+      move_places(piece_cords, white_move_two_forward(board, piece_cords[0], piece_cords[1]), king_cords, color)
+    end
+
+    if piece.color == "black" # rubocop:disable Style/GuardClause
+      move_places(piece_cords, black_move_one_forward(piece_cords[0], piece_cords[1]), king_cords, color)
+      move_places(piece_cords, black_move_two_forward(board, piece_cords[0], piece_cords[1]), king_cords, color)
     end
   end
 
@@ -164,7 +182,7 @@ class Board
     valid_moves = []
 
     possible_moves.each do |move_cords|
-      break if move_cords.empty?
+      next if move_cords.empty?
 
       move(piece_cords, move_cords)
       valid_moves << move_cords unless in_check?(king_cords, color)
@@ -172,7 +190,7 @@ class Board
     end
 
     p valid_moves
-    puts ""
+    # puts ""
   end
 end
 
