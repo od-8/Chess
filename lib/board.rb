@@ -17,7 +17,7 @@ require_relative "peices/white_pawn"
 require_relative "peices/black_pawn"
 
 # Contains the board and all of its methods
-class Board
+class Board # rubocop:disable Metrics/ClassLength
   include BoardSetup
   include KingPositions
   include VerticalHorizontalAlgorithims
@@ -50,7 +50,7 @@ class Board
   end
 
   # Moves the piece to where the player wants
-  def move(piece_cords, move_cords)
+  def move(piece_cords, move_cords) # rubocop:disable Metrics/AbcSize
     piece = board[piece_cords[0]][piece_cords[1]]
 
     @last_taken_piece = board[move_cords[0]][move_cords[1]]
@@ -139,18 +139,16 @@ class Board
   end
 
   # Checks if king is in checkmate
-  def checkmate?(stop_check_positions)
-    true if stop_check_positions.empty?
+  def checkmate?(king_cords, color)
+    return true if stop_check_positions(king_cords, color).empty?
+
+    false
   end
 
+  # Loops through board and adds call #piece_handler on all the piece that are the same color as the king passed
   def stop_check_positions(king_cords, color)
-    stop_check_positions = board_loop?(king_cords, color)
-    p stop_check_positions
-    stop_check_positions
-  end
-
-  def board_loop?(king_cords, color)
     valid_moves = []
+
     board.each_with_index do |row, row_index|
       row.each_with_index do |piece, piece_index|
         next unless piece&.color == color
@@ -158,25 +156,26 @@ class Board
         piece_handler(piece, [row_index, piece_index], king_cords, color).each { |move| valid_moves << move }
       end
     end
+
     valid_moves
   end
 
+  # Determines which method to call by their name
   def piece_handler(piece, piece_cords, king_cords, color) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/PerceivedComplexity
     valid_moves = []
 
-    puts piece.name
     case piece.name
     when "pawn"
       pawn_handler(piece, piece_cords, king_cords, color).each { |move| valid_moves << move }
     when "knight"
-      move_places(piece_cords, possible_knight_moves(piece_cords[0], piece_cords[1]), king_cords, color).each { |move| valid_moves << move }
+      move_places(piece_cords, possible_knight_moves(piece_cords[0], piece_cords[1]), king_cords, color).each { |move| valid_moves << move } # rubocop:disable Layout/LineLength
     when "bishop"
-      move_places(piece_cords, possible_bishop_moves(board, piece_cords, piece.color), king_cords, color).each { |move| valid_moves << move }
+      move_places(piece_cords, possible_bishop_moves(board, piece_cords, piece.color), king_cords, color).each { |move| valid_moves << move } # rubocop:disable Layout/LineLength
     when "rook"
-      move_places(piece_cords, possible_rook_moves(board, piece_cords, piece.color), king_cords, color).each { |move| valid_moves << move }
+      move_places(piece_cords, possible_rook_moves(board, piece_cords, piece.color), king_cords, color).each { |move| valid_moves << move } # rubocop:disable Layout/LineLength
     when "queen"
-      move_places(piece_cords, possible_bishop_moves(board, piece_cords, piece.color), king_cords, color).each { |move| valid_moves << move }
-      move_places(piece_cords, possible_rook_moves(board, piece_cords, piece.color), king_cords, color).each { |move| valid_moves << move }
+      move_places(piece_cords, possible_bishop_moves(board, piece_cords, piece.color), king_cords, color).each { |move| valid_moves << move } # rubocop:disable Layout/LineLength
+      move_places(piece_cords, possible_rook_moves(board, piece_cords, piece.color), king_cords, color).each { |move| valid_moves << move } # rubocop:disable Layout/LineLength
     when "king"
       king_handler(king_cords, color).each { |move| valid_moves << move }
     end
@@ -184,34 +183,41 @@ class Board
     valid_moves
   end
 
+  # Handles the color issues with pawn
   def pawn_handler(piece, piece_cords, king_cords, color) # rubocop:disable Metrics/AbcSize
     valid_moves = []
 
     if piece.color == "white"
-      move_places(piece_cords, white_move_one_forward(piece_cords[0], piece_cords[1]), king_cords, color).each { |move| valid_moves << move }
-      move_places(piece_cords, white_move_two_forward(board, piece_cords[0], piece_cords[1]), king_cords, color).each { |move| valid_moves << move }
+      move_places(piece_cords, white_move_one_forward(piece_cords[0], piece_cords[1]), king_cords, color).each { |move| valid_moves << move } # rubocop:disable Layout/LineLength
+      move_places(piece_cords, white_move_two_forward(board, piece_cords[0], piece_cords[1]), king_cords, color).each { |move| valid_moves << move } # rubocop:disable Layout/LineLength
     end
 
     if piece.color == "black"
-      move_places(piece_cords, black_move_one_forward(piece_cords[0], piece_cords[1]), king_cords, color).each { |move| valid_moves << move }
-      move_places(piece_cords, black_move_two_forward(board, piece_cords[0], piece_cords[1]), king_cords, color).each { |move| valid_moves << move }
+      move_places(piece_cords, black_move_one_forward(piece_cords[0], piece_cords[1]), king_cords, color).each { |move| valid_moves << move } # rubocop:disable Layout/LineLength
+      move_places(piece_cords, black_move_two_forward(board, piece_cords[0], piece_cords[1]), king_cords, color).each { |move| valid_moves << move } # rubocop:disable Layout/LineLength
     end
 
     valid_moves
   end
 
+  # Handles when the piece is a king and can only move to non check/empty spots
   def king_handler(king_cords, color)
     valid_moves = []
 
     possible_king_moves(king_cords[0], king_cords[1]).each do |move_cords|
-      if board[move_cords[0]][move_cords[1]]&.color != color && in_check?(move_cords, color) == false
-        valid_moves << move_cords
-      end
+      next if board[move_cords[0]][move_cords[1]]&.color == color
+
+      move(king_cords, move_cords)
+
+      valid_moves << move_cords if in_check?(move_cords, color) == false
+
+      reverse_move(king_cords, move_cords)
     end
 
     valid_moves
   end
 
+  # Gets all the moves that can block check
   def move_places(piece_cords, possible_moves, king_cords, color)
     valid_moves = []
 
@@ -226,14 +232,3 @@ class Board
     valid_moves
   end
 end
-
-# loop throught the bood
-# add all black pieces to an array
-# loop throught the array
-# loop through each one of the pieces
-# check if any of them can stop check
-# return the moves that stop check for that piece
-# do that for all pieces
-# if no moves returned then its checkmate
-########################################################
-# check if the king has no moves, if true then go to next step, if false not checkmate

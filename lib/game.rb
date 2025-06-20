@@ -23,21 +23,17 @@ class Game
   end
 
   # The handles the user move, updating the current player, check and checkmate
-  def game_loop # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+  def game_loop
     loop do
       move_loop
 
       board.print_board
 
-      if in_check?(black_king_cords, "black")
-        puts "Black king is in check".colorize(:red)
-        puts "Black king is in checkmate".colorize(:red) if checkmate?(black_king_cords, "black")
-      end
+      checkmate(white_king_cords, "white")
+      check(white_king_cords, "white")
 
-      if in_check?(white_king_cords, "white")
-        puts "White king is in check".colorize(:red)
-        puts "White king is in checkmate".colorize(:green) if checkmate?(white_king_cords, "white")
-      end
+      checkmate(black_king_cords, "black")
+      check(black_king_cords, "black")
 
       puts ""
       update_turn
@@ -112,7 +108,6 @@ class Game
   end
 
   # Checks to make sure the player is choosing their color pieces only
-  # Makes sure the player is moving their color pieces
   def correct_color?(piece_cords)
     return true if board.board[piece_cords[0]][piece_cords[1]]&.color == current_player.color
 
@@ -136,6 +131,16 @@ class Game
     board.unnocupied_square?(piece, move_cords)
   end
 
+  def check(king_cords, color)
+    puts "#{color.capitalize} is in check".colorize(:red) if in_check?(king_cords, color)
+  end
+
+  def checkmate(king_cords, color)
+    return unless in_check?(king_cords, color) && in_checkmate?(king_cords, color)
+
+    puts "#{color.capitalize} is in checkmate".colorize(:red)
+  end
+
   # Updates king cords when king is moved
   def update_king_position(piece, move_cords)
     @white_king_cords = move_cords if piece.color == "white"
@@ -149,7 +154,7 @@ class Game
   end
 
   # Checks if the player is in checkmate
-  def checkmate?(king_cords, color)
+  def in_checkmate?(king_cords, color)
     # false
     board.checkmate?(king_cords, color)
   end
