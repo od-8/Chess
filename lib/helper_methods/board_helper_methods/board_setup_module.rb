@@ -10,13 +10,13 @@ module BoardSetup
   end
 
   def add_king
-    board[0][3] = King.new("king", "\u265a", "white")
-    board[7][3] = King.new("king", "\u2654", "black")
+    board[0][4] = King.new("king", "\u265a", "white")
+    board[7][4] = King.new("king", "\u2654", "black")
   end
 
   def add_queen
-    board[0][4] = Queen.new("queen", "\u265b", "white")
-    board[7][4] = Queen.new("queen", "\u2655", "black")
+    board[0][3] = Queen.new("queen", "\u265b", "white")
+    board[7][3] = Queen.new("queen", "\u2655", "black")
   end
 
   def add_rooks

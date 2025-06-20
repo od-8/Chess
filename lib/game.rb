@@ -9,8 +9,8 @@ class Game
     @player1 = Player.new(name1, "white")
     @player2 = Player.new(name2, "black")
     @current_player = @player1
-    @white_king_cords = [0, 3]
-    @black_king_cords = [7, 3]
+    @white_king_cords = [0, 4]
+    @black_king_cords = [7, 4]
   end
 
   # Method for playing the game, handles the game loop and asks for another game
@@ -31,14 +31,12 @@ class Game
 
       if in_check?(black_king_cords, "black")
         puts "Black king is in check".colorize(:red)
-        # puts "Black king is in checkmate".colorize(:red) if checkmate?(black_king_cords, "black")
-        checkmate?(black_king_cords, "black")
+        puts "Black king is in checkmate".colorize(:red) if checkmate?(black_king_cords, "black")
       end
 
       if in_check?(white_king_cords, "white")
         puts "White king is in check".colorize(:red)
-        # puts "White king is in checkmate".colorize(:green) if checkmate?(white_king_cords, "white")
-        checkmate?(white_king_cords, "white")
+        puts "White king is in checkmate".colorize(:green) if checkmate?(white_king_cords, "white")
       end
 
       puts ""

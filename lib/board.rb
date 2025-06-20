@@ -139,43 +139,77 @@ class Board
   end
 
   # Checks if king is in checkmate
-  def checkmate?(king_cords, color)
+  def checkmate?(stop_check_positions)
+    true if stop_check_positions.empty?
+  end
+
+  def stop_check_positions(king_cords, color)
+    stop_check_positions = board_loop?(king_cords, color)
+    p stop_check_positions
+    stop_check_positions
+  end
+
+  def board_loop?(king_cords, color)
+    valid_moves = []
     board.each_with_index do |row, row_index|
       row.each_with_index do |piece, piece_index|
         next unless piece&.color == color
 
-        piece_handler(piece, [row_index, piece_index], king_cords, color)
+        piece_handler(piece, [row_index, piece_index], king_cords, color).each { |move| valid_moves << move }
       end
     end
+    valid_moves
   end
 
-  def piece_handler(piece, piece_cords, king_cords, color)
-    p piece.name
+  def piece_handler(piece, piece_cords, king_cords, color) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/PerceivedComplexity
+    valid_moves = []
+
+    puts piece.name
     case piece.name
     when "pawn"
-      pawn_handler(piece, piece_cords, king_cords, color)
+      pawn_handler(piece, piece_cords, king_cords, color).each { |move| valid_moves << move }
     when "knight"
-      move_places(piece_cords, possible_knight_moves(piece_cords[0], piece_cords[1]), king_cords, color)
+      move_places(piece_cords, possible_knight_moves(piece_cords[0], piece_cords[1]), king_cords, color).each { |move| valid_moves << move }
     when "bishop"
-      move_places(piece_cords, possible_bishop_moves(board, piece_cords, piece.color), king_cords, color)
+      move_places(piece_cords, possible_bishop_moves(board, piece_cords, piece.color), king_cords, color).each { |move| valid_moves << move }
     when "rook"
-      move_places(piece_cords, possible_rook_moves(board, piece_cords, piece.color), king_cords, color)
+      move_places(piece_cords, possible_rook_moves(board, piece_cords, piece.color), king_cords, color).each { |move| valid_moves << move }
     when "queen"
-      move_places(piece_cords, possible_bishop_moves(board, piece_cords, piece.color), king_cords, color)
-      move_places(piece_cords, possible_rook_moves(board, piece_cords, piece.color), king_cords, color)
+      move_places(piece_cords, possible_bishop_moves(board, piece_cords, piece.color), king_cords, color).each { |move| valid_moves << move }
+      move_places(piece_cords, possible_rook_moves(board, piece_cords, piece.color), king_cords, color).each { |move| valid_moves << move }
+    when "king"
+      king_handler(king_cords, color).each { |move| valid_moves << move }
     end
+
+    valid_moves
   end
 
   def pawn_handler(piece, piece_cords, king_cords, color) # rubocop:disable Metrics/AbcSize
+    valid_moves = []
+
     if piece.color == "white"
-      move_places(piece_cords, white_move_one_forward(piece_cords[0], piece_cords[1]), king_cords, color)
-      move_places(piece_cords, white_move_two_forward(board, piece_cords[0], piece_cords[1]), king_cords, color)
+      move_places(piece_cords, white_move_one_forward(piece_cords[0], piece_cords[1]), king_cords, color).each { |move| valid_moves << move }
+      move_places(piece_cords, white_move_two_forward(board, piece_cords[0], piece_cords[1]), king_cords, color).each { |move| valid_moves << move }
     end
 
-    if piece.color == "black" # rubocop:disable Style/GuardClause
-      move_places(piece_cords, black_move_one_forward(piece_cords[0], piece_cords[1]), king_cords, color)
-      move_places(piece_cords, black_move_two_forward(board, piece_cords[0], piece_cords[1]), king_cords, color)
+    if piece.color == "black"
+      move_places(piece_cords, black_move_one_forward(piece_cords[0], piece_cords[1]), king_cords, color).each { |move| valid_moves << move }
+      move_places(piece_cords, black_move_two_forward(board, piece_cords[0], piece_cords[1]), king_cords, color).each { |move| valid_moves << move }
     end
+
+    valid_moves
+  end
+
+  def king_handler(king_cords, color)
+    valid_moves = []
+
+    possible_king_moves(king_cords[0], king_cords[1]).each do |move_cords|
+      if board[move_cords[0]][move_cords[1]]&.color != color && in_check?(move_cords, color) == false
+        valid_moves << move_cords
+      end
+    end
+
+    valid_moves
   end
 
   def move_places(piece_cords, possible_moves, king_cords, color)
@@ -189,8 +223,7 @@ class Board
       reverse_move(piece_cords, move_cords)
     end
 
-    p valid_moves
-    # puts ""
+    valid_moves
   end
 end
 
