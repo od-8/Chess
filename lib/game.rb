@@ -1,7 +1,7 @@
 require "colorize"
 
 # Contains the game and all of its methods for playing the game
-class Game
+class Game # rubocop:disable Metrics/ClassLength
   attr_accessor :board, :player1, :player2, :current_player, :white_king_cords, :black_king_cords
 
   def initialize(name1 = "Jim", name2 = "John")
@@ -29,10 +29,12 @@ class Game
 
       board.print_board
 
-      checkmate(white_king_cords, "white")
+      break if checkmate?(white_king_cords, "white")
+
       check(white_king_cords, "white")
 
-      checkmate(black_king_cords, "black")
+      break if checkmate?(black_king_cords, "black")
+
       check(black_king_cords, "black")
 
       puts ""
@@ -44,6 +46,11 @@ class Game
   def move_loop # rubocop:disable Metrics/AbcSize,Metrics/MethodLength"
     loop do
       piece_cords, move_cords, _invalid_moves = legal_input
+      if piece_cords == "castle"
+        when_castling(move_cords)
+        break
+      end
+
       piece = board.board[piece_cords[0]][piece_cords[1]]
 
       next unless piece.legal_move?(board.board, piece_cords, move_cords) && unnocupied_square?(piece, move_cords)
@@ -70,6 +77,8 @@ class Game
       cords = take_input
       invalid_moves += 3
 
+      break if cords[0] == "castle"
+
       next unless legal_move?(cords[0]) && legal_move?(cords[1])
 
       cords.map! { |position| to_cords(position) }
@@ -92,6 +101,8 @@ class Game
 
   # Makes sure both cords are valid and have a length of 2
   def legal_move?(cords)
+    return if cords[0] == "castle"
+
     letter = cords[0]
     number = cords[1].to_i - 1
 
@@ -135,10 +146,12 @@ class Game
     puts "#{color.capitalize} is in check".colorize(:red) if in_check?(king_cords, color)
   end
 
-  def checkmate(king_cords, color)
+  def checkmate?(king_cords, color)
     return unless in_check?(king_cords, color) && in_checkmate?(king_cords, color)
 
     puts "#{color.capitalize} is in checkmate".colorize(:red)
+
+    return true
   end
 
   # Updates king cords when king is moved
@@ -157,6 +170,11 @@ class Game
   def in_checkmate?(king_cords, color)
     # false
     board.checkmate?(king_cords, color)
+  end
+
+  def when_castling(castle_side)
+    king_cords = current_player.color == "white" ? white_king_cords : black_king_cords
+    board.when_castling(castle_side, king_cords, current_player.color)
   end
 
   # print "\e[#{coordinates[2]}A\e[J" # Will be used later for printing nicely

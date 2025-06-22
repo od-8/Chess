@@ -1,5 +1,6 @@
 # Helper methods
 require_relative "helper_methods/board_helper_methods/board_setup_module"
+require_relative "helper_methods/board_helper_methods/castling_methods"
 require_relative "helper_methods/peices_helper_methods/white_pawn_positions"
 require_relative "helper_methods/peices_helper_methods/black_pawn_positions"
 require_relative "helper_methods/peices_helper_methods/knight_positions"
@@ -58,7 +59,7 @@ class Board # rubocop:disable Metrics/ClassLength
     @board[piece_cords[0]][piece_cords[1]] = nil
   end
 
-  # Reverse's #move, is used if player makes an illegal move
+  # Reverse's #move, its used to see reverse moves that are illegal
   def reverse_move(piece_cords, move_cords)
     piece = board[move_cords[0]][move_cords[1]]
 
