@@ -23,7 +23,7 @@ class BlackPawn
   def pawn_move_positions(board, peice_cords)
     possible_moves = []
 
-    black_move_one_forward(peice_cords[0], peice_cords[1]).each { |cords| possible_moves << cords }
+    black_move_one_forward(board, peice_cords[0], peice_cords[1]).each { |cords| possible_moves << cords }
     black_move_two_forward(board, peice_cords[0], peice_cords[1]).each { |cords| possible_moves << cords }
     black_take_positions(board, peice_cords[0], peice_cords[1]).each { |cords| possible_moves << cords }
 

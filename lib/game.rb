@@ -64,6 +64,9 @@ class Game # rubocop:disable Metrics/ClassLength
         next
       end
 
+      board.promotion(piece.color, move_cords) if piece&.name == "pawn"
+
+      p board.board[move_cords[0]][move_cords[1]]
       break
     end
   end
@@ -180,3 +183,5 @@ class Game # rubocop:disable Metrics/ClassLength
 
   # print "\e[#{coordinates[2]}A\e[J" # Will be used later for printing nicely
 end
+
+# update

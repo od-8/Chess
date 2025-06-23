@@ -2,10 +2,10 @@
 # Used for check and pawn capturing
 module PawnCapturing
   # Method for basic pawn movement, up 1 square
-  def black_move_one_forward(x, y) # rubocop:disable Naming/MethodParameterName
+  def black_move_one_forward(board, x, y) # rubocop:disable Naming/MethodParameterName
     all_possible_moves = []
 
-    all_possible_moves << [x - 1, y] if (x - 1).between?(0, 7)
+    all_possible_moves << [x - 1, y] if (x - 1).between?(0, 7) && board[x - 1][y].nil?
 
     all_possible_moves
   end

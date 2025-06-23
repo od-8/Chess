@@ -1,11 +1,11 @@
 # Has all the methods to add all the peices to the board
 module BoardSetup
   def add_peices
-    add_king
-    add_queen
-    add_rooks
-    add_bishops
-    add_knights
+    # add_king
+    # add_queen
+    # add_rooks
+    # add_bishops
+    # add_knights
     add_pawns
   end
 
