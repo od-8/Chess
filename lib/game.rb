@@ -69,7 +69,7 @@ class Game # rubocop:disable Metrics/ClassLength
   end
 
   # This repeats until a players cords are valid then turns them into usable cords
-  def legal_input
+  def legal_input # rubocop:disable Metrics/MethodLength
     invalid_moves = 22
     cords = []
 
@@ -173,8 +173,9 @@ class Game # rubocop:disable Metrics/ClassLength
   end
 
   def when_castling(castle_side)
-    king_cords = current_player.color == "white" ? white_king_cords : black_king_cords
-    board.when_castling(castle_side, king_cords, current_player.color)
+    legal_castling = board.castling_is_legal(castle_side, current_player.color)
+
+    board.castling_move(castle_side, current_player.color) if legal_castling == true
   end
 
   # print "\e[#{coordinates[2]}A\e[J" # Will be used later for printing nicely
