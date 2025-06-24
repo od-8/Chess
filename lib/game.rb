@@ -46,12 +46,15 @@ class Game # rubocop:disable Metrics/ClassLength
   def move_loop # rubocop:disable Metrics/AbcSize,Metrics/MethodLength"
     loop do
       piece_cords, move_cords, _invalid_moves = legal_input
-      if piece_cords == "castle"
-        when_castling(move_cords)
-        break
-      end
 
       piece = board.board[piece_cords[0]][piece_cords[1]]
+
+      if piece&.name == "king"
+        castling if move_cords[0]
+        # castling
+        # update king position
+        # break loop
+      end
 
       next unless piece.legal_move?(board.board, piece_cords, move_cords) && unnocupied_square?(piece, move_cords)
 
@@ -72,15 +75,13 @@ class Game # rubocop:disable Metrics/ClassLength
   end
 
   # This repeats until a players cords are valid then turns them into usable cords
-  def legal_input # rubocop:disable Metrics/MethodLength
+  def legal_input
     invalid_moves = 22
     cords = []
 
     loop do
       cords = take_input
       invalid_moves += 3
-
-      break if cords[0] == "castle"
 
       next unless legal_move?(cords[0]) && legal_move?(cords[1])
 
@@ -104,8 +105,6 @@ class Game # rubocop:disable Metrics/ClassLength
 
   # Makes sure both cords are valid and have a length of 2
   def legal_move?(cords)
-    return if cords[0] == "castle"
-
     letter = cords[0]
     number = cords[1].to_i - 1
 
@@ -154,7 +153,7 @@ class Game # rubocop:disable Metrics/ClassLength
 
     puts "#{color.capitalize} is in checkmate".colorize(:red)
 
-    return true
+    true
   end
 
   # Updates king cords when king is moved
@@ -173,12 +172,6 @@ class Game # rubocop:disable Metrics/ClassLength
   def in_checkmate?(king_cords, color)
     # false
     board.checkmate?(king_cords, color)
-  end
-
-  def when_castling(castle_side)
-    legal_castling = board.castling_is_legal(castle_side, current_player.color)
-
-    board.castling_move(castle_side, current_player.color) if legal_castling == true
   end
 
   # print "\e[#{coordinates[2]}A\e[J" # Will be used later for printing nicely
