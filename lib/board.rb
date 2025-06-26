@@ -1,6 +1,6 @@
 # Helper methods
 require_relative "helper_methods/board_helper_methods/board_setup_module"
-require_relative "helper_methods/board_helper_methods/castling_methods"
+require_relative "helper_methods/board_helper_methods/board_castling"
 require_relative "helper_methods/board_helper_methods/promotion_methods"
 require_relative "helper_methods/board_helper_methods/check_methods"
 require_relative "helper_methods/board_helper_methods/checkmate_methods"
@@ -23,7 +23,7 @@ require_relative "peices/black_pawn"
 # Contains the board and all of its methods
 class Board
   include BoardSetup
-  include Castling
+  # include Castling
   include Promotion
   include Check
   include Checkmate

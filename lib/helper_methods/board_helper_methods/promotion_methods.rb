@@ -1,4 +1,4 @@
-q# Contains methods for pawn promotion
+# Contains methods for pawn promotion
 module Promotion
   def ask_for_piece
     piece = nil

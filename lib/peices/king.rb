@@ -12,22 +12,18 @@ class King
     @color = color
   end
 
-  def legal_move?(board, piece_cords, move_cords)
+  def legal_move?(_board, piece_cords, move_cords)
     legal_moves = possible_king_moves(piece_cords[0], piece_cords[1])
-    castling(board, piece_cords[0], piece_cords[1]).each { |move| legal_moves << move}
+    # castling(board, piece_cords[0], piece_cords[1]).each { |move| legal_moves << move}
 
     return true if legal_moves.include?(move_cords)
 
     false
   end
 
-  def castling(board, x, y)
+  def castling(x, y) # rubocop:disable Naming/MethodParameterName
     possible_moves = []
-    possible_moves << [x, y + 2] if castling_is_legal?(board, [x, y + 2], color)
-    possible_moves << [x, y - 2] if castling_is_legal?(board, [x, y - 2], color)
-  end
-
-  def castling_is_legal?(board, cords, color)
-    
+    possible_moves << [x, y + 2] if board.castling_is_legal?([x, y + 2], color)
+    possible_moves << [x, y - 2] if board.castling_is_legal?([x, y - 2], color)
   end
 end
