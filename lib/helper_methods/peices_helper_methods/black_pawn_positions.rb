@@ -1,6 +1,6 @@
 # Contains the methods for pawn capturing
 # Used for check and pawn capturing
-module PawnCapturing
+module BlackPawnMovement
   # Method for basic pawn movement, up 1 square
   def black_move_one_forward(board, x, y) # rubocop:disable Naming/MethodParameterName
     all_possible_moves = []

@@ -52,11 +52,9 @@ class Game
     loop do
       piece_cords, move_cords = sub_move
 
-      piece = board.board[piece_cords[0]][piece_cords[1]]
+      piece = determine_piece(board.board[piece_cords[0]][piece_cords[1]], piece_cords, move_cords[0])
 
       king_cords = when_king(piece, move_cords)
-      p king_cords
-      p black_king_cords
 
       board.move(piece_cords, move_cords)
 
@@ -78,8 +76,6 @@ class Game
       piece = board.board[piece_cords[0]][piece_cords[1]]
 
       next unless valid_move?(piece, piece_cords, move_cords)
-
-      # board.promotion(piece.color, move_cords) if piece&.name == "pawn"
 
       return [piece_cords, move_cords]
     end
@@ -129,6 +125,16 @@ class Game
     return white_king_cords if piece.color == "white"
 
     black_king_cords if piece.color == "black"
+  end
+
+  def determine_piece(piece, piece_cords, row)
+    piece = piece.promote if piece.name == "pawn" && piece.legal_promotion?(row)
+    p piece.promote if piece.name == "pawn" && piece.legal_promotion?(row)
+    p piece
+
+    board.board[piece_cords[0]][piece_cords[1]] = piece
+
+    piece
   end
 
   # print "\e[#{coordinates[2]}A\e[J" # Will be used later for printing nicely

@@ -2,7 +2,7 @@ require_relative "../helper_methods/peices_helper_methods/white_pawn_positions"
 
 # Contains all the methods for the white pawns
 class WhitePawn
-  include PawnCapturing
+  include WhitePawnMovement
   attr_accessor :name, :symbol, :color
 
   def initialize(name, symbol, color)
@@ -28,5 +28,33 @@ class WhitePawn
     white_take_positions(board, peice_cords[0], peice_cords[1]).each { |cords| all_possible_moves << cords }
 
     all_possible_moves
+  end
+
+  def legal_promotion?(row)
+    return true if row == 7
+
+    false
+  end
+
+  def new_promotion_piece
+    loop do
+      puts "What piece would you like to promote to?"
+      piece = gets.chomp.downcase
+      return piece if %w[knight bishop rook queen].include?(piece)
+    end
+  end
+
+  def promote # rubocop:disable Metrics/MethodLength
+    piece = new_promotion_piece
+    case piece
+    when "knight"
+      Knight.new("knight", "\u265e", "white")
+    when "bishop"
+      Bishop.new("bishop", "\u265d", "white")
+    when "rook"
+      Rook.new("rook", "\u265c", "white")
+    when "queen"
+      Queen.new("queen", "\u265b", "white")
+    end
   end
 end

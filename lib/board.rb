@@ -31,7 +31,8 @@ class Board
   include VerticalHorizontalAlgorithims
   include DiagonalAlgorithims
   include KnightPositions
-  include PawnCapturing
+  include WhitePawnMovement
+  include BlackPawnMovement
 
   attr_accessor :board, :last_taken_piece, :white_king_moved, :black_king_moved
 
@@ -44,18 +45,19 @@ class Board
   end
 
   # Prints the board so it is easy to understand and looks good
-  def print_board # rubocop:disable Metrics/MethodLength
+  def print_board # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
     puts ""
-    puts "  +---+---+---+---+---+---+---+---+"
+    puts "+---+---+---+---+---+---+---+---+".center(54)
     board.reverse.each_with_index do |row, index|
+      print " ".center(8)
       print "#{8 - index} |"
       row.each do |piece|
         print piece.nil? ? "   |" : " #{piece&.symbol} |"
       end
       puts ""
-      puts "  +---+---+---+---+---+---+---+---+"
+      puts "+---+---+---+---+---+---+---+---+".center(54)
     end
-    puts "    a   b   c   d   e   f   g   h"
+    puts "a   b   c   d   e   f   g   h".center(54)
     puts ""
   end
 

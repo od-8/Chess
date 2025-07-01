@@ -2,7 +2,7 @@ require_relative "../helper_methods/peices_helper_methods/black_pawn_positions"
 
 # Contains all the methods for the black pawns
 class BlackPawn
-  include PawnCapturing
+  include BlackPawnMovement
   attr_accessor :name, :symbol, :color
 
   def initialize(name, symbol, color)
@@ -28,5 +28,33 @@ class BlackPawn
     black_take_positions(board, peice_cords[0], peice_cords[1]).each { |cords| possible_moves << cords }
 
     possible_moves
+  end
+
+  def legal_promotion?(row)
+    return true if row.zero?
+
+    false
+  end
+
+  def new_promotion_piece
+    loop do
+      puts "What piece would you like to promote to?"
+      piece = gets.chomp.downcase
+      return piece if %w[knight bishop rook queen].include?(piece)
+    end
+  end
+
+  def promote # rubocop:disable Metrics/MethodLength
+    piece = new_promotion_piece
+    case piece
+    when "knight"
+      Knight.new("knight", "\u2658", "black")
+    when "bishop"
+      Bishop.new("bishop", "\u2657", "black")
+    when "rook"
+      Rook.new("rook", "\u2656", "black")
+    when "queen"
+      Queen.new("queen", "\u2655", "black")
+    end
   end
 end
