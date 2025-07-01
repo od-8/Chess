@@ -7,7 +7,7 @@ class Game
   include GetCoordinates
   include BoardMethods
 
-  attr_accessor :board, :player1, :player2, :current_player, :white_king_cords, :black_king_cords
+  attr_accessor :board, :player1, :player2, :current_player, :white_king_cords, :black_king_cords, :current_king
 
   def initialize(name1 = "Jim", name2 = "John")
     @board = Board.new
@@ -16,6 +16,7 @@ class Game
     @current_player = @player1
     @white_king_cords = [0, 4]
     @black_king_cords = [7, 4]
+    @current_king = [[0, 4], "white"]
   end
 
   # Method for playing the game, handles the game loop and asks for another game
@@ -52,19 +53,19 @@ class Game
     loop do
       piece_cords, move_cords = sub_move
 
-      piece = determine_piece(board.board[piece_cords[0]][piece_cords[1]], piece_cords, move_cords[0])
+      piece = possible_promotion(board.board[piece_cords[0]][piece_cords[1]], piece_cords, move_cords[0])
 
-      king_cords = when_king(piece, move_cords)
+      king_cords = handle_king_cords(piece, move_cords)
 
       board.move(piece_cords, move_cords)
 
-      if invalid_move?(king_cords, "white") || invalid_move?(king_cords, "black")
+      if invalid_move?(king_cords, current_king[1])
         board.reverse_move(piece_cords, move_cords)
         next
       end
 
-      update_king_position(piece, move_cords) if piece&.name == "king"
-
+      update_king_cords(piece, move_cords)
+      update_king(piece)
       break
     end
   end
@@ -112,29 +113,39 @@ class Game
     true
   end
 
-  # Updates king cords when king is moved
-  def update_king_position(piece, move_cords)
-    @white_king_cords = move_cords if piece.color == "white"
-
-    @black_king_cords = move_cords if piece.color == "black"
-  end
-
-  def when_king(piece, move_cords)
+  # This method basically handles when the king is moved, that kings cords are not updated so it might
+  def handle_king_cords(piece, move_cords)
     return move_cords if piece.name == "king"
 
-    return white_king_cords if piece.color == "white"
-
-    black_king_cords if piece.color == "black"
+    current_king[0]
   end
 
-  def determine_piece(piece, piece_cords, row)
+  def possible_promotion(piece, piece_cords, row)
     piece = piece.promote if piece.name == "pawn" && piece.legal_promotion?(row)
-    p piece.promote if piece.name == "pawn" && piece.legal_promotion?(row)
-    p piece
 
     board.board[piece_cords[0]][piece_cords[1]] = piece
 
     piece
+  end
+
+  def update_king(piece)
+    @current_king = [white_king_cords, "white"] if piece.color == "black"
+
+    @current_king = [black_king_cords, "black"] if piece.color == "white"
+  end
+
+  def update_king_cords(piece, move_cords)
+    return unless piece.name == "king"
+
+    if piece.color == "white"
+      board.white_king_moved = true
+      @white_king_cords = move_cords
+    end
+
+    return unless piece.color == "black"
+
+    board.black_king_moved = true if piece.name == "king"
+    @black_king_cords = move_cords
   end
 
   # print "\e[#{coordinates[2]}A\e[J" # Will be used later for printing nicely

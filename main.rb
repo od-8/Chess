@@ -71,7 +71,7 @@ def front_page
     print "             Enter the number for what you would like to do? "
     game = gets.chomp.downcase
 
-    return game if %w[1 2 3].include?(game)
+    return game if %w[1 2 3 4].include?(game)
   end
 end
 
@@ -88,7 +88,7 @@ def print_options # rubocop:disable Metrics/AbcSize
 end
 
 def clear
-  10.times do
+  12.times do
     print "\e[1A\e[J"
     sleep 0.1
   end

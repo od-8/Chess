@@ -40,7 +40,7 @@ class Board
     @board = board
     @last_taken_piece = nil
     @white_king_moved = false
-    @black_king_move = false
+    @black_king_moved = false
     add_peices
   end
 
@@ -65,8 +65,6 @@ class Board
   def move(piece_cords, move_cords) # rubocop:disable Metrics/AbcSize
     piece = board[piece_cords[0]][piece_cords[1]]
 
-    @white_king_moved = true if piece == "king" && piece.color == "white"
-    @black_king_move = true if piece == "king" && piece.color == "black"
     @last_taken_piece = board[move_cords[0]][move_cords[1]]
     @board[move_cords[0]][move_cords[1]] = piece
     @board[piece_cords[0]][piece_cords[1]] = nil
