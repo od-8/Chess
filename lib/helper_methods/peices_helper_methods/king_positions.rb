@@ -1,5 +1,4 @@
-# Contains the method for where the king can move to
-# Used for king moving
+# Has the methods which returns all the valid king moves
 module KingPositions
   def possible_king_moves(x, y) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity,Naming/MethodParameterName
     possible_moves = []

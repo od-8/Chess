@@ -1,11 +1,11 @@
 require "colorize"
 require_relative "helper_methods/game_helper_modules/get_coordinates"
-require_relative "helper_methods/game_helper_modules/call_board_methods"
+require_relative "helper_methods/game_helper_modules/call_methods"
 
 # Contains the game and all of its methods for playing the game
 class Game
   include GetCoordinates
-  include BoardMethods
+  include CallMethods
 
   attr_accessor :board, :player1, :player2, :current_player, :white_king_cords, :black_king_cords, :current_king
 
@@ -32,7 +32,6 @@ class Game
   def game_loop
     loop do
       move_loop
-
       board.print_board
 
       break if checkmate?(white_king_cords, "white")
@@ -43,34 +42,28 @@ class Game
 
       check(black_king_cords, "black")
 
-      puts ""
-      update_turn
+      update_current_player
+      update_current_king
     end
   end
 
-  # This repeates until player enters a legal move
-  def move_loop # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
+  # Gets cords and move then checks to make sure this doesnt inflict check on the current palyer
+  def move_loop
     loop do
-      piece_cords, move_cords = sub_move
+      piece_cords, move_cords = legal_piece_move
 
-      piece = possible_promotion(board.board[piece_cords[0]][piece_cords[1]], piece_cords, move_cords[0])
+      piece = board.board[piece_cords[0]][piece_cords[1]]
 
       king_cords = handle_king_cords(piece, move_cords)
-
-      board.move(piece_cords, move_cords)
-
-      if invalid_move?(king_cords, current_king[1])
-        board.reverse_move(piece_cords, move_cords)
-        next
-      end
+      allowed_move?(piece_cords, move_cords, king_cords, current_king[1]) ? board.move(piece_cords, move_cords) : next
 
       update_king_cords(piece, move_cords)
-      update_king(piece)
       break
     end
   end
 
-  def sub_move
+  # Gets the cords then checks if the piece the player has chosen can make that move
+  def legal_piece_move
     loop do
       piece_cords, move_cords, _invalid_moves = legal_input
 
@@ -82,6 +75,7 @@ class Game
     end
   end
 
+  # Makes sure the piece can move there and the square is unnocupied
   def valid_move?(piece, piece_cords, move_cords)
     return true if piece.legal_move?(board.board, piece_cords, move_cords) &&
                    unnocupied_square?(piece, move_cords)
@@ -90,65 +84,67 @@ class Game
   end
 
   # Updates turn from player 1 to player 2
-  def update_turn
+  def update_current_player
     @current_player = current_player == player1 ? player2 : player1
   end
 
-  # Checks if the player is allowed to make that move, depends on if there in check and its there go
-  def invalid_move?(king_cords, color)
-    return true if current_player.color == color && in_check?(king_cords, color)
-
-    false
-  end
-
+  # Print statement for when either king is in checkmate
   def check(king_cords, color)
-    puts "#{color.capitalize} is in check".colorize(:red) if in_check?(king_cords, color)
+    return unless in_check?(board.board, king_cords, color)
+
+    puts "#{color.capitalize} king is in check".colorize(:green)
+    puts ""
   end
 
+  # Print statement for when either king is in checkmate
   def checkmate?(king_cords, color)
-    return unless in_check?(king_cords, color) && in_checkmate?(king_cords, color)
+    return unless in_check?(board.board, king_cords, color) && in_checkmate?(king_cords, color)
 
-    puts "#{color.capitalize} is in checkmate".colorize(:red)
+    puts "#{color.capitalize} king is in checkmate".colorize(:red)
+    puts ""
 
     true
   end
 
-  # This method basically handles when the king is moved, that kings cords are not updated so it might
+  # This handles an issue when preforming an invalid move with the king then moving any other piece including the king
+  # The king cords would be updated but then wouldnt be reset resulting in the game thinking the king is in the invalid
+  # square. This method returns the move cords if the piece being moved is the king, or the current kings cords if the
+  # piece being moved is not a king
   def handle_king_cords(piece, move_cords)
     return move_cords if piece.name == "king"
 
     current_king[0]
   end
 
-  def possible_promotion(piece, piece_cords, row)
-    piece = piece.promote if piece.name == "pawn" && piece.legal_promotion?(row)
+  # The current king is the king corresponding to the current player
+  # If the current player has the white pieces then the current king is the white king
+  def update_current_king
+    @current_king = [white_king_cords, "white"] if current_player.color == "black"
 
-    board.board[piece_cords[0]][piece_cords[1]] = piece
-
-    piece
+    @current_king = [black_king_cords, "black"] if current_player.color == "white"
   end
 
-  def update_king(piece)
-    @current_king = [white_king_cords, "white"] if piece.color == "black"
-
-    @current_king = [black_king_cords, "black"] if piece.color == "white"
-  end
-
+  # Updated the coordinates of the king
   def update_king_cords(piece, move_cords)
     return unless piece.name == "king"
 
     if piece.color == "white"
       board.white_king_moved = true
       @white_king_cords = move_cords
+    elsif piece.color == "black"
+      board.black_king_moved = true
+      @black_king_cords = move_cords
     end
+  end
 
-    return unless piece.color == "black"
+  # Deep copys the board then makes the move, then checks wether that move is legal, ie not in check
+  def allowed_move?(piece_cords, move_cords, king_cords, color)
+    future_board = board.clone_and_update(piece_cords, move_cords)
 
-    board.black_king_moved = true if piece.name == "king"
-    @black_king_cords = move_cords
+    return false if current_player.color == color && in_check?(future_board, king_cords, color)
+
+    true
   end
 
   # print "\e[#{coordinates[2]}A\e[J" # Will be used later for printing nicely
 end
-
-# update

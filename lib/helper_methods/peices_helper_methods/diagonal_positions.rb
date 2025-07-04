@@ -1,6 +1,5 @@
-# Contains the diagonal algorithims
-# Used for check, bishop moving, queen moving
-module DiagonalAlgorithims
+# Has all the methods for getting all inline positons from a specific square (piece_cords)
+module DiagonalPositions
   # All legal moves a bishop can make
   def possible_bishop_moves(board, piece_cords, color) # rubocop:disable Metrics/AbcSize
     possible_moves = []

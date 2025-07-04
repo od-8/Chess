@@ -1,5 +1,4 @@
-# Contains all the methods for getting player input like "a1"
-# and turning it into coordinates like [0, 0]
+# Gets the coordinates from the current player then turns them into usable cords ("a1" = [0, 0])
 module GetCoordinates
   # This repeats until a players cords are valid then turns them into usable coordinates
   def legal_input
@@ -10,20 +9,21 @@ module GetCoordinates
       cords = take_input
       invalid_moves += 3
 
-      next unless valid_coordinaates?(cords[0]) && valid_coordinaates?(cords[1])
+      next unless valid_coordinates?(cords[0]) && valid_coordinates?(cords[1])
 
       cords.map! { |position| to_cords(position) }
 
       break if correct_color?(cords[0])
     end
+
     cords << invalid_moves
   end
 
-  # Gets the peice the user would like to move and where they would like to move it
+  # Gets the chess cords of the piece the player is moving and where theyd like to move it
   def take_input
     print "     #{current_player.name}, input position of the peice you would like to move: "
     piece_cords = gets.chomp.downcase
-    print " #{current_player.name}, input position of where you would like to move that peice: "
+    print "     #{current_player.name}, input position of where you would like to move that peice: "
     move_cords = gets.chomp.downcase
     puts ""
 
@@ -31,7 +31,7 @@ module GetCoordinates
   end
 
   # Makes sure both cords are valid and have a length of 2
-  def valid_coordinaates?(cords)
+  def valid_coordinates?(cords)
     letter = cords[0]
     number = cords[1].to_i - 1
 

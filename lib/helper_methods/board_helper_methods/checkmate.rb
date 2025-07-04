@@ -1,4 +1,4 @@
-# Contains all the methods for checkmate
+# Has all the methods to check if any pieces can stop check, if there are none then its checkmate
 module Checkmate
   # Checks if king is in checkmate
   def checkmate?(king_cords, color)
@@ -7,7 +7,7 @@ module Checkmate
     false
   end
 
-  # Loops through board and adds call #piece_handler on all the piece that are the same color as the king passed
+  # Loops through board and calls #piece_handler on all the piece that are the same color as the king
   def stop_check_positions(king_cords, color)
     valid_moves = []
 
@@ -69,11 +69,9 @@ module Checkmate
     possible_king_moves(king_cords[0], king_cords[1]).each do |move_cords|
       next if board[move_cords[0]][move_cords[1]]&.color == color
 
-      move(king_cords, move_cords)
+      clone_board = clone_and_update(king_cords, move_cords)
 
-      valid_moves << move_cords if in_check?(move_cords, color) == false
-
-      reverse_move(king_cords, move_cords)
+      valid_moves << move_cords unless in_check?(clone_board, move_cords, color)
     end
 
     valid_moves
@@ -86,9 +84,8 @@ module Checkmate
     possible_moves.each do |move_cords|
       next if move_cords.empty?
 
-      move(piece_cords, move_cords)
-      valid_moves << move_cords unless in_check?(king_cords, color)
-      reverse_move(piece_cords, move_cords)
+      clone_board = clone_and_update(piece_cords, move_cords)
+      valid_moves << move_cords unless in_check?(clone_board, king_cords, color)
     end
 
     valid_moves

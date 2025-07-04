@@ -1,8 +1,8 @@
-require_relative "../helper_methods/peices_helper_methods/diagonal_algorithims"
+require_relative "../helper_methods/peices_helper_methods/diagonal_positions"
 
-# Contains all the methods for the bishop peices
+# Has the moves and info for the bishop
 class Bishop
-  include DiagonalAlgorithims
+  include DiagonalPositions
 
   attr_accessor :name, :symbol, :color
 

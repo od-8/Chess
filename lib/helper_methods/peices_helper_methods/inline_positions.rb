@@ -1,6 +1,5 @@
-# Contains the vertical and horizontal algorithims
-# Used for check, rook moving, queen moving
-module VerticalHorizontalAlgorithims
+# Has all the methods for getting all inline positons from a specific square (piece_cords)
+module InlinePositions
   # All legal moves a rook can make
   def possible_rook_moves(board, piece_cords, color) # rubocop:disable Metrics/AbcSize
     possible_moves = []

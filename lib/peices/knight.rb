@@ -1,6 +1,6 @@
 require_relative "../helper_methods/peices_helper_methods/knight_positions"
 
-# Contains all the methods for the knight peices
+# Has the moves and info for the knight
 class Knight
   include KnightPositions
   attr_accessor :name, :symbol, :color

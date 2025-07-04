@@ -1,7 +1,6 @@
 require_relative "../helper_methods/peices_helper_methods/king_positions"
-require_relative "../board"
 
-# Contains methods for king moving and check
+# Has the moves and info for the king
 class King
   include KingPositions
   attr_accessor :name, :symbol, :color
@@ -14,7 +13,6 @@ class King
 
   def legal_move?(_board, piece_cords, move_cords)
     legal_moves = possible_king_moves(piece_cords[0], piece_cords[1])
-    # castling(board, piece_cords[0], piece_cords[1]).each { |move| legal_moves << move}
 
     return true if legal_moves.include?(move_cords)
 

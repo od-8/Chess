@@ -1,5 +1,5 @@
-# Has all the methods to add all the peices to the board
-module BoardSetup
+# Add all the pieces to teh board
+module AddPieces
   def add_peices
     add_king
     add_queen

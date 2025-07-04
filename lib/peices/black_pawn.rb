@@ -1,8 +1,8 @@
 require_relative "../helper_methods/peices_helper_methods/black_pawn_positions"
 
-# Contains all the methods for the black pawns
+# Has the moves and info the the black pawn
 class BlackPawn
-  include BlackPawnMovement
+  include BlackPawnPositions
   attr_accessor :name, :symbol, :color
 
   def initialize(name, symbol, color)

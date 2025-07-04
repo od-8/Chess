@@ -1,8 +1,8 @@
-require_relative "../helper_methods/peices_helper_methods/vertical_horizontal_algorithims"
+require_relative "../helper_methods/peices_helper_methods/inline_positions"
 
-# Contains all the methods for the rook peices
+# Has the moves and info for the rook
 class Rook
-  include VerticalHorizontalAlgorithims
+  include InlinePositions
 
   attr_accessor :name, :symbol, :color
 

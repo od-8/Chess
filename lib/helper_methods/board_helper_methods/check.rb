@@ -1,10 +1,12 @@
-# Contians all the methods for check
+# Checks if there is a pawn to the top left/top right of king, knight attacking it, or its inline with
+# a bishop, rook or queen
 module Check
   # Checks if king is in check
-  def in_check?(cords, color)
-    if pawn_check?(board, cords, color) || knight_check?(board, cords, color) || diagonal_check?(board, cords, color) || inline_check?(board, cords, color) # rubocop:disable Layout/LineLength
-      return true
-    end
+  def in_check?(board, cords, color)
+    return true if pawn_check?(board, cords, color) ||
+                   knight_check?(board, cords, color) ||
+                   diagonal_check?(board, cords, color) ||
+                   inline_check?(board, cords, color)
 
     false
   end
@@ -26,7 +28,7 @@ module Check
     false
   end
 
-  # Checks if there is a check from a kngiht
+  # Checks if there is a check from a knight
   def knight_check?(board, piece_cords, color)
     knight_check_positions = possible_knight_moves(piece_cords[0], piece_cords[1])
 

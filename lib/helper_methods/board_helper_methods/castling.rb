@@ -1,4 +1,4 @@
-# Contains methods for castling
+# Has all the methods for castling including checking if castling is legal and actually moving the pieces
 module Castling
   # rook and king in same place
   # none of the moves between are in check

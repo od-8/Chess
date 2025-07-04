@@ -1,10 +1,10 @@
-require_relative "../helper_methods/peices_helper_methods/diagonal_algorithims"
-require_relative "../helper_methods/peices_helper_methods/vertical_horizontal_algorithims"
+require_relative "../helper_methods/peices_helper_methods/diagonal_positions"
+require_relative "../helper_methods/peices_helper_methods/inline_positions"
 
-# Contains all the methods for the queen peice
+# Has the moves and info for the queen
 class Queen
-  include VerticalHorizontalAlgorithims
-  include DiagonalAlgorithims
+  include InlinePositions
+  include DiagonalPositions
 
   attr_accessor :name, :symbol, :color
 

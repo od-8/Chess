@@ -1,8 +1,8 @@
 require_relative "../helper_methods/peices_helper_methods/white_pawn_positions"
 
-# Contains all the methods for the white pawns
+# Has the moves and info for the whtie pawn
 class WhitePawn
-  include WhitePawnMovement
+  include WhitePawnPositions
   attr_accessor :name, :symbol, :color
 
   def initialize(name, symbol, color)

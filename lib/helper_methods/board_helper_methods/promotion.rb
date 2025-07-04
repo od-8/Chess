@@ -1,4 +1,4 @@
-# Contains methods for pawn promotion
+# Handles promtoion from getting the piece the player would like to promte to and actually adding it to the board
 module Promotion
   def ask_for_piece
     piece = nil
