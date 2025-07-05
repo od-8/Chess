@@ -17,22 +17,23 @@ module Promotion
     false
   end
 
-  def promotion(color, move_cords)
-    return if (color == "white" && move_cords[0] != 7) || (color == "black" && move_cords[0] != 0)
+  def promotion(piece, move_cords)
+    return piece if piece.color == "white" && move_cords[0] != 7 ||
+                    piece.color == "black" && move_cords[0] != 0
 
-    make_new_piece(ask_for_piece, color, move_cords)
+    make_new_piece(ask_for_piece, piece.color)
   end
 
-  def make_new_piece(piece, color, move_cords) # rubocop:disable Metrics/AbcSize
+  def make_new_piece(piece, color)
     case piece
     when "queen"
-      @board[move_cords[0]][move_cords[1]] = Queen.new("queen", "\u265b", color)
+      Queen.new("queen", "\u265b", color)
     when "rook"
-      @board[move_cords[0]][move_cords[1]] = Rook.new("rook", "\u265b", color)
+      Rook.new("rook", "\u265b", color)
     when "bishop"
-      @board[move_cords[0]][move_cords[1]] = Bishop.new("bishop", "\u265b", color)
+      Bishop.new("bishop", "\u265b", color)
     when "kngight"
-      @board[move_cords[0]][move_cords[1]] = Knight.new("knight", "\u265b", color)
+      Knight.new("knight", "\u265b", color)
     end
   end
 end
