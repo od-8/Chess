@@ -25,7 +25,7 @@ require_relative "peices/black_pawn"
 # Contains the board and all of its methods
 class Board
   include AddPieces
-  # include Castling
+  include Castling
   include Promotion
   include Check
   include Checkmate
@@ -63,9 +63,10 @@ class Board
   end
 
   # Moves piece from where it currently is (piece_cords) to where it wants to go (move_cords)
-  def move(piece_cords, move_cords)
+  def move(piece_cords, move_cords) # rubocop:disable Metrics/AbcSize
     piece = board[piece_cords[0]][piece_cords[1]]
     piece = promotion(piece, move_cords) if piece.name == "pawn"
+    castling(piece_cords, move_cords) if piece.name == "king"
 
     @board[move_cords[0]][move_cords[1]] = piece
     @board[piece_cords[0]][piece_cords[1]] = nil
