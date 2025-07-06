@@ -128,13 +128,9 @@ class Game
   def update_king_cords(piece, move_cords)
     return unless piece.name == "king"
 
-    if piece.color == "white"
-      board.white_king_moved = true
-      @white_king_cords = move_cords
-    elsif piece.color == "black"
-      board.black_king_moved = true
-      @black_king_cords = move_cords
-    end
+    piece.color == "white" ? @white_king_cords = move_cords : @black_king_cords = move_cords
+
+    piece.king_moved = true
   end
 
   # Deep copys the board then makes the move, then checks wether that move is legal, ie not in check

@@ -2,34 +2,46 @@ require_relative "../helper_methods/peices_helper_methods/king_positions"
 
 # Has the moves and info for the king
 class King
+  include Check
   include KingPositions
-  attr_accessor :name, :symbol, :color
+  attr_accessor :name, :symbol, :color, :king_moved
 
   def initialize(name, symbol, color)
     @name = name
     @symbol = symbol
     @color = color
+    @king_moved = false
   end
 
-  def legal_move?(_board, piece_cords, move_cords)
+  def legal_move?(board, piece_cords, move_cords)
     legal_moves = possible_king_moves(piece_cords[0], piece_cords[1])
-    castling(piece_cords[0], piece_cords[1]).each { |move| legal_moves << move}
+    castling(board, piece_cords[0], piece_cords[1]).each { |move| legal_moves << move }
 
     return true if legal_moves.include?(move_cords)
 
     false
   end
 
-  def castling(x, y) # rubocop:disable Naming/MethodParameterName
+  def castling(board, x, y) # rubocop:disable Naming/MethodParameterName
     possible_moves = []
-    possible_moves << [x, y + 2]
-    possible_moves << [x, y - 2]
+    possible_moves << [x, y + 2] if king_side_is_legal?(board, x, y)
+    possible_moves << [x, y - 2] if queen_side_is_legal?(board, x, y)
+    possible_moves
   end
 
-  # def castling_is_legal(king_moved, board, cords)
-  #   return false if king_moved == true ||
-  #                   board[cords[0]]
+  def king_side_is_legal?(board, x, y) # rubocop:disable Naming/MethodParameterName
+    return true if king_moved == false &&
+                   board[x][y + 1].nil? && in_check?(board, [x, y + 1], color) == false &&
+                   board[x][y + 2].nil? && in_check?(board, [x, y + 2], color) == false
 
-  #   true
-  # end
+    false
+  end
+
+  def queen_side_is_legal?(board, x, y) # rubocop:disable Naming/MethodParameterName
+    return true if king_moved == false &&
+                   board[x][y - 1].nil? && in_check?(board, [x, y - 1], color) == false &&
+                   board[x][y - 2].nil? && in_check?(board, [x, y - 2], color) == false
+
+    false
+  end
 end

@@ -5,14 +5,6 @@ require_relative "helper_methods/board_helper_methods/promotion"
 require_relative "helper_methods/board_helper_methods/check"
 require_relative "helper_methods/board_helper_methods/checkmate"
 
-# Movement for all the pieces
-require_relative "helper_methods/peices_helper_methods/white_pawn_positions"
-require_relative "helper_methods/peices_helper_methods/black_pawn_positions"
-require_relative "helper_methods/peices_helper_methods/knight_positions"
-require_relative "helper_methods/peices_helper_methods/diagonal_positions"
-require_relative "helper_methods/peices_helper_methods/inline_positions"
-require_relative "helper_methods/peices_helper_methods/king_positions"
-
 # Peices
 require_relative "peices/king"
 require_relative "peices/queen"
@@ -29,12 +21,12 @@ class Board
   include Promotion
   include Check
   include Checkmate
-  include KingPositions
-  include InlinePositions
-  include DiagonalPositions
-  include KnightPositions
-  include WhitePawnPositions
-  include BlackPawnPositions
+  # include KingPositions
+  # include InlinePositions
+  # include DiagonalPositions
+  # include KnightPositions
+  # include WhitePawnPositions
+  # include BlackPawnPositions
 
   attr_accessor :board, :white_king_moved, :black_king_moved
 

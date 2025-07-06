@@ -3,8 +3,6 @@ module Castling
   def castling(piece_cords, move_cords)
     king_side = move_cords[1] == piece_cords[1] + 2
     queen_side = move_cords[1] == piece_cords[1] - 2
-    p king_side
-    p queen_side
 
     return unless king_side == true || queen_side == true
 

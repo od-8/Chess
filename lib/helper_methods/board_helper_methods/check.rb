@@ -1,6 +1,18 @@
+require_relative "../peices_helper_methods/white_pawn_positions"
+require_relative "../peices_helper_methods/black_pawn_positions"
+require_relative "../peices_helper_methods/knight_positions"
+require_relative "../peices_helper_methods/diagonal_positions"
+require_relative "../peices_helper_methods/inline_positions"
+
 # Checks if there is a pawn to the top left/top right of king, knight attacking it, or its inline with
 # a bishop, rook or queen
 module Check
+  include WhitePawnPositions
+  include BlackPawnPositions
+  include KnightPositions
+  include DiagonalPositions
+  include InlinePositions
+
   # Checks if king is in check
   def in_check?(board, cords, color)
     return true if pawn_check?(board, cords, color) ||
