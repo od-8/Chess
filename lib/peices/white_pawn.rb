@@ -34,6 +34,9 @@ class WhitePawn
   end
 
   def en_passant_positions(x, y) # rubocop:disable Naming/MethodParameterName
+    p left_passant
+    p right_passant
+    puts ""
     possible_moves = []
     possible_moves << [x + 1, y + 1] if right_passant == true
     possible_moves << [x + 1, y - 1] if left_passant == true

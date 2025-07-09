@@ -68,6 +68,8 @@ class Board
   def move_piece(piece, piece_cords, move_cords)
     @board[move_cords[0]][move_cords[1]] = piece
     @board[piece_cords[0]][piece_cords[1]] = nil
+
+    remove_passant_pawn(piece, piece_cords, move_cords) if piece.name == "pawn"
   end
 
   # Checks if the square is occupied by a piece with the same color
