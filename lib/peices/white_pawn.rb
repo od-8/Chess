@@ -3,12 +3,14 @@ require_relative "../helper_methods/peices_helper_methods/white_pawn_positions"
 # Has the moves and info for the whtie pawn
 class WhitePawn
   include WhitePawnPositions
-  attr_accessor :name, :symbol, :color
+  attr_accessor :name, :symbol, :color, :left_passant, :right_passant
 
   def initialize(name, symbol, color)
     @name = name
     @symbol = symbol
     @color = color
+    @right_passant = false
+    @left_passant = false
   end
 
   def legal_move?(board, peice_cords, move_cords)
@@ -20,41 +22,23 @@ class WhitePawn
   end
 
   # All legal moves a pawn can make
-  def pawn_move_positions(board, peice_cords)
-    all_possible_moves = []
+  def pawn_move_positions(board, peice_cords) # rubocop:disable Metrics/AbcSize
+    possible_moves = []
 
-    white_move_one_forward(board, peice_cords[0], peice_cords[1]).each { |cords| all_possible_moves << cords }
-    white_move_two_forward(board, peice_cords[0], peice_cords[1]).each { |cords| all_possible_moves << cords }
-    white_take_positions(board, peice_cords[0], peice_cords[1]).each { |cords| all_possible_moves << cords }
+    white_move_one_forward(board, peice_cords[0], peice_cords[1]).each { |cords| possible_moves << cords }
+    white_move_two_forward(board, peice_cords[0], peice_cords[1]).each { |cords| possible_moves << cords }
+    white_take_positions(board, peice_cords[0], peice_cords[1]).each { |cords| possible_moves << cords }
+    en_passant_positions(peice_cords[0], peice_cords[1]).each { |cords| possible_moves << cords }
 
-    all_possible_moves
+    possible_moves
   end
 
-  def legal_promotion?(row)
-    return true if row == 7
-
-    false
-  end
-
-  def new_promotion_piece
-    loop do
-      puts "What piece would you like to promote to?"
-      piece = gets.chomp.downcase
-      return piece if %w[knight bishop rook queen].include?(piece)
-    end
-  end
-
-  def promote # rubocop:disable Metrics/MethodLength
-    piece = new_promotion_piece
-    case piece
-    when "knight"
-      Knight.new("knight", "\u265e", "white")
-    when "bishop"
-      Bishop.new("bishop", "\u265d", "white")
-    when "rook"
-      Rook.new("rook", "\u265c", "white")
-    when "queen"
-      Queen.new("queen", "\u265b", "white")
-    end
+  def en_passant_positions(x, y) # rubocop:disable Naming/MethodParameterName
+    possible_moves = []
+    possible_moves << [x + 1, y + 1] if right_passant == true
+    possible_moves << [x + 1, y - 1] if left_passant == true
+    @left_passant = false
+    @right_passant = false
+    possible_moves
   end
 end

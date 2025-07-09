@@ -4,6 +4,7 @@ require_relative "helper_methods/board_helper_methods/castling"
 require_relative "helper_methods/board_helper_methods/promotion"
 require_relative "helper_methods/board_helper_methods/check"
 require_relative "helper_methods/board_helper_methods/checkmate"
+require_relative "helper_methods/board_helper_methods/en_passant"
 
 # Peices
 require_relative "peices/king"
@@ -21,12 +22,7 @@ class Board
   include Promotion
   include Check
   include Checkmate
-  # include KingPositions
-  # include InlinePositions
-  # include DiagonalPositions
-  # include KnightPositions
-  # include WhitePawnPositions
-  # include BlackPawnPositions
+  include EnPassant
 
   attr_accessor :board, :white_king_moved, :black_king_moved
 
@@ -54,12 +50,22 @@ class Board
     puts ""
   end
 
-  # Moves piece from where it currently is (piece_cords) to where it wants to go (move_cords)
-  def move(piece_cords, move_cords) # rubocop:disable Metrics/AbcSize
+  # Does stuff for before a move like when castling it handles moving the rook, handles promotion and en passant
+  def move(piece_cords, move_cords)
     piece = board[piece_cords[0]][piece_cords[1]]
-    piece = promotion(piece, move_cords) if piece.name == "pawn"
+
+    if piece.name == "pawn"
+      piece = promotion(piece, move_cords)
+      en_passant(piece, piece_cords, move_cords)
+    end
+
     castling(piece_cords, move_cords) if piece.name == "king"
 
+    move_piece(piece, piece_cords, move_cords)
+  end
+
+  # Moves piece from where it currently is (piece_cords) to where it wants to go (move_cords)
+  def move_piece(piece, piece_cords, move_cords)
     @board[move_cords[0]][move_cords[1]] = piece
     @board[piece_cords[0]][piece_cords[1]] = nil
   end
@@ -84,6 +90,3 @@ class Board
     clone_board
   end
 end
-
-# Notes:
-# 1 - Could try and adjust clone and update so instead it clones then calls move for more DRY code

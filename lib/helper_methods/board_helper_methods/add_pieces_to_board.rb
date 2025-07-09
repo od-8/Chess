@@ -3,8 +3,8 @@ module AddPieces
   def add_peices
     add_king
     # add_queen
-    add_rooks
-    add_bishops
+    # add_rooks
+    # add_bishops
     # add_knights
     add_pawns
   end
