@@ -27,4 +27,20 @@ module BlackPawnPositions
 
     all_possible_moves
   end
+
+  def en_passant_positions(board, x, y) # rubocop:disable Naming/MethodParameterName
+    possible_moves = []
+    possible_moves << [x - 1, y + 1] if en_passant_legal?(board, x, y + 1)
+    possible_moves << [x - 1, y - 1] if en_passant_legal?(board, x, y - 1)
+    possible_moves
+  end
+
+  def en_passant_legal?(board, x, y) # rubocop:disable Naming/MethodParameterName
+    return true if board[x - 1][y].nil? &&
+                   board[x][y]&.name == "pawn" &&
+                   board[x][y].color == "white" &&
+                   board[x][y].can_be_passanted == true
+
+    false
+  end
 end

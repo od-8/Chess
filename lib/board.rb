@@ -30,6 +30,7 @@ class Board
     @board = board
     @white_king_moved = false
     @black_king_moved = false
+    @passantable_pawn = nil
     add_peices
   end
 
@@ -52,6 +53,7 @@ class Board
 
   # Does stuff for before a move like when castling it handles moving the rook, handles promotion and en passant
   def move(piece_cords, move_cords)
+    update_passantable_pawn
     piece = board[piece_cords[0]][piece_cords[1]]
 
     if piece.name == "pawn"
@@ -66,10 +68,10 @@ class Board
 
   # Moves piece from where it currently is (piece_cords) to where it wants to go (move_cords)
   def move_piece(piece, piece_cords, move_cords)
+    remove_passant_pawn(piece, piece_cords, move_cords) if piece.name == "pawn"
+
     @board[move_cords[0]][move_cords[1]] = piece
     @board[piece_cords[0]][piece_cords[1]] = nil
-
-    remove_passant_pawn(piece, piece_cords, move_cords) if piece.name == "pawn"
   end
 
   # Checks if the square is occupied by a piece with the same color

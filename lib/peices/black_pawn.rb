@@ -3,14 +3,13 @@ require_relative "../helper_methods/peices_helper_methods/black_pawn_positions"
 # Has the moves and info the the black pawn
 class BlackPawn
   include BlackPawnPositions
-  attr_accessor :name, :symbol, :color, :left_passant, :right_passant
+  attr_accessor :name, :symbol, :color, :can_be_passanted
 
   def initialize(name, symbol, color)
     @name = name
     @symbol = symbol
     @color = color
-    @left_passant = false
-    @right_passant = false
+    @can_be_passanted = false
   end
 
   def legal_move?(board, peice_cords, move_cords)
@@ -28,17 +27,16 @@ class BlackPawn
     black_move_one_forward(board, peice_cords[0], peice_cords[1]).each { |cords| possible_moves << cords }
     black_move_two_forward(board, peice_cords[0], peice_cords[1]).each { |cords| possible_moves << cords }
     black_take_positions(board, peice_cords[0], peice_cords[1]).each { |cords| possible_moves << cords }
-    en_passant_positions(peice_cords[0], peice_cords[1]).each { |cords| possible_moves << cords }
+    en_passant_positions(board, peice_cords[0], peice_cords[1]).each { |cords| possible_moves << cords }
 
     possible_moves
   end
 
-  def en_passant_positions(x, y) # rubocop:disable Naming/MethodParameterName
-    possible_moves = []
-    possible_moves << [x - 1, y + 1] if right_passant == true
-    possible_moves << [x - 1, y - 1] if left_passant == true
-    @left_passant = false
-    @right_passant = false
-    possible_moves
+  def remove_passant_pawn(board, piece_cords, move_cords)
+    return unless
+        board[move_cords[0]][move_cords[1]].nil? &&
+        [[piece_cords[0] - 1, piece_cords[1] - 1], [piece_cords[0] - 1, piece_cords[1] + 1]].include?(move_cords)
+
+    [piece_cords[0], move_cords[1]]
   end
 end
