@@ -29,16 +29,16 @@ class Game
   end
 
   # The handles the user move, updating the current player, check and checkmate
-  def game_loop
+  def game_loop # rubocop:disable Metrics/AbcSize
     loop do
       move_loop
       board.print_board
 
-      break if checkmate?(white_king_cords, "white")
+      break if checkmate?(white_king_cords, "white") || stalemate?(white_king_cords, "white") || not_enough_pieces
 
       check(white_king_cords, "white")
 
-      break if checkmate?(black_king_cords, "black")
+      break if checkmate?(black_king_cords, "black") || stalemate?(black_king_cords, "black")
 
       check(black_king_cords, "black")
 
@@ -104,6 +104,27 @@ class Game
     puts ""
 
     true
+  end
+
+  def stalemate?(king_cords, color)
+    return unless in_check?(board.board, king_cords, color) == false &&
+                  in_checkmate?(king_cords, color) &&
+                  current_player.color != color
+
+    puts "Stalemate. There are no winners.".colorize(:red)
+    puts ""
+
+    true
+  end
+
+  def not_enough_pieces
+    if insufficient_material?
+      puts "Insufficient material. There are no winners.".colorize(:red)
+      puts ""
+      return true
+    end
+
+    false
   end
 
   # This handles an issue when preforming an invalid move with the king then moving any other piece including the king

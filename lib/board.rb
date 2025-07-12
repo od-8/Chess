@@ -5,6 +5,7 @@ require_relative "helper_methods/board_helper_methods/promotion"
 require_relative "helper_methods/board_helper_methods/check"
 require_relative "helper_methods/board_helper_methods/checkmate"
 require_relative "helper_methods/board_helper_methods/en_passant"
+require_relative "helper_methods/board_helper_methods/insufficient_material"
 
 # Peices
 require_relative "peices/king"
@@ -23,6 +24,7 @@ class Board
   include Check
   include Checkmate
   include EnPassant
+  include InsufficientMaterial
 
   attr_accessor :board, :white_king_moved, :black_king_moved
 

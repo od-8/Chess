@@ -15,4 +15,8 @@ module CallMethods
   def in_checkmate?(king_cords, color)
     board.checkmate?(king_cords, color)
   end
+
+  def insufficient_material?
+    board.insufficient_material?
+  end
 end
