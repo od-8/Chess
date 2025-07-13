@@ -19,4 +19,8 @@ module CallMethods
   def insufficient_material?
     board.insufficient_material?
   end
+
+  def threefold_repetition?
+    board.threefold_repetition?(board.board)
+  end
 end

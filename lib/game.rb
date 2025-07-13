@@ -34,7 +34,7 @@ class Game
       move_loop
       board.print_board
 
-      break if checkmate?(white_king_cords, "white") || stalemate?(white_king_cords, "white") || not_enough_pieces
+      break if checkmate?(white_king_cords, "white") || stalemate?(white_king_cords, "white") || not_enough_pieces || draw_by_repetition
 
       check(white_king_cords, "white")
 
@@ -118,13 +118,21 @@ class Game
   end
 
   def not_enough_pieces
-    if insufficient_material?
-      puts "Insufficient material. There are no winners.".colorize(:red)
-      puts ""
-      return true
-    end
+    return unless insufficient_material?
 
-    false
+    puts "Insufficient material. There are no winners.".colorize(:red)
+    puts ""
+
+    true
+  end
+
+  def draw_by_repetition
+    return unless threefold_repetition?
+
+    puts "Threefold repetition. There are no winners.".colorize(:red)
+    puts ""
+
+    true
   end
 
   # This handles an issue when preforming an invalid move with the king then moving any other piece including the king

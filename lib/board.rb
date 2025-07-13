@@ -6,6 +6,7 @@ require_relative "helper_methods/board_helper_methods/check"
 require_relative "helper_methods/board_helper_methods/checkmate"
 require_relative "helper_methods/board_helper_methods/en_passant"
 require_relative "helper_methods/board_helper_methods/insufficient_material"
+require_relative "helper_methods/board_helper_methods/threefold_repetition"
 
 # Peices
 require_relative "peices/king"
@@ -25,14 +26,16 @@ class Board
   include Checkmate
   include EnPassant
   include InsufficientMaterial
+  include ThreefoldRepetition
 
-  attr_accessor :board, :white_king_moved, :black_king_moved
+  attr_accessor :board, :white_king_moved, :black_king_moved, :previous_boards
 
   def initialize(board = Array.new(8) { Array.new(8) })
     @board = board
     @white_king_moved = false
     @black_king_moved = false
     @passantable_pawn = nil
+    @previous_boards = []
     add_peices
   end
 
@@ -74,6 +77,8 @@ class Board
 
     @board[move_cords[0]][move_cords[1]] = piece
     @board[piece_cords[0]][piece_cords[1]] = nil
+
+    @previous_boards << convert_to_fen(board)
   end
 
   # Checks if the square is occupied by a piece with the same color
@@ -94,5 +99,24 @@ class Board
     clone_board[piece_cords[0]][piece_cords[1]] = nil
 
     clone_board
+  end
+
+  def convert_to_fen(board)
+    fen_board = ""
+    board.each do |row|
+      row.each do |piece|
+        fen_board += "." if piece.nil?
+
+        fen_board += fen_piece(piece) unless piece.nil?
+      end
+      fen_board += "/"
+    end
+    fen_board
+  end
+
+  def fen_piece(piece)
+    return piece.name[0].capitalize if piece.color == "white"
+
+    piece.name[0] if piece.color == "black"
   end
 end
