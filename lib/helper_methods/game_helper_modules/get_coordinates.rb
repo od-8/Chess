@@ -2,12 +2,11 @@
 module GetCoordinates
   # This repeats until a players cords are valid then turns them into usable coordinates
   def legal_input
-    invalid_moves = 22
     cords = []
 
     loop do
       cords = take_input
-      invalid_moves += 3
+      @invalid_moves += 3
 
       next unless valid_coordinates?(cords[0]) && valid_coordinates?(cords[1])
 
@@ -16,7 +15,7 @@ module GetCoordinates
       break if correct_color?(cords[0])
     end
 
-    cords << invalid_moves
+    cords
   end
 
   # Gets the chess cords of the piece the player is moving and where theyd like to move it

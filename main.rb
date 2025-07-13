@@ -75,20 +75,18 @@ def front_page
   end
 end
 
-def print_options # rubocop:disable Metrics/AbcSize
+def print_options
   puts "+-----+-----+-----+-----+-----+".center(54)
   puts "| 1 - Play a new game         |".center(54)
   puts "+-----+-----+-----+-----+-----+".center(54)
   puts "| 2 - Load a saved game       |".center(54)
-  puts "+-----+-----+-----+-----+-----+".center(54)
-  puts "| 3 - Play Fischer Random     |".center(54)
   puts "+-----+-----+-----+-----+-----+".center(54)
   puts "| 4 - Exit                    |".center(54)
   puts "+-----+-----+-----+-----+-----+".center(54)
 end
 
 def clear
-  12.times do
+  10.times do
     print "\e[1A\e[J"
     sleep 0.1
   end

@@ -16,11 +16,11 @@ module CallMethods
     board.checkmate?(king_cords, color)
   end
 
-  def insufficient_material?
+  def checkmate_isnt_possible?
     board.insufficient_material?
   end
 
-  def threefold_repetition?
+  def draw_by_repetition?
     board.threefold_repetition?(board.board)
   end
 end
