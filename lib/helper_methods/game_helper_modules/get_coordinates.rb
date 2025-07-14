@@ -20,9 +20,9 @@ module GetCoordinates
 
   # Gets the chess cords of the piece the player is moving and where theyd like to move it
   def take_input
-    print "     #{current_player.name}, input position of the peice you would like to move: "
+    print "     #{current_player.name}, input the position of the piece you would like to move: "
     piece_cords = gets.chomp.downcase
-    print "     #{current_player.name}, input position of where you would like to move that peice: "
+    print "     #{current_player.name}, input the position of where you would like to move that peice: "
     move_cords = gets.chomp.downcase
     puts ""
 

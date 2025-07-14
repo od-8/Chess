@@ -1,13 +1,18 @@
 require "colorize"
+require_relative "helper_methods/game_helper_modules/print_information"
+require_relative "helper_methods/game_helper_modules/update_cords"
 require_relative "helper_methods/game_helper_modules/get_coordinates"
 require_relative "helper_methods/game_helper_modules/call_methods"
 
 # Contains the game and all of its methods for playing the game
-class Game # rubocop:disable Metrics/ClassLength
+class Game
+  include PrintInfo
+  include UpdateCords
   include GetCoordinates
   include CallMethods
 
-  attr_accessor :board, :player1, :player2, :current_player, :white_king_cords, :black_king_cords, :current_king
+  attr_accessor :board, :player1, :player2, :current_player, :white_king_cords, :black_king_cords, :current_king, 
+                :invalid_moves
 
   def initialize(name1 = "Jim", name2 = "John")
     @board = Board.new
@@ -22,20 +27,22 @@ class Game # rubocop:disable Metrics/ClassLength
 
   # Method for playing the game, handles the game loop and asks for another game
   def play_game
-    board.print_board("white")
+    board.print_board # ("white")
 
     game_loop
+    sleep 1
 
-    # Ask for another game
+    another_game
   end
 
-  # The handles the user move, updating the current player, check and checkmate
+  # The handles the user move, printing the game nicely on the screen checking for check and things that end the game 
+  # and it updates current player and current king.
   def game_loop
     loop do
       move_loop
       clear_screen
 
-      board.print_board(current_player.color)
+      board.print_board # (print_board_color)
 
       break if checkmate? || stalemate? || insufficient_material? || threefold_repetition?
 
@@ -83,107 +90,7 @@ class Game # rubocop:disable Metrics/ClassLength
     false
   end
 
-  # Updates turn from player 1 to player 2
-  def update_current_player
-    @current_player = current_player == player1 ? player2 : player1
-  end
-
-  def check?
-    return true if print_check?(white_king_cords, "white") || print_check?(black_king_cords, "black")
-
-    false
-  end
-
-  # Print statement for when either king is in checkmate
-  def print_check?(king_cords, color)
-    return unless in_check?(board.board, king_cords, color)
-
-    @invalid_moves += 2
-    puts "#{color.capitalize} king is in check".colorize(:green)
-    puts ""
-  end
-
-  def checkmate?
-    return true if print_checkmate?(white_king_cords, "white") || print_checkmate?(black_king_cords, "black")
-
-    false
-  end
-
-  # Print statement for when either king is in checkmate
-  def print_checkmate?(king_cords, color)
-    return unless in_check?(board.board, king_cords, color) && in_checkmate?(king_cords, color)
-
-    puts "#{color.capitalize} king is in checkmate".colorize(:red)
-    puts ""
-
-    true
-  end
-
-  def stalemate?
-    return true if print_stalemate?(white_king_cords, "white") || print_stalemate?(black_king_cords, "black")
-
-    false
-  end
-
-  def print_stalemate?(king_cords, color)
-    return unless in_check?(board.board, king_cords, color) == false &&
-                  in_checkmate?(king_cords, color) &&
-                  current_player.color != color
-
-    puts "It is #{color}'s go and they cant make any legal moves. Stalemate".colorize(:red)
-    puts ""
-
-    true
-  end
-
-  def insufficient_material?
-    return unless checkmate_isnt_possible?
-
-    puts "Insufficinet material. Draw".colorize(:red)
-    puts ""
-
-    true
-  end
-
-  def threefold_repetition?
-    return unless draw_by_repetition?
-
-    puts "Threefold repetition. Draw".colorize(:red)
-    puts ""
-
-    true
-  end
-
-  # This handles an issue when preforming an invalid move with the king then moving any other piece including the king
-  # The king cords would be updated but then wouldnt be reset resulting in the game thinking the king is in the invalid
-  # square. This method returns the move cords if the piece being moved is the king, or the current kings cords if the
-  # piece being moved is not a king
-  def handle_king_cords(piece, move_cords)
-    return move_cords if piece.name == "king"
-
-    current_king[0]
-  end
-
-  # The current king is the king corresponding to the current player
-  # If the current player has the white pieces then the current king is the white king
-  def update_current_king
-    @current_king = if @current_king == [white_king_cords, "white"]
-                      [black_king_cords, "black"]
-                    else
-                      [white_king_cords, "white"]
-                    end
-  end
-
-  # Updated the coordinates of the king
-  def update_king_cords(piece, move_cords)
-    return unless piece.name == "king"
-
-    piece.color == "white" ? @white_king_cords = move_cords : @black_king_cords = move_cords
-
-    piece.king_moved = true
-  end
-
-  # Deep copys the board then makes the move, then checks wether that move is legal, ie not in check
+  # Deep copys the board then makes the move, then checks if that move is legal, ie not in check
   def allowed_move?(piece_cords, move_cords, king_cords, color)
     future_board = board.clone_and_update(piece_cords, move_cords)
 
@@ -192,11 +99,44 @@ class Game # rubocop:disable Metrics/ClassLength
     true
   end
 
+  # Removes the board from the screen so tons of board dont stack up over and over
   def clear_screen
     print "\e[#{@invalid_moves}A\e[J"
 
     @invalid_moves = 20
   end
 
-  # print "\e[#{coordinates[2]}A\e[J" # Will be used later for printing nicely
+  # This handles which color to print the board for
+  def print_board_color
+    return "black" if current_player.color == "white"
+
+    "white"
+  end
+
+  # Based on player inputs it either starts a new game or says thank you message
+  def another_game
+    answer = another_game_answer
+    if answer == "yes"
+      @invalid_moves = 26
+      clear_screen
+      new_game = Game.new(@player1.name, @player2.name)
+      new_game.play_game
+    else
+      puts "Thank you for playing chess.".colorize(:green)
+      puts ""
+    end
+  end
+
+  # Asks if players would like to play another game
+  def another_game_answer
+    loop do
+      puts "Enter yes if you would like to play another game or no if you want to quit"
+      puts ""
+      print "Your descision: "
+      answer = gets.chomp.downcase
+      puts ""
+
+      return answer if %w[yes no].include?(answer)
+    end
+  end
 end
