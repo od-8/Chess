@@ -79,7 +79,7 @@ class Board
     @board[move_cords[0]][move_cords[1]] = piece
     @board[piece_cords[0]][piece_cords[1]] = nil
 
-    @previous_boards << convert_to_fen(board)
+    update_previous_boards
   end
 
   # Checks if the square is occupied by a piece with the same color
@@ -121,5 +121,29 @@ class Board
     return piece.name[0].capitalize if piece.color == "white"
 
     piece.name[0] if piece.color == "black"
+  end
+
+  # Adds the board to previous board, used for threefold repetition
+  def update_previous_boards
+    fen_str = fen_board(board)
+    @previous_boards << fen_str
+  end
+
+  def fen_board(board) # rubocop:disable Metrics/MethodLength
+    fen_arr = []
+    counter = 0
+
+    convert_to_fen(board).split("").each_with_index do |char, index|
+      counter += 1 if char == "."
+
+      unless char == "."
+        counter = 0
+        fen_arr << char
+        next
+      end
+
+      fen_arr << counter if convert_to_fen(board).split("")[index + 1] != "."
+    end
+    fen_arr.join("")
   end
 end
