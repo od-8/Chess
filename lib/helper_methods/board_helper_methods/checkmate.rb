@@ -5,7 +5,7 @@ require_relative "../peices_helper_methods/diagonal_positions"
 require_relative "../peices_helper_methods/inline_positions"
 require_relative "../peices_helper_methods/king_positions"
 
-# Has all the methods to check if any pieces can stop check, if there are none then its checkmate
+# Gets all possible moves and is used to check if any can stop check, its also used for stalemate.
 module Checkmate
   include WhitePawnPositions
   include BlackPawnPositions
@@ -14,7 +14,7 @@ module Checkmate
   include InlinePositions
   include KingPositions
 
-  # Checks if king is in checkmate
+  # Checks ift the king is in checkmate
   def checkmate?(king_cords, color)
     return true if stop_check_positions(king_cords, color).empty?
 
@@ -76,7 +76,7 @@ module Checkmate
     valid_moves
   end
 
-  # Handles when the piece is a king and can only move to non check/empty spots
+  # Handles when the piece is a king and can only move to non check or empty squares
   def king_handler(king_cords, color)
     valid_moves = []
 

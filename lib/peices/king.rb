@@ -13,6 +13,7 @@ class King
     @king_moved = false
   end
 
+  # Checks if the king can move to where the player wants it to move
   def legal_move?(board, piece_cords, move_cords)
     legal_moves = possible_king_moves(piece_cords[0], piece_cords[1])
     castling(board, piece_cords[0], piece_cords[1]).each { |move| legal_moves << move }
@@ -22,6 +23,7 @@ class King
     false
   end
 
+  # Allows king to castle if its legal
   def castling(board, x, y) # rubocop:disable Naming/MethodParameterName
     possible_moves = []
     possible_moves << [x, y + 2] if king_side_is_legal?(board, x, y)
@@ -29,6 +31,7 @@ class King
     possible_moves
   end
 
+  # Checks if king isde castling is legal
   def king_side_is_legal?(board, x, y) # rubocop:disable Naming/MethodParameterName
     return true if king_moved == false &&
                    board[x][y + 1].nil? && in_check?(board, [x, y + 1], color) == false &&
@@ -37,6 +40,7 @@ class King
     false
   end
 
+  # Checks if queen side castling is legal
   def queen_side_is_legal?(board, x, y) # rubocop:disable Naming/MethodParameterName
     return true if king_moved == false &&
                    board[x][y - 1].nil? && in_check?(board, [x, y - 1], color) == false &&

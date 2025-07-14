@@ -5,7 +5,7 @@ require_relative "../peices_helper_methods/diagonal_positions"
 require_relative "../peices_helper_methods/inline_positions"
 
 # Checks if there is a pawn to the top left/top right of king, knight attacking it, or its inline with
-# a bishop, rook or queen
+# a bishop, rook or queen.
 module Check
   include WhitePawnPositions
   include BlackPawnPositions
@@ -13,7 +13,7 @@ module Check
   include DiagonalPositions
   include InlinePositions
 
-  # Checks if king is in check
+  # Checks if the king is in check
   def in_check?(board, cords, color)
     return true if pawn_check?(board, cords, color) ||
                    knight_check?(board, cords, color) ||
@@ -53,7 +53,7 @@ module Check
     false
   end
 
-  # Checks if there is a check from a bishop or from queen
+  # Checks if there is a check from a bishop or from a queen
   def diagonal_check?(board, king_cords, color)
     diagonal_check_positions = possible_bishop_moves(board, king_cords, color)
 
@@ -66,7 +66,7 @@ module Check
     false
   end
 
-  # Checks if there is a check from a rook or queen
+  # Checks if there is a check from a rook or a queen
   def inline_check?(board, king_cords, color)
     inline_check_positions = possible_rook_moves(board, king_cords, color)
 

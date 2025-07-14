@@ -1,11 +1,11 @@
 # Helper stuff
 require_relative "helper_methods/board_helper_methods/print_color_board"
 require_relative "helper_methods/board_helper_methods/add_pieces_to_board"
+require_relative "helper_methods/board_helper_methods/en_passant"
 require_relative "helper_methods/board_helper_methods/castling"
 require_relative "helper_methods/board_helper_methods/promotion"
 require_relative "helper_methods/board_helper_methods/check"
 require_relative "helper_methods/board_helper_methods/checkmate"
-require_relative "helper_methods/board_helper_methods/en_passant"
 require_relative "helper_methods/board_helper_methods/insufficient_material"
 require_relative "helper_methods/board_helper_methods/threefold_repetition"
 
@@ -22,11 +22,11 @@ require_relative "peices/black_pawn"
 class Board
   # include PrintColorBoard
   include AddPieces
+  include EnPassant
   include Castling
   include Promotion
   include Check
   include Checkmate
-  include EnPassant
   include InsufficientMaterial
   include ThreefoldRepetition
 
@@ -41,6 +41,7 @@ class Board
     add_peices
   end
 
+  # Prints the board like a chess board
   def print_board # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
     puts ""
     puts "+---+---+---+---+---+---+---+---+".center(54)
@@ -65,6 +66,7 @@ class Board
     if piece.name == "pawn"
       piece = promotion(piece, move_cords)
       en_passant(piece, piece_cords, move_cords)
+      remove_passant_pawn(piece, piece_cords, move_cords) if piece.name == "pawn"
     end
 
     castling(piece_cords, move_cords) if piece.name == "king"
@@ -74,8 +76,6 @@ class Board
 
   # Moves piece from where it currently is (piece_cords) to where it wants to go (move_cords)
   def move_piece(piece, piece_cords, move_cords)
-    remove_passant_pawn(piece, piece_cords, move_cords) if piece.name == "pawn"
-
     @board[move_cords[0]][move_cords[1]] = piece
     @board[piece_cords[0]][piece_cords[1]] = nil
 
@@ -102,6 +102,7 @@ class Board
     clone_board
   end
 
+  # Converts the board to fen notation, not completed yet
   def convert_to_fen(board)
     fen_board = ""
     board.each do |row|
@@ -115,6 +116,7 @@ class Board
     fen_board
   end
 
+  # Handles which letter to return depending on color
   def fen_piece(piece)
     return piece.name[0].capitalize if piece.color == "white"
 

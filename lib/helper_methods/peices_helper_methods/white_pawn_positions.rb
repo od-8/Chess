@@ -1,4 +1,4 @@
-# Has all the methods for pawn 1 forward, 2 forward and taking
+# Has all the methods for pawn 1 forward, 2 forward, taking and en passant
 module WhitePawnPositions
   # Method for basic pawn movement, up 1 square
   def white_move_one_forward(board, x, y) # rubocop:disable Naming/MethodParameterName
@@ -28,6 +28,7 @@ module WhitePawnPositions
     all_possible_moves
   end
 
+  # Allows white pawn to en passant if its legal
   def en_passant_positions(board, x, y) # rubocop:disable Naming/MethodParameterName
     possible_moves = []
     possible_moves << [x + 1, y + 1] if en_passant_legal?(board, x, y + 1)
@@ -35,10 +36,11 @@ module WhitePawnPositions
     possible_moves
   end
 
+  # Checks if en passant is legal
   def en_passant_legal?(board, x, y) # rubocop:disable Naming/MethodParameterName
-    return true if board[x - 1][y].nil? &&
+    return true if board[x + 1][y].nil? &&
                    board[x][y]&.name == "pawn" &&
-                   board[x][y].color == "white" &&
+                   board[x][y].color == "black" &&
                    board[x][y].can_be_passanted == true
 
     false

@@ -16,10 +16,12 @@ module CallMethods
     board.checkmate?(king_cords, color)
   end
 
+  # Checks if there arent enough pieces
   def checkmate_isnt_possible?
     board.insufficient_material?
   end
 
+  # Checks if the same board has appeared three times
   def draw_by_repetition?
     board.threefold_repetition?(board.board)
   end

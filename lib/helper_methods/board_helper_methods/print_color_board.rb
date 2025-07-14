@@ -1,11 +1,14 @@
-# This is a feature im not sure I like, I maybe will use or maybe not
+# This print the board differently depending on color.
+# When its whites go then white is at the bottom, when its blacks go black is at the bottom.
+# Im not sure I like this, I maybe going to use this.
 module PrintColorBoard
-  # Prints the board so it looks like a chess board
+  # Calls different print board methods depending on color
   def print_board(color)
     white_print_board if color == "white"
     black_print_board if color == "black"
   end
 
+  # Prints the board with white at the bottom
   def white_print_board # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
     puts ""
     puts "+---+---+---+---+---+---+---+---+".center(54)
@@ -22,6 +25,7 @@ module PrintColorBoard
     puts ""
   end
 
+  # Prints the board with black at the bottom
   def black_print_board # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
     puts ""
     puts "+---+---+---+---+---+---+---+---+".center(54)

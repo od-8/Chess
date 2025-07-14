@@ -12,6 +12,7 @@ class WhitePawn
     @can_be_passanted = false
   end
 
+  # Checks if the white pawn can move to where the player wants it to move
   def legal_move?(board, peice_cords, move_cords)
     legal_moves = pawn_move_positions(board, peice_cords)
 
@@ -32,6 +33,7 @@ class WhitePawn
     possible_moves
   end
 
+  # Checks if en passant is the move and returns the coordinates of the piece that need to be removed
   def remove_passant_pawn(board, piece_cords, move_cords)
     return unless
         board[move_cords[0]][move_cords[1]].nil? &&

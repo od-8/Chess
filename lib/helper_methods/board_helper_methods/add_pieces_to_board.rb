@@ -1,12 +1,12 @@
-# Add all the pieces to teh board
+# Adds all the pieces to the board.
 module AddPieces
   def add_peices
     add_king
-    add_queen
+    # add_queen
     # add_rooks
     # add_bishops
-    add_knights
-    # add_pawns
+    # add_knights
+    add_pawns
   end
 
   def add_king

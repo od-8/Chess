@@ -14,6 +14,7 @@ class Queen
     @color = color
   end
 
+  # Checks if the queen can move to where the player wants it to move
   def legal_move?(board, piece_cords, move_cords)
     legal_moves = possible_queen_moves(board, piece_cords)
 
@@ -22,6 +23,7 @@ class Queen
     false
   end
 
+  # Gets all the possible moves for the queen
   def possible_queen_moves(board, piece_cords)
     possible_moves = []
 

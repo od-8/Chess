@@ -1,5 +1,6 @@
-# Handles all the details for threefold repetition
+# Handles the checking for threefold repetition
 module ThreefoldRepetition
+  # Checks if the same board has appeared three times
   def threefold_repetition?(board)
     fen_board = convert_to_fen(board)
     board_counter = 0

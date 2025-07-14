@@ -1,6 +1,6 @@
 require_relative "../helper_methods/peices_helper_methods/diagonal_positions"
 
-# Has the moves and info for the bishop
+# Has the moves and info for the bishop piece
 class Bishop
   include DiagonalPositions
 
@@ -12,6 +12,7 @@ class Bishop
     @color = color
   end
 
+  # Checks if the bishop can move to where the player wants it to move
   def legal_move?(board, piece_cords, move_cords)
     legal_moves = possible_bishop_moves(board, piece_cords, color)
 

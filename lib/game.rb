@@ -11,7 +11,7 @@ class Game
   include GetCoordinates
   include CallMethods
 
-  attr_accessor :board, :player1, :player2, :current_player, :white_king_cords, :black_king_cords, :current_king, 
+  attr_accessor :board, :player1, :player2, :current_player, :white_king_cords, :black_king_cords, :current_king,
                 :invalid_moves
 
   def initialize(name1 = "Jim", name2 = "John")
@@ -40,7 +40,7 @@ class Game
   def game_loop
     loop do
       move_loop
-      clear_screen
+      # clear_screen
 
       board.print_board # (print_board_color)
 

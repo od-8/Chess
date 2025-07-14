@@ -1,5 +1,6 @@
-# Handles promtoion from getting the piece the player would like to promte to and actually adding it to the board
+# Handles promotion. It checks if promotion is legal and makes a new piece depending on what the player asks for.
 module Promotion
+  # Gets the piece the player would like to promote to
   def ask_for_piece
     piece = nil
 

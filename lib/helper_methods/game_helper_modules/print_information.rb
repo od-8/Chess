@@ -1,5 +1,6 @@
 # Handles all the print statement for different conditions
 module PrintInfo
+  # Checks if check is true
   def check?
     return true if print_check?(white_king_cords, "white") || print_check?(black_king_cords, "black")
 
@@ -15,6 +16,7 @@ module PrintInfo
     puts ""
   end
 
+  # Checks if checkmate is true
   def checkmate?
     return true if print_checkmate?(white_king_cords, "white") || print_checkmate?(black_king_cords, "black")
 
@@ -31,12 +33,14 @@ module PrintInfo
     true
   end
 
+  # Checks if stalemate is true
   def stalemate?
     return true if print_stalemate?(white_king_cords, "white") || print_stalemate?(black_king_cords, "black")
 
     false
   end
 
+  # Print statement for when either king is in stalemate
   def print_stalemate?(king_cords, color)
     return unless in_check?(board.board, king_cords, color) == false &&
                   in_checkmate?(king_cords, color) &&
@@ -48,6 +52,7 @@ module PrintInfo
     true
   end
 
+  # Checks if there arent enough pieces on the board
   def insufficient_material?
     return unless checkmate_isnt_possible?
 
@@ -57,6 +62,7 @@ module PrintInfo
     true
   end
 
+  # Checks if the same board has appeared three times
   def threefold_repetition?
     return unless draw_by_repetition?
 
