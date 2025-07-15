@@ -63,15 +63,17 @@ class Board
     update_passantable_pawn
     piece = board[piece_cords[0]][piece_cords[1]]
 
-    if piece.name == "pawn"
-      piece = promotion(piece, move_cords)
-      en_passant(piece, piece_cords, move_cords)
-      remove_passant_pawn(piece, piece_cords, move_cords) if piece.name == "pawn"
-    end
+    piece = handle_pawn(piece, piece_cords, move_cords) if piece.name == "pawn"
 
     castling(piece_cords, move_cords) if piece.name == "king"
 
     move_piece(piece, piece_cords, move_cords)
+  end
+
+  def handle_pawn(piece, piece_cords, move_cords)
+    en_passant(piece, piece_cords, move_cords)
+    remove_passant_pawn(piece, piece_cords, move_cords)
+    promotion(piece, move_cords)
   end
 
   # Moves piece from where it currently is (piece_cords) to where it wants to go (move_cords)
@@ -133,7 +135,7 @@ class Board
     fen_arr = []
     counter = 0
 
-    convert_to_fen(board).split("").each_with_index do |char, index|
+    convert_to_fen(board).chars.each_with_index do |char, index|
       counter += 1 if char == "."
 
       unless char == "."
@@ -142,8 +144,8 @@ class Board
         next
       end
 
-      fen_arr << counter if convert_to_fen(board).split("")[index + 1] != "."
+      fen_arr << counter if convert_to_fen(board).chars[index + 1] != "."
     end
-    fen_arr.join("")
+    fen_arr.join
   end
 end

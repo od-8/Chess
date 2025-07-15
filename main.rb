@@ -40,7 +40,7 @@ end
 
 # print "\e[#{1}A\e[J"
 
-def play_chess # rubocop:disable Metrics/MethodLength
+def play_chess
   game = front_page
 
   case game
@@ -54,9 +54,6 @@ def play_chess # rubocop:disable Metrics/MethodLength
     clear
     # load game
   when "3"
-    clear
-    # Game.new with fischer random
-  when "4"
     # quites
   end
 end

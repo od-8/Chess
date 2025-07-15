@@ -19,8 +19,8 @@ module Promotion
   end
 
   def promotion(piece, move_cords)
-    return piece if piece.color == "white" && move_cords[0] != 7 ||
-                    piece.color == "black" && move_cords[0] != 0
+    return piece if (piece.color == "white" && move_cords[0] != 7) ||
+                    (piece.color == "black" && move_cords[0] != 0)
 
     make_new_piece(ask_for_piece, piece.color)
   end

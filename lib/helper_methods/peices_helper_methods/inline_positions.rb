@@ -2,9 +2,7 @@
 module InlinePositions
   # All legal moves a rook can make
   def possible_rook_moves(board, piece_cords, color) # rubocop:disable Metrics/AbcSize
-    possible_moves = []
-
-    upwards_positions(board, piece_cords[0], piece_cords[1], color).each { |cords| possible_moves << cords }
+    possible_moves = upwards_positions(board, piece_cords[0], piece_cords[1], color).map { |cords| cords }
     downwards_positions(board, piece_cords[0], piece_cords[1], color).each { |cords| possible_moves << cords }
     left_positions(board, piece_cords[0], piece_cords[1], color).each { |cords| possible_moves << cords }
     right_positions(board, piece_cords[0], piece_cords[1], color).each { |cords| possible_moves << cords }

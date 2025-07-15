@@ -2,9 +2,7 @@
 module DiagonalPositions
   # All legal moves a bishop can make
   def possible_bishop_moves(board, piece_cords, color) # rubocop:disable Metrics/AbcSize
-    possible_moves = []
-
-    left_upwards_positions(board, piece_cords[0], piece_cords[1], color).each { |cords| possible_moves << cords }
+    possible_moves = left_upwards_positions(board, piece_cords[0], piece_cords[1], color).map { |cords| cords }
     right_upwards_positions(board, piece_cords[0], piece_cords[1], color).each { |cords| possible_moves << cords }
     left_downwards_positions(board, piece_cords[0], piece_cords[1], color).each { |cords| possible_moves << cords }
     right_downwards_positions(board, piece_cords[0], piece_cords[1], color).each { |cords| possible_moves << cords }

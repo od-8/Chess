@@ -9,7 +9,7 @@ module PrintInfo
 
   # Print statement for when either king is in checkmate
   def print_check?(king_cords, color)
-    return unless in_check?(board.board, king_cords, color)
+    return false unless in_check?(board.board, king_cords, color)
 
     @invalid_moves += 2
     puts "#{color.capitalize} king is in check".colorize(:green)
@@ -25,7 +25,7 @@ module PrintInfo
 
   # Print statement for when either king is in checkmate
   def print_checkmate?(king_cords, color)
-    return unless in_check?(board.board, king_cords, color) && in_checkmate?(king_cords, color)
+    return false unless in_check?(board.board, king_cords, color) && in_checkmate?(king_cords, color)
 
     puts "#{color.capitalize} king is in checkmate".colorize(:red)
     puts ""
@@ -42,9 +42,9 @@ module PrintInfo
 
   # Print statement for when either king is in stalemate
   def print_stalemate?(king_cords, color)
-    return unless in_check?(board.board, king_cords, color) == false &&
-                  in_checkmate?(king_cords, color) &&
-                  current_player.color != color
+    return false unless in_check?(board.board, king_cords, color) == false &&
+                        in_checkmate?(king_cords, color) &&
+                        current_player.color != color
 
     puts "It is #{color}'s go and they cant make any legal moves. Stalemate".colorize(:red)
     puts ""
@@ -54,7 +54,7 @@ module PrintInfo
 
   # Checks if there arent enough pieces on the board
   def insufficient_material?
-    return unless checkmate_isnt_possible?
+    return false unless checkmate_isnt_possible?
 
     puts "Insufficinet material. Draw".colorize(:red)
     puts ""
@@ -64,7 +64,7 @@ module PrintInfo
 
   # Checks if the same board has appeared three times
   def threefold_repetition?
-    return unless draw_by_repetition?
+    return false unless draw_by_repetition?
 
     puts "Threefold repetition. Draw".colorize(:red)
     puts ""

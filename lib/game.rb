@@ -35,12 +35,12 @@ class Game
     another_game
   end
 
-  # The handles the user move, printing the game nicely on the screen checking for check and things that end the game 
+  # The handles the user move, printing the game nicely on the screen checking for check and things that end the game
   # and it updates current player and current king.
   def game_loop
     loop do
       move_loop
-      # clear_screen
+      clear_screen
 
       board.print_board # (print_board_color)
 
