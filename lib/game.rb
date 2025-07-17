@@ -27,10 +27,10 @@ class Game
 
   # Method for playing the game, handles the game loop and asks for another game
   def play_game
-    board.print_board # ("white")
+    board.print_board
 
     game_loop
-    sleep 1
+    sleep 2
 
     another_game
   end
@@ -42,9 +42,9 @@ class Game
       move_loop
       clear_screen
 
-      board.print_board # (print_board_color)
+      board.print_board
 
-      break if checkmate? || stalemate? || insufficient_material? || threefold_repetition?
+      break if game_over?
 
       check?
 
@@ -115,8 +115,7 @@ class Game
 
   # Based on player inputs it either starts a new game or says thank you message
   def another_game
-    answer = another_game_answer
-    if answer == "yes"
+    if another_game?
       @invalid_moves = 26
       clear_screen
       new_game = Game.new(@player1.name, @player2.name)
@@ -128,7 +127,7 @@ class Game
   end
 
   # Asks if players would like to play another game
-  def another_game_answer
+  def another_game?
     loop do
       puts "Enter yes if you would like to play another game or no if you want to quit"
       puts ""
@@ -136,7 +135,15 @@ class Game
       answer = gets.chomp.downcase
       puts ""
 
-      return answer if %w[yes no].include?(answer)
+      return true if %w[yes no].include?(answer)
     end
+
+    false
+  end
+
+  def game_over?
+    return true if checkmate? || stalemate? || threefold_repetition? || insufficient_material?
+
+    false
   end
 end

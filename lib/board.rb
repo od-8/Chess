@@ -8,6 +8,8 @@ require_relative "helper_methods/board_helper_methods/check"
 require_relative "helper_methods/board_helper_methods/checkmate"
 require_relative "helper_methods/board_helper_methods/insufficient_material"
 require_relative "helper_methods/board_helper_methods/threefold_repetition"
+require_relative "helper_methods/board_helper_methods/convert_to_fen"
+require_relative "helper_methods/board_helper_methods/convert_from_fen"
 
 # Peices
 require_relative "peices/king"
@@ -21,6 +23,8 @@ require_relative "peices/black_pawn"
 # Contains the board and all of its methods
 class Board
   # include PrintColorBoard
+  include ConvertToFen
+  include ConvertFromFen
   include AddPieces
   include EnPassant
   include Castling
@@ -104,48 +108,9 @@ class Board
     clone_board
   end
 
-  # Converts the board to fen notation, not completed yet
-  def convert_to_fen(board)
-    fen_board = ""
-    board.each do |row|
-      row.each do |piece|
-        fen_board += "." if piece.nil?
-
-        fen_board += fen_piece(piece) unless piece.nil?
-      end
-      fen_board += "/"
-    end
-    fen_board
-  end
-
-  # Handles which letter to return depending on color
-  def fen_piece(piece)
-    return piece.name[0].capitalize if piece.color == "white"
-
-    piece.name[0] if piece.color == "black"
-  end
-
   # Adds the board to previous board, used for threefold repetition
   def update_previous_boards
-    fen_str = fen_board(board)
+    fen_str = convert_to_fen(board)
     @previous_boards << fen_str
-  end
-
-  def fen_board(board) # rubocop:disable Metrics/MethodLength
-    fen_arr = []
-    counter = 0
-
-    convert_to_fen(board).chars.each_with_index do |char, index|
-      counter += 1 if char == "."
-
-      unless char == "."
-        counter = 0
-        fen_arr << char
-        next
-      end
-
-      fen_arr << counter if convert_to_fen(board).chars[index + 1] != "."
-    end
-    fen_arr.join
   end
 end
