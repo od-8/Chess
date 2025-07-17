@@ -34,12 +34,10 @@ class Board
   include InsufficientMaterial
   include ThreefoldRepetition
 
-  attr_accessor :board, :white_king_moved, :black_king_moved, :previous_boards
+  attr_accessor :board, :previous_boards
 
   def initialize(board = Array.new(8) { Array.new(8) })
     @board = board
-    @white_king_moved = false
-    @black_king_moved = false
     @passantable_pawn = nil
     @previous_boards = []
     add_peices
@@ -49,7 +47,7 @@ class Board
   def print_board # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
     puts ""
     puts "+---+---+---+---+---+---+---+---+".center(54)
-    board.reverse.each_with_index do |row, index|
+    board.each_with_index do |row, index|
       print " ".center(8)
       print "#{8 - index} |"
       row.each do |piece|
@@ -111,6 +109,8 @@ class Board
   # Adds the board to previous board, used for threefold repetition
   def update_previous_boards
     fen_str = convert_to_fen(board)
+    p fen_str
     @previous_boards << fen_str
+    # p convert_from_fen(fen_str)
   end
 end

@@ -1,6 +1,6 @@
 # This handles converting a fen str to a new board
 module ConvertFromFen
-  def convert_to_board(fen_str)
+  def convert_from_fen(fen_str)
     new_fen_str = convert_nums_to_dots(fen_str)
     create_new_board(new_fen_str)
   end
@@ -9,7 +9,7 @@ module ConvertFromFen
     new_fen_str = ""
     fen_str.split("/").each do |row|
       row.chars.each do |char|
-        convert_char(char) { |var| @fen_str += var }
+        convert_char(char) { |var| new_fen_str += var }
       end
       new_fen_str += "/"
     end

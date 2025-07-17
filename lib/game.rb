@@ -19,9 +19,9 @@ class Game
     @player1 = Player.new(name1, "white")
     @player2 = Player.new(name2, "black")
     @current_player = @player1
-    @white_king_cords = [0, 4]
-    @black_king_cords = [7, 4]
-    @current_king = [[0, 4], "white"]
+    @white_king_cords = [7, 4]
+    @black_king_cords = [0, 4]
+    @current_king = [[7, 4], "white"]
     @invalid_moves = 20
   end
 
@@ -40,7 +40,7 @@ class Game
   def game_loop
     loop do
       move_loop
-      clear_screen
+      # clear_screen
 
       board.print_board
 

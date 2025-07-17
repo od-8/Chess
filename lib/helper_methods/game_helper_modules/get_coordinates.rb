@@ -14,7 +14,6 @@ module GetCoordinates
 
       break if correct_color?(cords[0])
     end
-
     cords
   end
 
@@ -32,7 +31,7 @@ module GetCoordinates
   # Makes sure both cords are valid and have a length of 2
   def valid_coordinates?(cords)
     letter = cords[0]
-    number = cords[1].to_i - 1
+    number = 8 - cords[1].to_i
 
     return true if letter.between?("a", "h") && number.between?(0, 7) && cords.length == 2
 
@@ -43,7 +42,7 @@ module GetCoordinates
   def to_cords(cords)
     alphabet = ("a".."h").to_a
 
-    [cords[1].to_i - 1, alphabet.find_index(cords[0])]
+    [8 - cords[1].to_i, alphabet.find_index(cords[0])]
   end
 
   # Checks to make sure the player is choosing their color pieces only

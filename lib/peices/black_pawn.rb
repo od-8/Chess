@@ -35,7 +35,7 @@ class BlackPawn
   def remove_passant_pawn(board, piece_cords, move_cords)
     return unless
         board[move_cords[0]][move_cords[1]].nil? &&
-        [[piece_cords[0] - 1, piece_cords[1] - 1], [piece_cords[0] - 1, piece_cords[1] + 1]].include?(move_cords)
+        [[piece_cords[0] + 1, piece_cords[1] - 1], [piece_cords[0] + 1, piece_cords[1] + 1]].include?(move_cords)
 
     [piece_cords[0], move_cords[1]]
   end

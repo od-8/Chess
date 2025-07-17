@@ -4,6 +4,7 @@ module UpdateCords
   def update_king_cords(piece, move_cords)
     return unless piece.name == "king"
 
+    piece.king_moved = true
     piece.color == "white" ? @white_king_cords = move_cords : @black_king_cords = move_cords
 
     piece.king_moved = true

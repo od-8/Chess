@@ -1,8 +1,8 @@
 # This handles converting a board to fen and converting a fen board into a regular board
 module ConvertToFen
   # Converts the board (2d array) to a string as fen
-  def convert_to_fen
-    fen_board = convert_pieces_to_fen
+  def convert_to_fen(board)
+    fen_board = convert_pieces_to_fen(board)
     fen_board_arr = convert_to_fen_arr(fen_board)
     fen_board_arr.join
   end
@@ -22,8 +22,12 @@ module ConvertToFen
   end
 
   # Handles which letter to return depending on color
-  def convert_piece_to_fen(piece)
-    return piece.name[0].capitalize if piece.color == "white"
+  def convert_piece_to_fen(piece) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity
+    return piece.name[0].capitalize if piece.color == "white" && piece.name != "knight"
+
+    return "N" if piece.color == "white" && piece.name == "knight"
+
+    return "n" if piece.color == "black" && piece.name == "knight"
 
     piece.name[0] if piece.color == "black"
   end
