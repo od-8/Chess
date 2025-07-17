@@ -29,7 +29,11 @@ class Game
   def play_game
     board.print_board
 
-    game_loop
+    if game_loop == "quit"
+      end_the_game
+      return
+    end
+
     sleep 2
 
     another_game
@@ -39,8 +43,9 @@ class Game
   # and it updates current player and current king.
   def game_loop
     loop do
-      move_loop
+      move = move_loop
       # clear_screen
+      return "quit" if move == "quit"
 
       board.print_board
 
@@ -58,6 +63,8 @@ class Game
     loop do
       piece_cords, move_cords = legal_piece_move
 
+      return "quit" if piece_cords == "quit"
+
       piece = board.board[piece_cords[0]][piece_cords[1]]
 
       king_cords = handle_king_cords(piece, move_cords)
@@ -72,7 +79,9 @@ class Game
   # Gets the cords then checks if the piece the player has chosen can make that move
   def legal_piece_move
     loop do
-      piece_cords, move_cords, _invalid_moves = legal_input
+      piece_cords, move_cords, = legal_input
+
+      return "quit" if piece_cords == "quit"
 
       piece = board.board[piece_cords[0]][piece_cords[1]]
 
@@ -145,5 +154,64 @@ class Game
     return true if checkmate? || stalemate? || threefold_repetition? || insufficient_material?
 
     false
+  end
+
+  def end_the_game
+    choice = end_game_choice
+    return "quit" if choice == "quit"
+
+    acquire_new_file_name
+    # save_game_information
+  end
+
+  def end_game_choice
+    loop do
+      puts ""
+      puts "Would you like to save and quit or quit without saving"
+      print "Enter #{'save'.colorize(:green)} to save and quit or #{'quit'.colorize(:green)} to quit without saving: "
+      choice = gets.chomp.downcase
+      puts ""
+      return choice if %w[save quit].include?(choice)
+
+      puts "Enter a valid answer"
+      puts ""
+    end
+  end
+
+  def acquire_new_file_name
+    loop do
+      puts "The game is being saved, please enter the name of the file you would like to save this game as: "
+      print "Without file extension (do not include .example in the name): "
+      file_name = gets.chomp.downcase
+      puts ""
+      break unless file_name.include?(".")
+
+      puts "Your file cannot have dots (.) in it"
+      puts ""
+    end
+  end
+
+  def something # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+    board_info = {
+      fen_board: board.convert_to_fen(board.board),
+      previous_boards: board.previous_boards
+    }
+
+    game_info = {
+      current_player_name: current_player.name,
+      current_player_color: current_player.color,
+      white_king_cords: white_king_cords,
+      black_king_cords: black_king_cords,
+      current_king_cords: current_king[0],
+      current_king_color: current_king[1],
+      invalid_moves: invalid_moves
+    }
+
+    player_info = {
+      player1_name: player1.name,
+      player1_color: player1.color,
+      player2_name: player2.name,
+      player2_color: player2.color
+    }
   end
 end

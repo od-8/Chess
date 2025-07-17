@@ -8,6 +8,7 @@ module GetCoordinates
       cords = take_input
       @invalid_moves += 3
 
+      return "quit" if cords == "quit"
       next unless legal_coordinates?(cords)
 
       cords.map! { |position| to_cords(position) }
@@ -21,6 +22,8 @@ module GetCoordinates
   def take_input
     print "     #{current_player.name}, input the position of the piece you would like to move: "
     piece_cords = gets.chomp.downcase
+    return "quit" if piece_cords == "q"
+
     print "     #{current_player.name}, input the position of where you would like to move that peice: "
     move_cords = gets.chomp.downcase
     puts ""
