@@ -39,43 +39,37 @@ module SaveGame
     end
   end
 
-  def something # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
-    board_info = {
-      fen_board: board.convert_to_fen(board.board),
-      previous_boards: board.previous_boards
-    }
+  def create_new_file(file_name)
+    game_info = [acquire_game_info, acquire_board_info, acquire_player_info]
+    puts game_info.to_yaml
+    File.write("#{file_name}.yaml", game_info.to_yaml)
+    `rm #{file_name}.yaml`
+  end
 
-    game_info = {
+  def acquire_game_info
+    {
       current_player_name: current_player.name,
       current_player_color: current_player.color,
-      white_king_cords: white_king_cords,
-      black_king_cords: black_king_cords,
       current_king_cords: current_king[0],
       current_king_color: current_king[1],
       invalid_moves: invalid_moves
     }
+  end
 
-    player_info = {
+  def acquire_board_info
+    {
+      board: board.convert_to_fen(board.board),
+      previous_board: board.previous_boards,
+      passantable_pawn: board.passantable_pawn
+    }
+  end
+
+  def acquire_player_info
+    {
       player1_name: player1.name,
       player1_color: player1.color,
       player2_name: player2.name,
       player2_color: player2.color
     }
-    [game_info, board_info, player_info]
-  end
-
-  def create_new_file(file_name)
-    File.open("#{file_name}.yaml", "w")
-
-    fen_board = board.convert_to_fen(board.board)
-    info = {
-      board: fen_board,
-      player1: player1,
-      player2: player2,
-      white_king_cords: white_king_cords,
-      black_king_cords: black_king_cords
-    }
-
-    puts info.to_yaml
   end
 end

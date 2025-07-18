@@ -135,6 +135,7 @@ class Game
   end
 
   def end_message
+    puts ""
     puts "Thank you for playing chess.".colorize(:green)
     puts ""
   end
