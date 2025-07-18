@@ -3,7 +3,7 @@ require_relative "lib/game"
 require_relative "lib/player"
 require "colorize"
 # Handles loading a previous game, starting new games
-class Chess
+class Chess # rubocop:disable Metrics/ClassLength
   attr_accessor :player1, :player2, :invalid_moves
 
   def initialize
@@ -89,12 +89,16 @@ class Chess
     case num.to_i
     when 1
       clear_screen
-      new_game = Game.new(player1, player2)
+      new_game = Game.new # (player1, player2)
       new_game.play_game
     when 2
       clear_screen
       show_prev_games
-      p load_prev_game
+      prev_game_name = acquire_prev_game_name
+
+      new_game = Game.new
+      new_game.load_prev_game(prev_game_name)
+      new_game.play_game
     when 3
       # Quits
     end
@@ -110,7 +114,7 @@ class Chess
     end
   end
 
-  def load_prev_game
+  def acquire_prev_game_name
     loop do
       print "Enter file name (without extension): "
       file_name =  gets.chomp.downcase

@@ -1,9 +1,11 @@
 require "colorize"
+require "yaml"
 require_relative "helper_methods/game_helper_modules/print_information"
 require_relative "helper_methods/game_helper_modules/update_cords"
 require_relative "helper_methods/game_helper_modules/get_coordinates"
 require_relative "helper_methods/game_helper_modules/call_methods"
 require_relative "helper_methods/game_helper_modules/save_game"
+require_relative "helper_methods/game_helper_modules/load_game"
 require_relative "helper_methods/game_helper_modules/another_game"
 
 # Contains the game and all of its methods for playing the game
@@ -13,12 +15,13 @@ class Game
   include GetCoordinates
   include CallMethods
   include SaveGame
+  include LoadGame
   include AnotherGame
 
   attr_accessor :board, :player1, :player2, :current_player, :white_king_cords, :black_king_cords, :current_king,
                 :invalid_moves
 
-  def initialize(name1 = "Jim", name2 = "John")
+  def initialize(name1 = "Player1", name2 = "Player2")
     @board = Board.new
     @player1 = Player.new(name1, "white")
     @player2 = Player.new(name2, "black")

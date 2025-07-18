@@ -1,0 +1,22 @@
+---
+- :current_player_name: Player1
+  :current_player_color: white
+  :current_king_cords:
+  - 7
+  - 4
+  :current_king_color: white
+  :invalid_moves: 56
+- :board: r2qkb1r/ppp1pppp/2n2n2/3p1b2/3P1B2/2N2N2/PPP1PPPP/R2QKB1R/
+  :previous_boards:
+  - rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR/
+  - rnbqkbnr/ppp1pppp/8/3p4/3P4/8/PPP1PPPP/RNBQKBNR/
+  - rnbqkbnr/ppp1pppp/8/3p4/3P1B2/8/PPP1PPPP/RN1QKBNR/
+  - rn1qkbnr/ppp1pppp/8/3p1b2/3P1B2/8/PPP1PPPP/RN1QKBNR/
+  - rn1qkbnr/ppp1pppp/8/3p1b2/3P1B2/5N2/PPP1PPPP/RN1QKB1R/
+  - rn1qkb1r/ppp1pppp/5n2/3p1b2/3P1B2/5N2/PPP1PPPP/RN1QKB1R/
+  - rn1qkb1r/ppp1pppp/5n2/3p1b2/3P1B2/2N2N2/PPP1PPPP/R2QKB1R/
+  - r2qkb1r/ppp1pppp/2n2n2/3p1b2/3P1B2/2N2N2/PPP1PPPP/R2QKB1R/
+- :player1_name: Player1
+  :player1_color: white
+  :player2_name: Player2
+  :player2_color: black

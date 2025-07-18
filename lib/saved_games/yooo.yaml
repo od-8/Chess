@@ -5,18 +5,13 @@
   - 7
   - 4
   :current_king_color: white
-  :invalid_moves: 32
-
-- :board: rnbqkbnr/ppp1pppp/8/3p4/3P4/8/PPP1PPPP/RNBQKBNR/
-  :previous_board:
+  :invalid_moves: 35
+- :board: r1bqkbnr/ppp1pppp/2n5/3p4/3P1B2/8/PPP1PPPP/RN1QKBNR/
+  :previous_boards:
   - rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR/
   - rnbqkbnr/ppp1pppp/8/3p4/3P4/8/PPP1PPPP/RNBQKBNR/
-  :passantable_pawn: !ruby/object:BlackPawn
-    name: pawn
-    symbol: "♙"
-    color: black
-    can_be_passanted: true
-
+  - rnbqkbnr/ppp1pppp/8/3p4/3P1B2/8/PPP1PPPP/RN1QKBNR/
+  - r1bqkbnr/ppp1pppp/2n5/3p4/3P1B2/8/PPP1PPPP/RN1QKBNR/
 - :player1_name: Player1
   :player1_color: white
   :player2_name: Player2

@@ -1,5 +1,3 @@
-require "yaml"
-
 # methods for save and quit or quit without saving
 module SaveGame
   def end_the_game
@@ -29,7 +27,7 @@ module SaveGame
     Dir.chdir("lib/saved_games")
     loop do
       puts "The game is being saved, please enter the name of the file you would like to save this game as."
-      print "Without file extension and Jfile doesnt already exist: "
+      print "Without file extension and file doesnt already exist: "
       file_name = gets.chomp.downcase
       puts ""
       return file_name unless file_name.include?(".") || File.exist?("#{file_name}.yaml")
@@ -42,7 +40,7 @@ module SaveGame
   def create_new_file(file_name)
     game_info = [acquire_game_info, acquire_board_info, acquire_player_info]
     puts game_info.to_yaml
-    # File.write("#{file_name}.yaml", game_info.to_yaml)
+    File.write("#{file_name}.yaml", game_info.to_yaml)
     # `rm #{file_name}.yaml`
   end
 
@@ -59,8 +57,8 @@ module SaveGame
   def acquire_board_info
     {
       board: board.convert_to_fen(board.board),
-      previous_board: board.previous_boards,
-      passantable_pawn: board.passantable_pawn
+      previous_boards: board.previous_boards
+      # passantable_pawn: board.passantable_pawn
     }
   end
 

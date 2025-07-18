@@ -46,36 +46,36 @@ module ConvertFromFen
   end
 
   def handle_white_piece(piece) # rubocop:disable Metrics/MethodLength
-    case piece # rubocop:disable Style/HashLikeCase
+    case piece
     when "P"
-      "Pawn"
+      WhitePawn.new("pawn", "\u265f", "white")
     when "N"
-      "Knight"
+      Knight.new("knight", "\u265e", "white")
     when "B"
-      "Bishop"
+      Bishop.new("bishop", "\u265d", "white")
     when "R"
-      "RooK"
+      Rook.new("rook", "\u265c", "white")
     when "Q"
-      "Queen"
+      Queen.new("queen", "\u265b", "white")
     when "K"
-      "King"
+      King.new("king", "\u265a", "white")
     end
   end
 
   def handle_black_piece(piece) # rubocop:disable Metrics/MethodLength
-    case piece # rubocop:disable Style/HashLikeCase
+    case piece
     when "p"
-      "pawn"
+      BlackPawn.new("pawn", "\u2659", "black")
     when "n"
-      "knight"
+      Knight.new("knight", "\u2658", "black")
     when "b"
-      "bishop"
+      Bishop.new("bishop", "\u2657", "black")
     when "r"
-      "rooK"
+      Rook.new("rook", "\u2656", "black")
     when "q"
-      "queen"
+      Queen.new("queen", "\u2655", "black")
     when "k"
-      "king"
+      King.new("king", "\u2654", "black")
     end
   end
 end
