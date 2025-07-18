@@ -28,13 +28,13 @@ module SaveGame
   def acquire_new_file_name
     Dir.chdir("lib/saved_games")
     loop do
-      puts "The game is being saved, please enter the name of the file you would like to save this game as: "
-      print "Without file extension (do not include .example in the name): "
+      puts "The game is being saved, please enter the name of the file you would like to save this game as."
+      print "Without file extension and Jfile doesnt already exist: "
       file_name = gets.chomp.downcase
       puts ""
       return file_name unless file_name.include?(".") || File.exist?("#{file_name}.yaml")
 
-      puts "Your file cannot have dots (.) in it"
+      puts "Your file cannot have dots in its name and its name must be unique".colorize(:red)
       puts ""
     end
   end
@@ -42,8 +42,8 @@ module SaveGame
   def create_new_file(file_name)
     game_info = [acquire_game_info, acquire_board_info, acquire_player_info]
     puts game_info.to_yaml
-    File.write("#{file_name}.yaml", game_info.to_yaml)
-    `rm #{file_name}.yaml`
+    # File.write("#{file_name}.yaml", game_info.to_yaml)
+    # `rm #{file_name}.yaml`
   end
 
   def acquire_game_info

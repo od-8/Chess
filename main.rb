@@ -83,20 +83,41 @@ class Chess
     end
   end
 
-  def determine_game_choice
+  def determine_game_choice # rubocop:disable Metrics/MethodLength
     num = choose_game
 
     case num.to_i
     when 1
-      # New game
-      # setup_names
       clear_screen
       new_game = Game.new(player1, player2)
       new_game.play_game
     when 2
-      # Load previous game
+      clear_screen
+      show_prev_games
+      p load_prev_game
     when 3
       # Quits
+    end
+  end
+
+  def show_prev_games
+    puts ""
+    puts "Chosse a previous game to load:"
+
+    prev_games = `ls lib/saved_games/`
+    prev_games.split.each do |file|
+      puts " - #{file.colorize(:green)}"
+    end
+  end
+
+  def load_prev_game
+    loop do
+      print "Enter file name (without extension): "
+      file_name =  gets.chomp.downcase
+      return file_name if `ls lib/saved_games/`.split.include?("#{file_name}.yaml")
+
+      puts "Enter a valid file name".colorize(:red)
+      puts ""
     end
   end
 

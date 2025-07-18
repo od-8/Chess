@@ -1,0 +1,17 @@
+---
+- :current_player_name: Player1
+  :current_player_color: white
+  :current_king_cords:
+  - 7
+  - 4
+  :current_king_color: white
+  :invalid_moves: 35
+- :board: rnbqkb1r/pppppppp/5n2/8/8/5N2/PPPPPPPP/RNBQKB1R/
+  :previous_board:
+  - rnbqkbnr/pppppppp/8/8/8/5N2/PPPPPPPP/RNBQKB1R/
+  - rnbqkb1r/pppppppp/5n2/8/8/5N2/PPPPPPPP/RNBQKB1R/
+  :passantable_pawn:
+- :player1_name: Player1
+  :player1_color: white
+  :player2_name: Player2
+  :player2_color: black
