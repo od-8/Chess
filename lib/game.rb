@@ -3,6 +3,8 @@ require_relative "helper_methods/game_helper_modules/print_information"
 require_relative "helper_methods/game_helper_modules/update_cords"
 require_relative "helper_methods/game_helper_modules/get_coordinates"
 require_relative "helper_methods/game_helper_modules/call_methods"
+require_relative "helper_methods/game_helper_modules/save_game"
+require_relative "helper_methods/game_helper_modules/another_game"
 
 # Contains the game and all of its methods for playing the game
 class Game
@@ -10,6 +12,8 @@ class Game
   include UpdateCords
   include GetCoordinates
   include CallMethods
+  include SaveGame
+  include AnotherGame
 
   attr_accessor :board, :player1, :player2, :current_player, :white_king_cords, :black_king_cords, :current_king,
                 :invalid_moves
@@ -31,12 +35,14 @@ class Game
 
     if game_loop == "quit"
       end_the_game
+      end_message
       return
     end
 
     sleep 2
 
     another_game
+    end_message
   end
 
   # The handles the user move, printing the game nicely on the screen checking for check and things that end the game
@@ -122,96 +128,14 @@ class Game
     "white"
   end
 
-  # Based on player inputs it either starts a new game or says thank you message
-  def another_game
-    if another_game?
-      @invalid_moves = 26
-      clear_screen
-      new_game = Game.new(@player1.name, @player2.name)
-      new_game.play_game
-    else
-      puts "Thank you for playing chess.".colorize(:green)
-      puts ""
-    end
-  end
-
-  # Asks if players would like to play another game
-  def another_game?
-    loop do
-      puts "Enter yes if you would like to play another game or no if you want to quit"
-      puts ""
-      print "Your descision: "
-      answer = gets.chomp.downcase
-      puts ""
-
-      return true if %w[yes no].include?(answer)
-    end
-
-    false
-  end
-
   def game_over?
     return true if checkmate? || stalemate? || threefold_repetition? || insufficient_material?
 
     false
   end
 
-  def end_the_game
-    choice = end_game_choice
-    return "quit" if choice == "quit"
-
-    acquire_new_file_name
-    # save_game_information
-  end
-
-  def end_game_choice
-    loop do
-      puts ""
-      puts "Would you like to save and quit or quit without saving"
-      print "Enter #{'save'.colorize(:green)} to save and quit or #{'quit'.colorize(:green)} to quit without saving: "
-      choice = gets.chomp.downcase
-      puts ""
-      return choice if %w[save quit].include?(choice)
-
-      puts "Enter a valid answer"
-      puts ""
-    end
-  end
-
-  def acquire_new_file_name
-    loop do
-      puts "The game is being saved, please enter the name of the file you would like to save this game as: "
-      print "Without file extension (do not include .example in the name): "
-      file_name = gets.chomp.downcase
-      puts ""
-      break unless file_name.include?(".")
-
-      puts "Your file cannot have dots (.) in it"
-      puts ""
-    end
-  end
-
-  def something # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
-    board_info = {
-      fen_board: board.convert_to_fen(board.board),
-      previous_boards: board.previous_boards
-    }
-
-    game_info = {
-      current_player_name: current_player.name,
-      current_player_color: current_player.color,
-      white_king_cords: white_king_cords,
-      black_king_cords: black_king_cords,
-      current_king_cords: current_king[0],
-      current_king_color: current_king[1],
-      invalid_moves: invalid_moves
-    }
-
-    player_info = {
-      player1_name: player1.name,
-      player1_color: player1.color,
-      player2_name: player2.name,
-      player2_color: player2.color
-    }
+  def end_message
+    puts "Thank you for playing chess.".colorize(:green)
+    puts ""
   end
 end

@@ -56,6 +56,8 @@ module GetCoordinates
   end
 
   def legal_coordinates?(cords)
+    return false if cords[0] == "" || cords[1] == ""
+
     return true if valid_coordinates?(cords[0]) &&
                    valid_coordinates?(cords[1])
 
