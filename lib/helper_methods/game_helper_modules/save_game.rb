@@ -57,8 +57,8 @@ module SaveGame
   def acquire_board_info
     {
       board: board.convert_to_fen(board.board),
-      previous_boards: board.previous_boards
-      # passantable_pawn: board.passantable_pawn
+      previous_boards: board.previous_boards,
+      passantable_pawn_cords: board.passantable_pawn[1]
     }
   end
 

@@ -13,10 +13,15 @@ module LoadGame
     @invalid_moves = game_info[:invalid_moves]
   end
 
-  def update_board(game_info)
+  def update_board(game_info) # rubocop:disable Metrics/AbcSize
     new_board = board.convert_from_fen(game_info[:board])
     board.previous_boards = game_info[:previous_boards]
     board.board = new_board
+    passant_cords = game_info[:passantable_pawn_cords]
+    piece = board.board[passant_cords[0]][passant_cords[1]]
+    piece.can_be_passanted = true
+    board.passantable_pawn[0] = piece
+    board.passantable_pawn[1] = passant_cords
   end
 
   def update_player(game_info)

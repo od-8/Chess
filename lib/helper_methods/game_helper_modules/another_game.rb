@@ -19,9 +19,8 @@ module AnotherGame
       answer = gets.chomp.downcase
       puts ""
 
-      return true if %w[yes no].include?(answer)
+      return true if answer == "yes"
+      return false if answer == "no"
     end
-
-    false
   end
 end

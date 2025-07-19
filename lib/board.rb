@@ -38,7 +38,7 @@ class Board
 
   def initialize(board = Array.new(8) { Array.new(8) })
     @board = board
-    @passantable_pawn = nil
+    @passantable_pawn = []
     @previous_boards = []
     add_peices
   end
