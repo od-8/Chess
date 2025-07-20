@@ -53,9 +53,9 @@ class Game
   def game_loop
     loop do
       move = move_loop
-      clear_screen
       return "quit" if move == "quit"
 
+      clear_screen
       board.print_board
 
       break if game_over?
@@ -131,12 +131,14 @@ class Game
     "white"
   end
 
+  # Checks if there is a reason to end the game
   def game_over?
     return true if checkmate? || stalemate? || threefold_repetition? || insufficient_material?
 
     false
   end
 
+  # Prints the thank you for playing message
   def end_message
     puts ""
     puts "Thank you for playing chess.".colorize(:green)

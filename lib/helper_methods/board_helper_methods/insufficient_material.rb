@@ -1,6 +1,7 @@
 # Has the methods which check if there isnt enought pieces left on the board.
 # 1 king 1 bishop, 1 king 1 knight, 1 king 2 knights.
 module InsufficientMaterial
+  # Gets all the pieces of the same color
   def return_all_pieces(color)
     pieces = []
     board.each do |row|

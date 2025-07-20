@@ -14,7 +14,7 @@ module Checkmate
   include InlinePositions
   include KingPositions
 
-  # Checks ift the king is in checkmate
+  # Checks if the king is in checkmate
   def checkmate?(king_cords, color)
     return true if stop_check_positions(king_cords, color).empty?
 

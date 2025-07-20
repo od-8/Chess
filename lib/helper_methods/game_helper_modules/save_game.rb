@@ -1,5 +1,6 @@
 # methods for save and quit or quit without saving
 module SaveGame
+  # Ends the game but with different results depending on a players answer
   def end_the_game
     choice = end_game_choice
     return "quit" if choice == "quit"
@@ -14,11 +15,9 @@ module SaveGame
       puts ""
       print "Enter #{'save'.colorize(:green)} to save and quit or #{'quit'.colorize(:green)} to quit without saving: "
       choice = gets.chomp.downcase
-      puts ""
       return choice if %w[save quit].include?(choice)
 
       puts "Enter either the word save or the word quit".colorize(:red)
-      puts ""
     end
   end
 
@@ -26,14 +25,13 @@ module SaveGame
   def acquire_new_file_name
     Dir.chdir("lib/saved_games")
     loop do
-      puts "The game is being saved, please enter the name of the file you would like to save this game as."
-      print "Without file extension and file doesnt already exist: "
-      file_name = gets.chomp.downcase
       puts ""
+      print "Please name this game: "
+      file_name = gets.chomp.downcase
       return file_name unless file_name.include?(".") || File.exist?("#{file_name}.yaml")
 
-      puts "Your file cannot have dots in its name and its name must be unique".colorize(:red)
       puts ""
+      puts "The name must be unique and it cannot contain any dots".colorize(:red)
     end
   end
 
@@ -43,16 +41,17 @@ module SaveGame
     File.write("#{file_name}.yaml", game_info.to_yaml)
   end
 
+  # Gets the game info
   def acquire_game_info
     {
       current_player_name: current_player.name,
       current_player_color: current_player.color,
       current_king_cords: current_king[0],
-      current_king_color: current_king[1],
-      invalid_moves: invalid_moves
+      current_king_color: current_king[1]
     }
   end
 
+  # Gets the board info
   def acquire_board_info
     {
       board: board.convert_to_fen(board.board),
@@ -61,6 +60,7 @@ module SaveGame
     }
   end
 
+  # Gets the player info
   def acquire_player_info
     {
       player1_name: player1.name,

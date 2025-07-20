@@ -12,12 +12,14 @@ module Promotion
     piece
   end
 
+  # Checks if user input is a valid piece
   def legal_piece?(piece)
     return true if %w[queen rook bishop knight].include?(piece)
 
     false
   end
 
+  # Returns the piece that the pawn promoted to or the passed piece if the pawn isnt promoting
   def promotion(piece, move_cords)
     return piece if (piece.color == "white" && move_cords[0] != 0) ||
                     (piece.color == "black" && move_cords[0] != 7)

@@ -12,8 +12,8 @@ module Castling
     castle_queen_side(piece_cords) if queen_side == true
   end
 
+  # Moves the queen side rook to the correct position
   def castle_king_side(piece_cords)
-    # Moves the queen side rook to the correct position
     rook = board[piece_cords[0]][piece_cords[1] + 3]
 
     @board[piece_cords[0]][piece_cords[1] + 1] = rook

@@ -1,10 +1,12 @@
 # This handles converting a fen str to a new board
 module ConvertFromFen
+  # Converts the board from a fen string to a 2d array
   def convert_from_fen(fen_str)
     new_fen_str = convert_nums_to_dots(fen_str)
     create_new_board(new_fen_str)
   end
 
+  # Converts the numbers in the fen string to dots
   def convert_nums_to_dots(fen_str)
     new_fen_str = ""
     fen_str.split("/").each do |row|
@@ -17,6 +19,7 @@ module ConvertFromFen
     new_fen_str
   end
 
+  # Gets a number and returns the same number of dots
   def convert_char(char)
     yield char if char.to_i.zero?
 
@@ -25,6 +28,7 @@ module ConvertFromFen
     end
   end
 
+  # Loop through the fen string and updates and adds the piece to its correct position
   def create_new_board(fen_str)
     board = Array.new(8) { Array.new(8) }
 
@@ -37,6 +41,7 @@ module ConvertFromFen
     board
   end
 
+  # Convers the character into is piece
   def convert_piece(piece)
     return nil if piece == "."
 
@@ -45,6 +50,7 @@ module ConvertFromFen
     handle_black_piece(piece) if %w[p n b r q k].include?(piece)
   end
 
+  # Turns the uppercase letters into white pieces
   def handle_white_piece(piece) # rubocop:disable Metrics/MethodLength
     case piece
     when "P"
@@ -62,6 +68,7 @@ module ConvertFromFen
     end
   end
 
+  # Turns the lowercase letters into black pieces
   def handle_black_piece(piece) # rubocop:disable Metrics/MethodLength
     case piece
     when "p"

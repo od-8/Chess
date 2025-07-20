@@ -2,15 +2,52 @@ require_relative "lib/board"
 require_relative "lib/game"
 require_relative "lib/player"
 require "colorize"
+
+# Contains the methods for loading a previous game
+module LoadPreviousGame
+  def play_previous_game
+    @invalid_moves = 4
+    show_prev_games
+    prev_game_name = acquire_prev_game_name
+    clear_screen
+
+    new_game = Game.new
+    new_game.load_prev_game(prev_game_name)
+    new_game.play_game
+  end
+
+  def show_prev_games
+    puts ""
+    puts "Chosse a previous game to load:"
+
+    prev_games = `ls lib/saved_games/`
+    prev_games.split.each do |file|
+      puts " - #{file.colorize(:green)}"
+    end
+    puts ""
+  end
+
+  def acquire_prev_game_name
+    loop do
+      @invalid_moves += 2
+      print "Enter file name (without extension): "
+      file_name =  gets.chomp.downcase
+      return file_name if `ls lib/saved_games/`.split.include?("#{file_name}.yaml")
+
+      puts "Enter a valid file name".colorize(:red)
+      puts ""
+    end
+  end
+end
+
 # Handles loading a previous game, starting new games
-class Chess # rubocop:disable Metrics/ClassLength
+class Chess
   attr_accessor :player1, :player2, :invalid_moves
 
   def initialize
     @player1 = "Player1"
     @player2 = "Player2"
     # @invalid_moves = 15
-    # its normally the number above however i skip the names intro part
     @invalid_moves = 11
     setup_game
   end
@@ -83,46 +120,24 @@ class Chess # rubocop:disable Metrics/ClassLength
     end
   end
 
-  def determine_game_choice # rubocop:disable Metrics/MethodLength
+  def determine_game_choice
     num = choose_game
+    clear_screen
 
     case num.to_i
     when 1
-      clear_screen
-      new_game = Game.new # (player1, player2)
-      new_game.play_game
+      new_game
     when 2
-      clear_screen
-      show_prev_games
-      prev_game_name = acquire_prev_game_name
-
-      new_game = Game.new
-      new_game.load_prev_game(prev_game_name)
-      new_game.play_game
+      play_previous_game
     when 3
       # Quits
     end
   end
 
-  def show_prev_games
-    puts ""
-    puts "Chosse a previous game to load:"
-
-    prev_games = `ls lib/saved_games/`
-    prev_games.split.each do |file|
-      puts " - #{file.colorize(:green)}"
-    end
-  end
-
-  def acquire_prev_game_name
-    loop do
-      print "Enter file name (without extension): "
-      file_name =  gets.chomp.downcase
-      return file_name if `ls lib/saved_games/`.split.include?("#{file_name}.yaml")
-
-      puts "Enter a valid file name".colorize(:red)
-      puts ""
-    end
+  def new_game
+    # setup_names
+    new_game = Game.new
+    new_game.play_game
   end
 
   def clear_screen
