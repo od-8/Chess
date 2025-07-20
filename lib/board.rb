@@ -1,5 +1,4 @@
 # Helper stuff
-require_relative "helper_methods/board_helper_methods/print_color_board"
 require_relative "helper_methods/board_helper_methods/add_pieces_to_board"
 require_relative "helper_methods/board_helper_methods/en_passant"
 require_relative "helper_methods/board_helper_methods/castling"
@@ -22,7 +21,6 @@ require_relative "peices/black_pawn"
 
 # Contains the board and all of its methods
 class Board
-  # include PrintColorBoard
   include ConvertToFen
   include ConvertFromFen
   include AddPieces

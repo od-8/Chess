@@ -9,7 +9,7 @@ module LoadPreviousGame
     @invalid_moves = 4
     show_prev_games
     prev_game_name = acquire_prev_game_name
-    clear_screen
+    # clear_screen
 
     new_game = Game.new
     new_game.load_prev_game(prev_game_name)
@@ -42,6 +42,8 @@ end
 
 # Handles loading a previous game, starting new games
 class Chess
+  include LoadPreviousGame
+
   attr_accessor :player1, :player2, :invalid_moves
 
   def initialize

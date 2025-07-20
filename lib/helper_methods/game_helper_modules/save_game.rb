@@ -47,7 +47,9 @@ module SaveGame
       current_player_name: current_player.name,
       current_player_color: current_player.color,
       current_king_cords: current_king[0],
-      current_king_color: current_king[1]
+      current_king_color: current_king[1],
+      white_king_cords: white_king_cords,
+      black_king_cords: black_king_cords
     }
   end
 

@@ -10,9 +10,10 @@ module LoadGame
 
   # Updates the Game
   def update_game(game_info)
-    p game_info
     @current_player = player1.name == game_info[:current_player_name] ? @player1 : @player2
     @current_king = [game_info[:current_king_cords], game_info[:current_king_color]]
+    @white_king_cords = [game_info[:white_king_cords]]
+    @black_king_cords = [game_info[:black_king_cords]]
   end
 
   # Updates the Board
