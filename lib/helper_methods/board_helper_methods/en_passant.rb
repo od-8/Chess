@@ -4,8 +4,7 @@ module EnPassant
     return unless piece_cords[0] + 2 == move_cords[0] ||
                   piece_cords[0] - 2 == move_cords[0]
 
-    @passantable_pawn[0] = piece
-    @passantable_pawn[1] = move_cords
+    @passantable_pawn_cords = move_cords
 
     piece.can_be_passanted = true
   end
@@ -18,8 +17,9 @@ module EnPassant
 
   # Sets the passantablee pawns passantable status to false
   def update_passantable_pawn
-    return if @passantable_pawn.empty?
+    return if passantable_pawn_cords.nil?
 
-    @passantable_pawn[0].can_be_passanted = false
+    board[passantable_pawn_cords[0]][passantable_pawn_cords[1]].can_be_passanted = false
+    @passantable_pawn_cords = nil
   end
 end

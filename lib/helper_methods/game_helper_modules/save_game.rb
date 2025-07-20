@@ -5,24 +5,24 @@ module SaveGame
     return "quit" if choice == "quit"
 
     file_name = acquire_new_file_name
-    # save_game_information
     create_new_file(file_name)
   end
 
+  # Sees if the player wants to save and quit or quit without saving
   def end_game_choice
     loop do
       puts ""
-      puts "Would you like to save and quit or quit without saving"
       print "Enter #{'save'.colorize(:green)} to save and quit or #{'quit'.colorize(:green)} to quit without saving: "
       choice = gets.chomp.downcase
       puts ""
       return choice if %w[save quit].include?(choice)
 
-      puts "Enter a valid answer"
+      puts "Enter either the word save or the word quit".colorize(:red)
       puts ""
     end
   end
 
+  # Gets the new file name
   def acquire_new_file_name
     Dir.chdir("lib/saved_games")
     loop do
@@ -37,11 +37,10 @@ module SaveGame
     end
   end
 
+  # Creates the new file and adds the game info to it
   def create_new_file(file_name)
     game_info = [acquire_game_info, acquire_board_info, acquire_player_info]
-    puts game_info.to_yaml
     File.write("#{file_name}.yaml", game_info.to_yaml)
-    # `rm #{file_name}.yaml`
   end
 
   def acquire_game_info
@@ -58,7 +57,7 @@ module SaveGame
     {
       board: board.convert_to_fen(board.board),
       previous_boards: board.previous_boards,
-      passantable_pawn_cords: board.passantable_pawn[1]
+      passantable_pawn_cords: board.passantable_pawn_cords
     }
   end
 

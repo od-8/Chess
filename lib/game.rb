@@ -53,7 +53,7 @@ class Game
   def game_loop
     loop do
       move = move_loop
-      # clear_screen
+      clear_screen
       return "quit" if move == "quit"
 
       board.print_board

@@ -34,11 +34,11 @@ class Board
   include InsufficientMaterial
   include ThreefoldRepetition
 
-  attr_accessor :board, :previous_boards, :passantable_pawn
+  attr_accessor :board, :previous_boards, :passantable_pawn_cords
 
   def initialize(board = Array.new(8) { Array.new(8) })
     @board = board
-    @passantable_pawn = []
+    @passantable_pawn_cords = nil
     @previous_boards = []
     add_peices
   end
