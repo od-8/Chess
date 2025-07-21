@@ -1,4 +1,4 @@
-require_relative "../helper_methods/peices_helper_methods/king_positions"
+require_relative "../helper_modules/pieces_modules/king_positions"
 
 # Has the moves and info for the king
 class King

@@ -1,4 +1,4 @@
-require_relative "../helper_methods/peices_helper_methods/knight_positions"
+require_relative "../helper_modules/pieces_modules/knight_positions"
 
 # Has the moves and info for the knight
 class Knight

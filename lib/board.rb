@@ -1,35 +1,35 @@
 # Helper stuff
-require_relative "helper_methods/board_helper_methods/add_pieces_to_board"
-require_relative "helper_methods/board_helper_methods/en_passant"
-require_relative "helper_methods/board_helper_methods/castling"
-require_relative "helper_methods/board_helper_methods/promotion"
-require_relative "helper_methods/board_helper_methods/check"
-require_relative "helper_methods/board_helper_methods/checkmate"
-require_relative "helper_methods/board_helper_methods/insufficient_material"
-require_relative "helper_methods/board_helper_methods/threefold_repetition"
-require_relative "helper_methods/board_helper_methods/convert_to_fen"
-require_relative "helper_methods/board_helper_methods/convert_from_fen"
+require_relative "helper_modules/board_modules/add_pieces_to_board"
+require_relative "helper_modules/board_modules/castling"
+require_relative "helper_modules/board_modules/check"
+require_relative "helper_modules/board_modules/checkmate"
+require_relative "helper_modules/board_modules/convert_from_fen"
+require_relative "helper_modules/board_modules/convert_to_fen"
+require_relative "helper_modules/board_modules/en_passant"
+require_relative "helper_modules/board_modules/insufficient_material"
+require_relative "helper_modules/board_modules/promotion"
+require_relative "helper_modules/board_modules/threefold_repetition"
 
 # Peices
+require_relative "peices/bishop"
+require_relative "peices/black_pawn"
 require_relative "peices/king"
+require_relative "peices/knight"
 require_relative "peices/queen"
 require_relative "peices/rook"
-require_relative "peices/bishop"
-require_relative "peices/knight"
 require_relative "peices/white_pawn"
-require_relative "peices/black_pawn"
 
 # Contains the board and all of its methods
 class Board
-  include ConvertToFen
-  include ConvertFromFen
   include AddPieces
-  include EnPassant
   include Castling
-  include Promotion
   include Check
   include Checkmate
+  include ConvertFromFen
+  include ConvertToFen
+  include EnPassant
   include InsufficientMaterial
+  include Promotion
   include ThreefoldRepetition
 
   attr_accessor :board, :previous_boards, :passantable_pawn_cords

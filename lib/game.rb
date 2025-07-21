@@ -1,22 +1,22 @@
+require_relative "helper_modules/game_modules/another_game"
+require_relative "helper_modules/game_modules/call_methods"
+require_relative "helper_modules/game_modules/get_coordinates"
+require_relative "helper_modules/game_modules/load_game"
+require_relative "helper_modules/game_modules/print_information"
+require_relative "helper_modules/game_modules/save_game"
+require_relative "helper_modules/game_modules/update_cords"
 require "colorize"
 require "yaml"
-require_relative "helper_methods/game_helper_modules/print_information"
-require_relative "helper_methods/game_helper_modules/update_cords"
-require_relative "helper_methods/game_helper_modules/get_coordinates"
-require_relative "helper_methods/game_helper_modules/call_methods"
-require_relative "helper_methods/game_helper_modules/save_game"
-require_relative "helper_methods/game_helper_modules/load_game"
-require_relative "helper_methods/game_helper_modules/another_game"
 
 # Contains the game and all of its methods for playing the game
 class Game
-  include PrintInfo
-  include UpdateCords
-  include GetCoordinates
-  include CallMethods
-  include SaveGame
-  include LoadGame
   include AnotherGame
+  include CallMethods
+  include GetCoordinates
+  include LoadGame
+  include PrintInfo
+  include SaveGame
+  include UpdateCords
 
   attr_accessor :board, :player1, :player2, :current_player, :white_king_cords, :black_king_cords, :current_king,
                 :invalid_moves

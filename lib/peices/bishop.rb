@@ -1,4 +1,4 @@
-require_relative "../helper_methods/peices_helper_methods/diagonal_positions"
+require_relative "../helper_modules/pieces_modules/diagonal_positions"
 
 # Has the moves and info for the bishop piece
 class Bishop

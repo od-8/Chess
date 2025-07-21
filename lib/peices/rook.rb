@@ -1,4 +1,4 @@
-require_relative "../helper_methods/peices_helper_methods/inline_positions"
+require_relative "../helper_modules/pieces_modules/inline_positions"
 
 # Has the moves and info for the rook
 class Rook

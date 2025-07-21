@@ -1,4 +1,4 @@
-require_relative "../helper_methods/peices_helper_methods/black_pawn_positions"
+require_relative "../helper_modules/pieces_modules/black_pawn_positions"
 
 # Has the moves and info the the black pawn piece
 class BlackPawn

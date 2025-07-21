@@ -1,4 +1,4 @@
-require_relative "../helper_methods/peices_helper_methods/white_pawn_positions"
+require_relative "../helper_modules/pieces_modules/white_pawn_positions"
 
 # Has the moves and info for the whtie pawn
 class WhitePawn
