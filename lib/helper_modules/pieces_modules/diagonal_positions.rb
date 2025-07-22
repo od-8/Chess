@@ -1,17 +1,17 @@
 # Has all the methods for getting all inline positons from a specific square (piece_cords)
 module DiagonalPositions
   # All legal moves a bishop can make
-  def possible_bishop_moves(board, piece_cords, color) # rubocop:disable Metrics/AbcSize
-    possible_moves = left_upwards_positions(board, piece_cords[0], piece_cords[1], color).map { |cords| cords }
-    right_upwards_positions(board, piece_cords[0], piece_cords[1], color).each { |cords| possible_moves << cords }
-    left_downwards_positions(board, piece_cords[0], piece_cords[1], color).each { |cords| possible_moves << cords }
-    right_downwards_positions(board, piece_cords[0], piece_cords[1], color).each { |cords| possible_moves << cords }
+  def possible_diagonal_moves(board, piece_cords, color) # rubocop:disable Metrics/AbcSize
+    possible_moves = north_west_moves(board, piece_cords[0], piece_cords[1], color).map { |cords| cords }
+    north_east_moves(board, piece_cords[0], piece_cords[1], color).each { |cords| possible_moves << cords }
+    south_west_moves(board, piece_cords[0], piece_cords[1], color).each { |cords| possible_moves << cords }
+    south_east_moves(board, piece_cords[0], piece_cords[1], color).each { |cords| possible_moves << cords }
 
     possible_moves
   end
 
   # All diagonal moves upwards and to the left
-  def left_upwards_positions(board, x, y, color) # rubocop:disable Naming/MethodParameterName,Metrics/CyclomaticComplexity
+  def north_west_moves(board, x, y, color) # rubocop:disable Naming/MethodParameterName,Metrics/CyclomaticComplexity
     positions = []
 
     loop do
@@ -26,7 +26,7 @@ module DiagonalPositions
   end
 
   # All diagonal moves upwards and to the right
-  def right_upwards_positions(board, x, y, color) # rubocop:disable Naming/MethodParameterName,Metrics/CyclomaticComplexity
+  def north_east_moves(board, x, y, color) # rubocop:disable Naming/MethodParameterName,Metrics/CyclomaticComplexity
     positions = []
 
     loop do
@@ -41,7 +41,7 @@ module DiagonalPositions
   end
 
   # All diagonal moves downwards and to the left
-  def left_downwards_positions(board, x, y, color) # rubocop:disable Naming/MethodParameterName,Metrics/AbcSize,Metrics/CyclomaticComplexity
+  def south_west_moves(board, x, y, color) # rubocop:disable Naming/MethodParameterName,Metrics/AbcSize,Metrics/CyclomaticComplexity
     positions = []
 
     loop do
@@ -56,7 +56,7 @@ module DiagonalPositions
   end
 
   # All diagonal moves downwards and to the right
-  def right_downwards_positions(board, x, y, color) # rubocop:disable Naming/MethodParameterName,Metrics/CyclomaticComplexity
+  def south_east_moves(board, x, y, color) # rubocop:disable Naming/MethodParameterName,Metrics/CyclomaticComplexity
     positions = []
 
     loop do

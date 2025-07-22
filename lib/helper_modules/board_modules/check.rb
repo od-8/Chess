@@ -55,7 +55,7 @@ module Check
 
   # Checks if there is a check from a bishop or from a queen
   def diagonal_check?(board, king_cords, color)
-    diagonal_check_positions = possible_bishop_moves(board, king_cords, color)
+    diagonal_check_positions = possible_diagonal_moves(board, king_cords, color)
 
     diagonal_check_positions.each do |check_position|
       piece = board[check_position[0]][check_position[1]]
