@@ -11,13 +11,13 @@ require_relative "helper_modules/board_modules/promotion"
 require_relative "helper_modules/board_modules/threefold_repetition"
 
 # Peices
-require_relative "peices/bishop"
-require_relative "peices/black_pawn"
-require_relative "peices/king"
-require_relative "peices/knight"
-require_relative "peices/queen"
-require_relative "peices/rook"
-require_relative "peices/white_pawn"
+require_relative "pieces/bishop"
+require_relative "pieces/black_pawn"
+require_relative "pieces/king"
+require_relative "pieces/knight"
+require_relative "pieces/queen"
+require_relative "pieces/rook"
+require_relative "pieces/white_pawn"
 
 # Contains the board and all of its methods
 class Board

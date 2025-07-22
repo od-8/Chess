@@ -1,9 +1,9 @@
-require_relative "../peices_modules/white_pawn_positions"
-require_relative "../peices_modules/black_pawn_positions"
-require_relative "../peices_modules/knight_positions"
-require_relative "../peices_modules/diagonal_positions"
-require_relative "../peices_modules/inline_positions"
-require_relative "../peices_modules/king_positions"
+require_relative "../pieces_modules/white_pawn_positions"
+require_relative "../pieces_modules/black_pawn_positions"
+require_relative "../pieces_modules/knight_positions"
+require_relative "../pieces_modules/diagonal_positions"
+require_relative "../pieces_modules/inline_positions"
+require_relative "../pieces_modules/king_positions"
 
 # Gets all possible moves and is used to check if any can stop check, its also used for stalemate.
 module Checkmate

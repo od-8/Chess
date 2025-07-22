@@ -10,7 +10,7 @@ module DiagonalPositions
     possible_moves
   end
 
-  # All bishop moves upwards and to the left
+  # All diagonal moves upwards and to the left
   def left_upwards_positions(board, x, y, color) # rubocop:disable Naming/MethodParameterName,Metrics/CyclomaticComplexity
     positions = []
 
@@ -25,7 +25,7 @@ module DiagonalPositions
     positions
   end
 
-  # All bishop moves upwards and to the right
+  # All diagonal moves upwards and to the right
   def right_upwards_positions(board, x, y, color) # rubocop:disable Naming/MethodParameterName,Metrics/CyclomaticComplexity
     positions = []
 
@@ -40,7 +40,7 @@ module DiagonalPositions
     positions
   end
 
-  # All bishop moves downwards and to the left
+  # All diagonal moves downwards and to the left
   def left_downwards_positions(board, x, y, color) # rubocop:disable Naming/MethodParameterName,Metrics/AbcSize,Metrics/CyclomaticComplexity
     positions = []
 
@@ -55,7 +55,7 @@ module DiagonalPositions
     positions
   end
 
-  # All bishop moves downwards and to the right
+  # All diagonal moves downwards and to the right
   def right_downwards_positions(board, x, y, color) # rubocop:disable Naming/MethodParameterName,Metrics/CyclomaticComplexity
     positions = []
 

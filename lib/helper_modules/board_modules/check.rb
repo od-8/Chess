@@ -1,8 +1,8 @@
-require_relative "../peices_modules/white_pawn_positions"
-require_relative "../peices_modules/black_pawn_positions"
-require_relative "../peices_modules/knight_positions"
-require_relative "../peices_modules/diagonal_positions"
-require_relative "../peices_modules/inline_positions"
+require_relative "../pieces_modules/white_pawn_positions"
+require_relative "../pieces_modules/black_pawn_positions"
+require_relative "../pieces_modules/knight_positions"
+require_relative "../pieces_modules/diagonal_positions"
+require_relative "../pieces_modules/inline_positions"
 
 # Checks if there is a pawn to the top left/top right of king, knight attacking it, or its inline with
 # a bishop, rook or queen.
