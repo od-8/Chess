@@ -1,5 +1,15 @@
 # Has all the methods for pawn 1 forward, 2 forward, taking and en passant
 module BlackPawnPositions
+  # All legal moves a pawn can make
+  def black_pawn_positions(board, peice_cords) # rubocop:disable Metrics/AbcSize
+    possible_moves = black_move_one_forward(board, peice_cords[0], peice_cords[1]).map { |cords| cords }
+    black_move_two_forward(board, peice_cords[0], peice_cords[1]).each { |cords| possible_moves << cords }
+    black_take_positions(board, peice_cords[0], peice_cords[1]).each { |cords| possible_moves << cords }
+    en_passant_positions(board, peice_cords[0], peice_cords[1]).each { |cords| possible_moves << cords }
+
+    possible_moves
+  end
+
   # Method for basic pawn movement, up 1 square
   def black_move_one_forward(board, x, y) # rubocop:disable Naming/MethodParameterName
     all_possible_moves = []

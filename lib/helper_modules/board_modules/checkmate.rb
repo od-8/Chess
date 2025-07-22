@@ -44,14 +44,20 @@ module Checkmate
     when "pawn"
       pawn_handler(piece, piece_cords, king_cords, color).each { |move| valid_moves << move }
     when "knight"
-      move_places(piece_cords, possible_knight_moves(piece_cords[0], piece_cords[1]), king_cords, color).each { |move| valid_moves << move } # rubocop:disable Layout/LineLength
+      knight_moves = possible_knight_moves(piece_cords[0], piece_cords[1])
+      move_places(piece_cords, knight_moves, king_cords, color).each { |move| valid_moves << move }
     when "bishop"
-      move_places(piece_cords, possible_diagonal_moves(board, piece_cords, piece.color), king_cords, color).each { |move| valid_moves << move } # rubocop:disable Layout/LineLength
+      bishop_moves = possible_diagonal_moves(board, piece_cords, piece.color)
+      move_places(piece_cords, bishop_moves, king_cords, color).each { |move| valid_moves << move }
     when "rook"
-      move_places(piece_cords, possible_inline_moves(board, piece_cords, piece.color), king_cords, color).each { |move| valid_moves << move } # rubocop:disable Layout/LineLength
+      rook_moves = possible_inline_moves(board, piece_cords, piece.color)
+      move_places(piece_cords, rook_moves, king_cords, color).each { |move| valid_moves << move }
     when "queen"
-      move_places(piece_cords, possible_diagonal_moves(board, piece_cords, piece.color), king_cords, color).each { |move| valid_moves << move } # rubocop:disable Layout/LineLength
-      move_places(piece_cords, possible_inline_moves(board, piece_cords, piece.color), king_cords, color).each { |move| valid_moves << move } # rubocop:disable Layout/LineLength
+      queen_diagonal_moves = possible_diagonal_moves(board, piece_cords, piece.color)
+      queen_inline_moves = possible_inline_moves(board, piece_cords, piece.color)
+
+      move_places(piece_cords, queen_diagonal_moves, king_cords, color).each { |move| valid_moves << move }
+      move_places(piece_cords, queen_inline_moves, king_cords, color).each { |move| valid_moves << move }
     when "king"
       king_handler(king_cords, color).each { |move| valid_moves << move }
     end
@@ -60,17 +66,17 @@ module Checkmate
   end
 
   # Handles the color issues with pawn
-  def pawn_handler(piece, piece_cords, king_cords, color) # rubocop:disable Metrics/AbcSize
+  def pawn_handler(piece, piece_cords, king_cords, color)
     valid_moves = []
 
     if piece.color == "white"
-      move_places(piece_cords, white_move_one_forward(board, piece_cords[0], piece_cords[1]), king_cords, color).each { |move| valid_moves << move } # rubocop:disable Layout/LineLength
-      move_places(piece_cords, white_move_two_forward(board, piece_cords[0], piece_cords[1]), king_cords, color).each { |move| valid_moves << move } # rubocop:disable Layout/LineLength
+      white_pawn_moves = white_pawn_positions(board, piece_cords)
+      move_places(piece_cords, white_pawn_moves, king_cords, color)
     end
 
     if piece.color == "black"
-      move_places(piece_cords, black_move_one_forward(board, piece_cords[0], piece_cords[1]), king_cords, color).each { |move| valid_moves << move } # rubocop:disable Layout/LineLength
-      move_places(piece_cords, black_move_two_forward(board, piece_cords[0], piece_cords[1]), king_cords, color).each { |move| valid_moves << move } # rubocop:disable Layout/LineLength
+      black_pawn_moves = black_pawn_positions(board, piece_cords)
+      move_places(piece_cords, black_pawn_moves, king_cords, color)
     end
 
     valid_moves

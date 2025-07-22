@@ -14,7 +14,7 @@ class Bishop
 
   # Checks if the bishop can move to where the player wants it to move
   def legal_move?(board, piece_cords, move_cords)
-    legal_moves = possible_bishop_moves(board, piece_cords, color)
+    legal_moves = possible_diagonal_moves(board, piece_cords, color)
 
     return true if legal_moves.include?(move_cords)
 
