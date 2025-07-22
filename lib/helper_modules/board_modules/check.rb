@@ -68,7 +68,7 @@ module Check
 
   # Checks if there is a check from a rook or a queen
   def inline_check?(board, king_cords, color)
-    inline_check_positions = possible_rook_moves(board, king_cords, color)
+    inline_check_positions = possible_inline_moves(board, king_cords, color)
 
     inline_check_positions.each do |check_position|
       piece = board[check_position[0]][check_position[1]]

@@ -48,10 +48,10 @@ module Checkmate
     when "bishop"
       move_places(piece_cords, possible_diagonal_moves(board, piece_cords, piece.color), king_cords, color).each { |move| valid_moves << move } # rubocop:disable Layout/LineLength
     when "rook"
-      move_places(piece_cords, possible_rook_moves(board, piece_cords, piece.color), king_cords, color).each { |move| valid_moves << move } # rubocop:disable Layout/LineLength
+      move_places(piece_cords, possible_inline_moves(board, piece_cords, piece.color), king_cords, color).each { |move| valid_moves << move } # rubocop:disable Layout/LineLength
     when "queen"
       move_places(piece_cords, possible_diagonal_moves(board, piece_cords, piece.color), king_cords, color).each { |move| valid_moves << move } # rubocop:disable Layout/LineLength
-      move_places(piece_cords, possible_rook_moves(board, piece_cords, piece.color), king_cords, color).each { |move| valid_moves << move } # rubocop:disable Layout/LineLength
+      move_places(piece_cords, possible_inline_moves(board, piece_cords, piece.color), king_cords, color).each { |move| valid_moves << move } # rubocop:disable Layout/LineLength
     when "king"
       king_handler(king_cords, color).each { |move| valid_moves << move }
     end

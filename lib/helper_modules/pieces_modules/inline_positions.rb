@@ -1,17 +1,17 @@
 # Has all the methods for getting all inline positons from a specific square (piece_cords)
 module InlinePositions
   # All legal moves a rook can make
-  def possible_rook_moves(board, piece_cords, color) # rubocop:disable Metrics/AbcSize
-    possible_moves = upwards_positions(board, piece_cords[0], piece_cords[1], color).map { |cords| cords }
-    downwards_positions(board, piece_cords[0], piece_cords[1], color).each { |cords| possible_moves << cords }
-    left_positions(board, piece_cords[0], piece_cords[1], color).each { |cords| possible_moves << cords }
-    right_positions(board, piece_cords[0], piece_cords[1], color).each { |cords| possible_moves << cords }
+  def possible_inline_moves(board, piece_cords, color) # rubocop:disable Metrics/AbcSize
+    possible_moves = north_moves(board, piece_cords[0], piece_cords[1], color).map { |cords| cords }
+    south_moves(board, piece_cords[0], piece_cords[1], color).each { |cords| possible_moves << cords }
+    west_moves(board, piece_cords[0], piece_cords[1], color).each { |cords| possible_moves << cords }
+    east_moves(board, piece_cords[0], piece_cords[1], color).each { |cords| possible_moves << cords }
 
     possible_moves
   end
 
   # All rook moves going straight up
-  def upwards_positions(board, x, y, color) # rubocop:disable Naming/MethodParameterName
+  def north_moves(board, x, y, color) # rubocop:disable Naming/MethodParameterName
     positions = []
 
     loop do
@@ -26,7 +26,7 @@ module InlinePositions
   end
 
   # All rook moves going straight down
-  def downwards_positions(board, x, y, color) # rubocop:disable Naming/MethodParameterName
+  def south_moves(board, x, y, color) # rubocop:disable Naming/MethodParameterName
     positions = []
 
     loop do
@@ -41,7 +41,7 @@ module InlinePositions
   end
 
   # All rook moves going straight to the left
-  def left_positions(board, x, y, color) # rubocop:disable Naming/MethodParameterName
+  def west_moves(board, x, y, color) # rubocop:disable Naming/MethodParameterName
     positions = []
 
     loop do
@@ -56,7 +56,7 @@ module InlinePositions
   end
 
   # All rook moves going straight to the right
-  def right_positions(board, x, y, color) # rubocop:disable Naming/MethodParameterName
+  def east_moves(board, x, y, color) # rubocop:disable Naming/MethodParameterName
     positions = []
 
     loop do
