@@ -6,7 +6,7 @@ RSpec.describe WhitePawnPositions do
   let(:test_dummy) { Class.new { extend WhitePawnPositions } }
 
   context "when all forward moves are available" do
-    # ]These cords are used to show that pawn can move 1 forward and move 2 forward.
+    # These cords are used to show that pawn can move 1 forward and move 2 forward.
     # 2 move forward requires specific conditions to be a legal move.
     # That why I use these cords which are not random.
     let(:back_rank_cords) { [6, 2] }
