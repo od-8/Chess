@@ -17,3 +17,5 @@ Style/StringLiterals:
 
 Style/FrozenStringLiteralComment:
   EnforcedStyle: never
+
+plugins: rubocop-rspec

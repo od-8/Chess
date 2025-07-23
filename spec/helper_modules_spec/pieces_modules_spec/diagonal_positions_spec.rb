@@ -2,7 +2,7 @@ require_relative "../../../lib/helper_modules/pieces_modules/diagonal_positions"
 require_relative "../../../lib/pieces/white_pawn"
 require_relative "../../../lib/pieces/knight"
 
-RSpec.describe DiagonalPositions do # rubocop:disable Metrics/BlockLength
+RSpec.describe DiagonalPositions do
   let(:board) { Array.new(8) { Array.new(8) } }
   let(:test_dummy) { Class.new { extend DiagonalPositions } }
 
@@ -10,22 +10,20 @@ RSpec.describe DiagonalPositions do # rubocop:disable Metrics/BlockLength
     let(:random_cords) { [1, 1] }
     let(:random_color) { "white" }
 
-    let(:legal_moves) { [[2, 0], [2, 2], [3, 3], [4, 4], [5, 5], [6, 6], [7, 7], [0, 0], [0, 2]] }
-
     it "returns all legal moves" do
-      moves = test_dummy.possible_bishop_moves(board, random_cords, random_color)
+      legal_moves = [[2, 0], [2, 2], [3, 3], [4, 4], [5, 5], [6, 6], [7, 7], [0, 0], [0, 2]]
+
+      moves = test_dummy.possible_diagonal_moves(board, random_cords, random_color)
       expect(moves).to eq(legal_moves)
     end
   end
 
-  context "when some move squares are occupied" do
-    let(:white_pawn) { double(WhitePawn) }
-    let(:black_knight) { double(Knight) }
+  context "when some move squares are occupied" do # rubocop:disable RSpec/MultipleMemoizedHelpers
+    let(:white_pawn) { instance_double(WhitePawn) }
+    let(:black_knight) { instance_double(Knight) }
 
     let(:random_cords) { [3, 3] }
     let(:random_color) { "black" }
-
-    let(:legal_moves) { [[4, 2], [5, 1], [6, 0], [4, 4], [5, 5], [2, 2], [1, 1], [0, 0], [2, 4]] }
 
     before do
       # Allows the pieces on the board to return their color
@@ -38,7 +36,9 @@ RSpec.describe DiagonalPositions do # rubocop:disable Metrics/BlockLength
     end
 
     it "returns all legal moves" do
-      moves = test_dummy.possible_bishop_moves(board, random_cords, random_color)
+      legal_moves = [[4, 2], [5, 1], [6, 0], [4, 4], [5, 5], [2, 2], [1, 1], [0, 0], [2, 4]]
+
+      moves = test_dummy.possible_diagonal_moves(board, random_cords, random_color)
       expect(moves).to eq(legal_moves)
     end
   end

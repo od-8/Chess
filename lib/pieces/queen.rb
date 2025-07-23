@@ -1,5 +1,4 @@
-require_relative "../helper_modules/pieces_modules/diagonal_positions"
-require_relative "../helper_modules/pieces_modules/inline_positions"
+require_relative "../helper_modules/pieces_modules/queen_positions"
 
 # Has the moves and info for the queen
 class Queen
@@ -21,13 +20,5 @@ class Queen
     return true if legal_moves.include?(move_cords)
 
     false
-  end
-
-  # Gets all the possible moves for the queen
-  def possible_queen_moves(board, piece_cords)
-    possible_moves = possible_diagonal_moves(board, piece_cords, color).map { |cords| cords }
-    possible_inline_moves(board, piece_cords, color).each { |cords| possible_moves << cords }
-
-    possible_moves
   end
 end
