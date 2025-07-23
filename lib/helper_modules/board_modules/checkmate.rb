@@ -3,6 +3,7 @@ require_relative "../pieces_modules/black_pawn_positions"
 require_relative "../pieces_modules/knight_positions"
 require_relative "../pieces_modules/diagonal_positions"
 require_relative "../pieces_modules/inline_positions"
+require_relative "../pieces_modules/queen_positions"
 require_relative "../pieces_modules/king_positions"
 
 # Gets all possible moves and is used to check if any can stop check, its also used for stalemate.
@@ -12,6 +13,7 @@ module Checkmate
   include KnightPositions
   include DiagonalPositions
   include InlinePositions
+  include QueenPositions
   include KingPositions
 
   # Checks if the king is in checkmate
@@ -53,11 +55,8 @@ module Checkmate
       rook_moves = possible_inline_moves(board, piece_cords, piece.color)
       move_places(piece_cords, rook_moves, king_cords, color).each { |move| valid_moves << move }
     when "queen"
-      queen_diagonal_moves = possible_diagonal_moves(board, piece_cords, piece.color)
-      queen_inline_moves = possible_inline_moves(board, piece_cords, piece.color)
-
-      move_places(piece_cords, queen_diagonal_moves, king_cords, color).each { |move| valid_moves << move }
-      move_places(piece_cords, queen_inline_moves, king_cords, color).each { |move| valid_moves << move }
+      queen_moves = possible_queen_moves(board, piece_cords, piece.color)
+      move_places(piece_cords, queen_moves, king_cords, color).each { |move| valid_moves << move }
     when "king"
       king_handler(king_cords, color).each { |move| valid_moves << move }
     end
