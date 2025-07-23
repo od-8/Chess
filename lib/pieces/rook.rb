@@ -4,12 +4,13 @@ require_relative "../helper_modules/pieces_modules/inline_positions"
 class Rook
   include InlinePositions
 
-  attr_accessor :name, :symbol, :color
+  attr_accessor :name, :symbol, :color, :rook_moved
 
   def initialize(name, symbol, color)
     @name = name
     @symbol = symbol
     @color = color
+    @rook_moved = false
   end
 
   # Checks if the rook can move to where the player wants it to move
@@ -19,5 +20,9 @@ class Rook
     return true if legal_moves.include?(move_cords)
 
     false
+  end
+
+  def update_rook
+    @rook_moved = true
   end
 end

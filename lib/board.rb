@@ -63,11 +63,19 @@ class Board
     update_passantable_pawn
     piece = board[piece_cords[0]][piece_cords[1]]
 
-    piece = handle_pawn(piece, piece_cords, move_cords) if piece.name == "pawn"
-
-    castling(piece_cords, move_cords) if piece.name == "king"
+    piece = handle_piece(piece, piece_cords, move_cords)
 
     move_piece(piece, piece_cords, move_cords)
+  end
+
+  def handle_piece(piece, piece_cords, move_cords)
+    return piece if %w[bishop kngiht].include?(piece.name)
+
+    castling(piece_cords, move_cords) if piece.name == "king"
+    piece.update_rook if piece.name == "rook"
+
+    piece = handle_pawn(piece, piece_cords, move_cords) if piece.name == "pawn"
+    piece
   end
 
   def handle_pawn(piece, piece_cords, move_cords)

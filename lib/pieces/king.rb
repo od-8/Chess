@@ -1,4 +1,5 @@
 require_relative "../helper_modules/pieces_modules/king_positions"
+require_relative "../helper_modules/board_modules/check"
 
 # Has the moves and info for the king
 class King
@@ -32,19 +33,22 @@ class King
   end
 
   # Checks if king isde castling is legal
-  def king_side_is_legal?(board, x, y) # rubocop:disable Naming/MethodParameterName
-    return true if king_moved == false &&
+  def king_side_is_legal?(board, x, y) # rubocop:disable Naming/MethodParameterName,Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
+    return true if king_moved == false && in_check?(board, [x, y], color) == false &&
                    board[x][y + 1].nil? && in_check?(board, [x, y + 1], color) == false &&
-                   board[x][y + 2].nil? && in_check?(board, [x, y + 2], color) == false
+                   board[x][y + 2].nil? && in_check?(board, [x, y + 2], color) == false &&
+                   board[x][y + 3]&.name == "rook" && board[x][y + 3].rook_moved == false
 
     false
   end
 
   # Checks if queen side castling is legal
-  def queen_side_is_legal?(board, x, y) # rubocop:disable Naming/MethodParameterName
-    return true if king_moved == false &&
+  def queen_side_is_legal?(board, x, y) # rubocop:disable Naming/MethodParameterName,Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
+    return true if king_moved == false && in_check?(board, [x, y], color) == false &&
                    board[x][y - 1].nil? && in_check?(board, [x, y - 1], color) == false &&
-                   board[x][y - 2].nil? && in_check?(board, [x, y - 2], color) == false
+                   board[x][y - 2].nil? && in_check?(board, [x, y - 2], color) == false &&
+                   board[x][y - 4]&.name == "rook" && board[x][y - 4].rook_moved == false && 
+                   board[x][y - 3].nil?
 
     false
   end
