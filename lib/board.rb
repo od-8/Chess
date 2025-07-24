@@ -60,7 +60,6 @@ class Board
 
   # Does stuff for before a move like when castling it handles moving the rook, handles promotion and en passant
   def move(piece_cords, move_cords)
-    update_passantable_pawn
     piece = board[piece_cords[0]][piece_cords[1]]
 
     piece = handle_piece(piece, piece_cords, move_cords)
@@ -71,17 +70,31 @@ class Board
   def handle_piece(piece, piece_cords, move_cords)
     return piece if %w[bishop kngiht].include?(piece.name)
 
-    castling(piece_cords, move_cords) if piece.name == "king"
-    piece.update_rook if piece.name == "rook"
-
-    piece = handle_pawn(piece, piece_cords, move_cords) if piece.name == "pawn"
-    piece
+    handle_rook(piece)
+    handle_king(piece, piece_cords, move_cords)
+    handle_pawn(piece, piece_cords, move_cords)
   end
 
   def handle_pawn(piece, piece_cords, move_cords)
-    en_passant(piece, piece_cords, move_cords)
+    return piece unless piece.name == "pawn"
+
+    update_passantable_status(piece, piece_cords, move_cords)
     remove_passant_pawn(piece, piece_cords, move_cords)
+
     promotion(piece, move_cords)
+  end
+
+  def handle_rook(piece)
+    return unless piece.name == "rook"
+
+    piece.update_move_status
+  end
+
+  def handle_king(piece, piece_cords, move_cords)
+    return unless piece.name == "king"
+
+    castling(piece_cords, move_cords)
+    piece.update_move_status
   end
 
   # Moves piece from where it currently is (piece_cords) to where it wants to go (move_cords)

@@ -22,7 +22,7 @@ class BlackPawn
   end
 
   # Checks if en passant is the move and returns the coordinates of the piece that need to be removed
-  def remove_passant_pawn(board, piece_cords, move_cords)
+  def cords_of_passanted_pawn(board, piece_cords, move_cords)
     return unless
         board[move_cords[0]][move_cords[1]].nil? &&
         [[piece_cords[0] + 1, piece_cords[1] - 1], [piece_cords[0] + 1, piece_cords[1] + 1]].include?(move_cords)

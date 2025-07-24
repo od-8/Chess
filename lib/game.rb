@@ -55,7 +55,7 @@ class Game
       move = move_loop
       return "quit" if move == "quit"
 
-      clear_screen
+      # clear_screen
       board.print_board
 
       break if game_over?
