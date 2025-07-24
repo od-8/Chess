@@ -3,157 +3,146 @@ require_relative "lib/game"
 require_relative "lib/player"
 require "colorize"
 
-# Contains the methods for loading a previous game
-module LoadPreviousGame
-  def play_previous_game
-    @invalid_moves = 4
-    show_prev_games
-    prev_game_name = acquire_prev_game_name
-    # clear_screen
-
-    new_game = Game.new
-    new_game.load_prev_game(prev_game_name)
-    new_game.play_game
-  end
-
-  def show_prev_games
-    puts ""
-    puts "Chosse a previous game to load:"
-
-    prev_games = `ls lib/saved_games/`
-    prev_games.split.each do |file|
-      puts " - #{file.colorize(:green)}"
-    end
-    puts ""
-  end
-
-  def acquire_prev_game_name
-    loop do
-      @invalid_moves += 2
-      print "Enter file name (without extension): "
-      file_name =  gets.chomp.downcase
-      return file_name if `ls lib/saved_games/`.split.include?("#{file_name}.yaml")
-
-      puts "Enter a valid file name".colorize(:red)
-      puts ""
-    end
-  end
-end
-
-# Handles loading a previous game, starting new games
-class Chess
-  include LoadPreviousGame
-
-  attr_accessor :player1, :player2, :invalid_moves
+# Contains methods for starting a new game or loading a previous game
+class Chess # rubocop:disable Metrics/ClassLength
+  attr_accessor :invalid_moves
 
   def initialize
-    @player1 = "Player1"
-    @player2 = "Player2"
-    # @invalid_moves = 15
-    @invalid_moves = 11
-    setup_game
+    @invalid_moves = -1
+    print_logo
+    game_options
   end
 
   def print_logo
     puts ""
-    puts "              ______"
-    puts "             / ___| |__   ___  ___ ___"
-    puts '            | |   |  _ \ / _ \/ __/ __|'
-    puts '            | |___| | | |  __/\__ \__ \ '
-    puts '             \____|_| |_|\___||___/___/'
+    puts "   ______"
+    puts "  / ___| |__   ___  ___ ___"
+    puts ' | |   |  _ \ / _ \/ __/ __|'
+    puts ' | |___| | | |  __/\__ \__ \ '
+    puts '  \____|_| |_|\___||___/___/'
     puts ""
   end
 
-  def print_options
-    puts "+-----+-----+-----+-----+-----+".center(54)
-    puts "| 1 - Play a new game         |".center(54)
-    puts "+-----+-----+-----+-----+-----+".center(54)
-    puts "| 2 - Load a saved game       |".center(54)
-    puts "+-----+-----+-----+-----+-----+".center(54)
-    puts "| 3 - Exit                    |".center(54)
-    puts "+-----+-----+-----+-----+-----+".center(54)
+  # Starts a new game automatically if there are no saved games otherwise gives option
+  def game_options
+    result = `ls lib/saved_games`
+    result.empty? ? start_new_game : give_options
   end
 
-  def setup_names
-    puts ""
-    puts "    Who will be playing?"
+  def start_new_game
+    player1, player2 = acquire_valid_names
 
-    names = acquire_valid_names
-    @player1 = names[0]
-    @player2 = names[1]
+    clear_screen
 
-    puts ""
-    puts " #{player1} will have the #{'White'.colorize(:green)} peices."
-    puts " #{player2} will have the #{'Black'.colorize(:green)} peices."
-    sleep 2
-    names
-  end
+    new_game = Game.new(player1, player2)
+    new_game.play_game
 
-  def acquire_player_names
-    print "         Enter the first players name: "
-    player1 = gets.chomp.capitalize
-    print "         Enter the second players name: "
-    player2 = gets.chomp.capitalize
-    puts ""
-
-    [player1, player2]
+    print_end_message
   end
 
   def acquire_valid_names
     loop do
-      @invalid_moves += 3
-      player1, player2 = acquire_player_names
+      print " Enter the name of player 1: "
+      player1 = gets.chomp.downcase
+      print " Enter the name of player 2: "
+      player2 = gets.chomp.downcase
 
-      return [player1, player2] if player1 != player2 && player1 != "" && player2 != ""
+      @invalid_moves += 4
 
-      puts "Enter 2 different valid names".center(50).colorize(:red)
+      # Makes sures the player names arent the same
+      return [player1, player2] unless player1 == player2
+
+      puts " Your names cannot be the same".colorize(:red)
       puts ""
-      @invalid_moves += 2
     end
   end
 
-  def choose_game
-    loop do
-      puts ""
-      print "         Enter the number for what you would like to do? "
-      game = gets.chomp.downcase
-
-      return game if %w[1 2 3].include?(game)
-    end
+  def game_choice
+    result = `ls lib/saved_games`
+    result.empty? ? start_new_game : give_options
   end
 
-  def determine_game_choice
-    num = choose_game
-    clear_screen
+  def give_options
+    print_options
 
-    case num.to_i
-    when 1
-      new_game
-    when 2
-      play_previous_game
-    when 3
-      # Quits
-    end
+    num = acquire_game_choice
+
+    num == 1 ? start_new_game : load_prev_game
   end
 
-  def new_game
-    # setup_names
+  def load_prev_game
+    print_previous_games
+
+    file_name = acquire_prev_file_name
+
     new_game = Game.new
+
+    new_game.load_prev_game(file_name)
     new_game.play_game
   end
 
-  def clear_screen
-    puts "called"
-    invalid_moves.times do
-      print "\e[1A\e[J"
-      sleep 0.1
+  def print_previous_games
+    prev_games = `ls lib/saved_games`
+
+    puts "These are the games you can play"
+
+    prev_games.split.each do |game|
+      puts " - #{game}".colorize(:green)
+    end
+
+    puts ""
+  end
+
+  def acquire_prev_file_name
+    games = `ls lib/saved_games`.split
+
+    loop do
+      print "Enter the name of the file you would like to load: "
+      file_name = gets.chomp.downcase
+      puts ""
+      return file_name if games.include?(file_name)
+
+      puts "Enter a name of one of the files".colorize(:red)
+      puts ""
     end
   end
 
-  def setup_game
-    print_logo
-    print_options
-    determine_game_choice
+  # Print the options of what to do
+  def print_options
+    puts "+---+---+---+---+---+---+---+"
+    puts "|  Enter 1 for a new game   |"
+    puts "+---+---+---+---+---+---+---+"
+    puts "|  Enter 2 to load a game   |"
+    puts "+---+---+---+---+---+---+---+"
+    puts ""
+  end
+
+  # Gets the choice of what game they would like to play
+  def acquire_game_choice
+    loop do
+      print "Enter the name of what you would like to do: "
+      num = gets.chomp.downcase
+      puts ""
+
+      return num if %w[1 2].include?(num)
+
+      puts "Enter either 1 or 2"
+      puts ""
+    end
+  end
+
+  # Prints the thank you for playing message
+  def print_end_message
+    puts ""
+    puts "Thank you for playing chess.".colorize(:green)
+    puts ""
+  end
+
+  def clear_screen
+    @invalid_moves.times do
+      print "\e[1A\e[J"
+      sleep 0.1
+    end
   end
 end
 

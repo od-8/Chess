@@ -45,7 +45,6 @@ class Game
     sleep 2
 
     another_game
-    end_message
   end
 
   # The handles the user move, printing the game nicely on the screen checking for check and things that end the game
@@ -136,12 +135,5 @@ class Game
     return true if checkmate? || stalemate? || threefold_repetition? || insufficient_material?
 
     false
-  end
-
-  # Prints the thank you for playing message
-  def end_message
-    puts ""
-    puts "Thank you for playing chess.".colorize(:green)
-    puts ""
   end
 end

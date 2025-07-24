@@ -71,4 +71,8 @@ module SaveGame
       player2_color: player2.color
     }
   end
+
+  def acquire_info
+    
+  end
 end
