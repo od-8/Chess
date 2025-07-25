@@ -13,11 +13,11 @@ module SaveGame
   def end_game_choice
     loop do
       puts ""
-      print "Enter #{'save'.colorize(:green)} to save and quit or #{'quit'.colorize(:green)} to quit without saving: "
+      print " Enter #{'save'.colorize(:green)} to save and quit or #{'quit'.colorize(:green)} to quit without saving: "
       choice = gets.chomp.downcase
       return choice if %w[save quit].include?(choice)
 
-      puts "Enter either the word save or the word quit".colorize(:red)
+      puts " Enter either the word save or the word quit".colorize(:red)
     end
   end
 
@@ -26,12 +26,12 @@ module SaveGame
     Dir.chdir("lib/saved_games")
     loop do
       puts ""
-      print "Please name this game: "
+      print " Please name this game: "
       file_name = gets.chomp.downcase
       return file_name unless file_name.include?(".") || File.exist?("#{file_name}.yaml")
 
       puts ""
-      puts "The name must be unique and it cannot contain any dots".colorize(:red)
+      puts " The name must be unique and it cannot contain any dots".colorize(:red)
     end
   end
 
@@ -70,9 +70,5 @@ module SaveGame
       player2_name: player2.name,
       player2_color: player2.color
     }
-  end
-
-  def acquire_info
-    
   end
 end

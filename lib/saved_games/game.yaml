@@ -1,0 +1,21 @@
+---
+- :current_player_name: jimmy
+  :current_player_color: black
+  :current_king_cords: &1
+  - 0
+  - 4
+  :current_king_color: black
+  :white_king_cords:
+  - 7
+  - 4
+  :black_king_cords: *1
+- :board: rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR/
+  :previous_boards:
+  - rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR/
+  :passantable_pawn_cords:
+  - 4
+  - 3
+- :player1_name: jim
+  :player1_color: white
+  :player2_name: jimmy
+  :player2_color: black

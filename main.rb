@@ -43,9 +43,9 @@ class Chess # rubocop:disable Metrics/ClassLength
   def acquire_valid_names
     loop do
       print " Enter the name of player 1: "
-      player1 = gets.chomp.downcase
+      player1 = gets.chomp.downcase.capitalize
       print " Enter the name of player 2: "
-      player2 = gets.chomp.downcase
+      player2 = gets.chomp.downcase.capitalize
 
       @invalid_moves += 4
 
@@ -63,11 +63,12 @@ class Chess # rubocop:disable Metrics/ClassLength
   end
 
   def give_options
+    @invalid_moves += 8
     print_options
 
     num = acquire_game_choice
 
-    num == 1 ? start_new_game : load_prev_game
+    num == "1" ? start_new_game : load_prev_game
   end
 
   def load_prev_game
@@ -100,7 +101,7 @@ class Chess # rubocop:disable Metrics/ClassLength
       print "Enter the name of the file you would like to load: "
       file_name = gets.chomp.downcase
       puts ""
-      return file_name if games.include?(file_name)
+      return file_name if games.include?("#{file_name}.yaml")
 
       puts "Enter a name of one of the files".colorize(:red)
       puts ""
@@ -110,9 +111,9 @@ class Chess # rubocop:disable Metrics/ClassLength
   # Print the options of what to do
   def print_options
     puts "+---+---+---+---+---+---+---+"
-    puts "|  Enter 1 for a new game   |"
+    puts "|  Enter #{'1'.colorize(:green)} for a new game   |"
     puts "+---+---+---+---+---+---+---+"
-    puts "|  Enter 2 to load a game   |"
+    puts "|  Enter #{'2'.colorize(:green)} to load a game   |"
     puts "+---+---+---+---+---+---+---+"
     puts ""
   end

@@ -42,19 +42,18 @@ class Board
   end
 
   # Prints the board like a chess board
-  def print_board # rubocop:disable Metrics/MethodLength,Metrics/AbcSize
+  def print_board # rubocop:disable Metrics/MethodLength
     puts ""
-    puts "+---+---+---+---+---+---+---+---+".center(54)
+    puts "   +---+---+---+---+---+---+---+---+"
     board.each_with_index do |row, index|
-      print " ".center(8)
-      print "#{8 - index} |"
+      print " #{8 - index} |"
       row.each do |piece|
         print piece.nil? ? "   |" : " #{piece&.symbol} |"
       end
       puts ""
-      puts "+---+---+---+---+---+---+---+---+".center(54)
+      puts "   +---+---+---+---+---+---+---+---+"
     end
-    puts "a   b   c   d   e   f   g   h".center(54)
+    puts "   a   b   c   d   e   f   g   h"
     puts ""
   end
 

@@ -5,7 +5,7 @@ module Promotion
     piece = nil
 
     loop do
-      puts "What piece would you like to promote to"
+      puts " What piece would you like to promote to"
       piece = gets.chomp.downcase
       break if legal_piece?(piece)
     end

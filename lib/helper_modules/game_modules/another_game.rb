@@ -13,9 +13,9 @@ module AnotherGame
   # Asks if players would like to play another game
   def another_game?
     loop do
-      puts "Enter yes if you would like to play another game or no if you want to quit"
+      puts " Enter yes if you would like to play another game or no if you want to quit"
       puts ""
-      print "Your descision: "
+      print " Your descision: "
       answer = gets.chomp.downcase
       puts ""
 

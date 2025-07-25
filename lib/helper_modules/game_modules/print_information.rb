@@ -12,7 +12,7 @@ module PrintInfo
     return false unless in_check?(board.board, king_cords, color)
 
     @invalid_moves += 2
-    puts "#{color.capitalize} king is in check".colorize(:green)
+    puts " #{color.capitalize} king is in check".colorize(:green)
     puts ""
   end
 
@@ -27,7 +27,7 @@ module PrintInfo
   def print_checkmate?(king_cords, color)
     return false unless in_check?(board.board, king_cords, color) && in_checkmate?(king_cords, color)
 
-    puts "#{color.capitalize} king is in checkmate".colorize(:red)
+    puts " #{color.capitalize} king is in checkmate".colorize(:red)
     puts ""
 
     true
@@ -46,7 +46,7 @@ module PrintInfo
                         in_checkmate?(king_cords, color) &&
                         current_player.color != color
 
-    puts "It is #{color}'s go and they cant make any legal moves. Stalemate".colorize(:red)
+    puts " It is #{color}'s go and they cant make any legal moves. Stalemate".colorize(:red)
     puts ""
 
     true
@@ -56,7 +56,7 @@ module PrintInfo
   def insufficient_material?
     return false unless checkmate_isnt_possible?
 
-    puts "Insufficinet material. Draw".colorize(:red)
+    puts " Insufficinet material. Draw".colorize(:red)
     puts ""
 
     true
@@ -66,7 +66,7 @@ module PrintInfo
   def threefold_repetition?
     return false unless draw_by_repetition?
 
-    puts "Threefold repetition. Draw".colorize(:red)
+    puts " Threefold repetition. Draw".colorize(:red)
     puts ""
 
     true

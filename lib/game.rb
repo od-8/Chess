@@ -38,7 +38,6 @@ class Game
 
     if game_loop == "quit"
       end_the_game
-      end_message
       return
     end
 

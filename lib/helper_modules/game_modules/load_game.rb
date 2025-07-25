@@ -2,6 +2,7 @@
 module LoadGame
   # Gets the information from a file then updates the game
   def load_prev_game(prev_game_name)
+    puts File.read("lib/saved_games/#{prev_game_name}.yaml")
     game_info = YAML.load_file("lib/saved_games/#{prev_game_name}.yaml")
     update_player(game_info[2])
     update_game(game_info[0])
