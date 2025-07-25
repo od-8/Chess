@@ -1,7 +1,14 @@
 # This handles converting a board to fen and converting a fen board into a regular board
 module ConvertToFen
   # Converts the board (2d array) to a string as fen
-  def convert_to_fen(board)
+  def convert_to_fen(board, white_king_cords, black_king_cords, color)
+    fen_str = convert_board_to_fen(board)
+    fen_str += " #{color[0]} "
+    fen_str += fen_castling(white_king_cords, black_king_cords)
+    fen_str
+  end
+
+  def convert_board_to_fen(board)
     fen_board = convert_pieces_to_fen(board)
     fen_board_arr = convert_to_fen_arr(fen_board)
     fen_board_arr.join
@@ -49,5 +56,22 @@ module ConvertToFen
       fen_arr << counter if fen_board.chars[index + 1] != "."
     end
     fen_arr
+  end
+
+  # Converts the castling rights to fen
+  def fen_castling(white_king_cords, black_king_cords) # rubocop:disable Metrics/AbcSize
+    wx, wy = white_king_cords
+    bx, by = black_king_cords
+
+    fen_str = ""
+
+    fen_str += "K" if board[wx][wy].king_side_is_legal?(board, wx, wy)
+    fen_str += "Q" if board[wx][wy].queen_side_is_legal?(board, wx, wy)
+    fen_str += "k" if board[bx][by].king_side_is_legal?(board, bx, by)
+    fen_str += "q" if board[bx][by].queen_side_is_legal?(board, bx, by)
+
+    return fen_str if fen_str.length.positive?
+
+    "-"
   end
 end

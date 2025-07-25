@@ -60,9 +60,9 @@ class Game
 
       check?
 
+      add_to_prev_games
       update_current_player
       update_current_king
-      save_as_fen
     end
   end
 
@@ -137,27 +137,8 @@ class Game
     false
   end
 
-  def save_as_fen
-    fen_str = board.convert_to_fen(board.board)
-    fen_str += " #{current_player.color[0]} "
-    castling { |char| fen_str += char }
-    puts fen_str
-  end
-
-  def castling # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/PerceivedComplexity
-    wx = white_king_cords[0]
-    wy = white_king_cords[1]
-    bx = black_king_cords[0]
-    by = black_king_cords[1]
-
-    yield "K" if board.board[wx][wy].king_side_is_legal?(board.board, wx, wy)
-    yield "Q" if board.board[wx][wy].queen_side_is_legal?(board.board, wx, wy)
-    yield "k" if board.board[bx][by].king_side_is_legal?(board.board, bx, by)
-    yield "q" if board.board[bx][by].queen_side_is_legal?(board.board, bx, by)
-
-    yield "-" if !board.board[wx][wy].king_side_is_legal?(board.board, wx, wy) &&
-                 !board.board[wx][wy].queen_side_is_legal?(board.board, wx, wy) &&
-                 !board.board[bx][by].king_side_is_legal?(board.board, bx, by) &&
-                 !board.board[bx][by].queen_side_is_legal?(board.board, bx, by)
+  def add_to_prev_games
+    fen = board.convert_to_fen(board.board, white_king_cords, black_king_cords, current_player.color)
+    board.previous_boards << fen
   end
 end

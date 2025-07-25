@@ -34,7 +34,7 @@ class Board
 
   attr_accessor :board, :previous_boards, :passantable_pawn_cords
 
-  def initialize(board = Array.new(8) { Array.new(8) })
+  def initialize(board = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w -")
     @board = board
     @passantable_pawn_cords = nil
     @previous_boards = []
@@ -66,14 +66,22 @@ class Board
     move_piece(piece, piece_cords, move_cords)
   end
 
+  # Moves piece from where it currently is (piece_cords) to where it wants to go (move_cords)
+  def move_piece(piece, piece_cords, move_cords)
+    @board[move_cords[0]][move_cords[1]] = piece
+    @board[piece_cords[0]][piece_cords[1]] = nil
+  end
+
+  # Handles pieces differently depending on what piece is being moved
   def handle_piece(piece, piece_cords, move_cords)
-    return piece if %w[bishop kngiht].include?(piece.name)
+    return piece if %w[queen bishop kngiht].include?(piece.name)
 
     handle_rook(piece)
     handle_king(piece, piece_cords, move_cords)
     handle_pawn(piece, piece_cords, move_cords)
   end
 
+  # Updates passantable status and if pawn is promoting
   def handle_pawn(piece, piece_cords, move_cords)
     return piece unless piece.name == "pawn"
 
@@ -83,25 +91,19 @@ class Board
     promotion(piece, move_cords)
   end
 
+  # Updates the rooks moved status
   def handle_rook(piece)
     return unless piece.name == "rook"
 
     piece.update_move_status
   end
 
+  # Updates the kings moved status and handles castling
   def handle_king(piece, piece_cords, move_cords)
     return unless piece.name == "king"
 
     castling(piece_cords, move_cords)
     piece.update_move_status
-  end
-
-  # Moves piece from where it currently is (piece_cords) to where it wants to go (move_cords)
-  def move_piece(piece, piece_cords, move_cords)
-    @board[move_cords[0]][move_cords[1]] = piece
-    @board[piece_cords[0]][piece_cords[1]] = nil
-
-    update_previous_boards
   end
 
   # Checks if the square is occupied by a piece with the same color
@@ -122,12 +124,6 @@ class Board
     clone_board[piece_cords[0]][piece_cords[1]] = nil
 
     clone_board
-  end
-
-  # Adds the board to previous board, used for threefold repetition
-  def update_previous_boards
-    fen_str = convert_to_fen(board)
-    @previous_boards << fen_str
   end
 end
 

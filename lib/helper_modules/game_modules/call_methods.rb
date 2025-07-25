@@ -23,6 +23,6 @@ module CallMethods
 
   # Checks if the same board has appeared three times
   def draw_by_repetition?
-    board.threefold_repetition?(board.board)
+    board.threefold_repetition?(board.previous_boards[-1])
   end
 end
