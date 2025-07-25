@@ -18,7 +18,7 @@ module ConvertToFen
       end
       fen_board += "/"
     end
-    fen_board
+    fen_board[0..-2]
   end
 
   # Handles which letter to return depending on color

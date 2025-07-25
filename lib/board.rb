@@ -53,7 +53,7 @@ class Board
       puts ""
       puts "   +---+---+---+---+---+---+---+---+"
     end
-    puts "   a   b   c   d   e   f   g   h"
+    puts "     a   b   c   d   e   f   g   h"
     puts ""
   end
 
@@ -130,3 +130,10 @@ class Board
     @previous_boards << fen_str
   end
 end
+
+# board as fen
+# current player color
+# castling possibilties
+# en passant square
+# halfmove clock
+# fullmove clock

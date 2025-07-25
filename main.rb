@@ -30,11 +30,12 @@ class Chess # rubocop:disable Metrics/ClassLength
   end
 
   def start_new_game
-    player1, player2 = acquire_valid_names
+    # player1, player2 = acquire_valid_names
 
     clear_screen
 
-    new_game = Game.new(player1, player2)
+    # new_game = Game.new(player1, player2)
+    new_game = Game.new("jim", "bob")
     new_game.play_game
 
     print_end_message
