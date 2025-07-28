@@ -34,10 +34,10 @@ class Board
 
   attr_accessor :board, :previous_boards, :passantable_pawn_cords
 
-  def initialize(board = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w -")
+  def initialize(board = Array.new(8) { Array.new(8) })
     @board = board
     @passantable_pawn_cords = nil
-    @previous_boards = []
+    @previous_boards = ["rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w -"]
     add_peices
   end
 
@@ -61,7 +61,7 @@ class Board
   def move(piece_cords, move_cords)
     piece = board[piece_cords[0]][piece_cords[1]]
 
-    piece = handle_piece(piece, piece_cords, move_cords)
+    # piece = handle_piece(piece, piece_cords, move_cords)
 
     move_piece(piece, piece_cords, move_cords)
   end
@@ -125,11 +125,12 @@ class Board
 
     clone_board
   end
-end
 
-# board as fen
-# current player color
-# castling possibilties
-# en passant square
-# halfmove clock
-# fullmove clock
+  def find_king_coordinates(board, color)
+    board.each_with_index do |row, row_index|
+      row.each_with_index do |piece, piece_index|
+        return [row_index, piece_index] if piece&.name == "king" && piece&.color == color
+      end
+    end
+  end
+end

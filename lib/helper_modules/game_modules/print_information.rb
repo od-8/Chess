@@ -2,14 +2,14 @@
 module PrintInfo
   # Checks if check is true
   def check?
-    return true if print_check?(white_king_cords, "white") || print_check?(black_king_cords, "black")
+    return true if print_check?("white") || print_check?("black")
 
     false
   end
 
   # Print statement for when either king is in checkmate
-  def print_check?(king_cords, color)
-    return false unless in_check?(board.board, king_cords, color)
+  def print_check?(color)
+    return false unless in_check?(board.board, color)
 
     @invalid_moves += 2
     puts " #{color.capitalize} king is in check".colorize(:green)
@@ -18,14 +18,14 @@ module PrintInfo
 
   # Checks if checkmate is true
   def checkmate?
-    return true if print_checkmate?(white_king_cords, "white") || print_checkmate?(black_king_cords, "black")
+    return true if print_checkmate?("white") || print_checkmate?("black")
 
     false
   end
 
   # Print statement for when either king is in checkmate
-  def print_checkmate?(king_cords, color)
-    return false unless in_check?(board.board, king_cords, color) && in_checkmate?(king_cords, color)
+  def print_checkmate?(color)
+    return false unless in_check?(board.board, color) && in_checkmate?(color)
 
     puts " #{color.capitalize} king is in checkmate".colorize(:red)
     puts ""
@@ -35,15 +35,15 @@ module PrintInfo
 
   # Checks if stalemate is true
   def stalemate?
-    return true if print_stalemate?(white_king_cords, "white") || print_stalemate?(black_king_cords, "black")
+    return true if print_stalemate?("white") || print_stalemate?("black")
 
     false
   end
 
   # Print statement for when either king is in stalemate
-  def print_stalemate?(king_cords, color)
-    return false unless in_check?(board.board, king_cords, color) == false &&
-                        in_checkmate?(king_cords, color) &&
+  def print_stalemate?(color)
+    return false unless in_check?(board.board, color) == false &&
+                        in_checkmate?(color) &&
                         current_player.color != color
 
     puts " It is #{color}'s go and they cant make any legal moves. Stalemate".colorize(:red)

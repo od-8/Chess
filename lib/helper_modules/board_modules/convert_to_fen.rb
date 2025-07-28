@@ -1,10 +1,10 @@
 # This handles converting a board to fen and converting a fen board into a regular board
 module ConvertToFen
   # Converts the board (2d array) to a string as fen
-  def convert_to_fen(board, white_king_cords, black_king_cords, color)
+  def convert_to_fen(board, color)
     fen_str = convert_board_to_fen(board)
     fen_str += " #{color[0]} "
-    fen_str += fen_castling(white_king_cords, black_king_cords)
+    # fen_str += fen_castling(white_king_cords, black_king_cords)
     fen_str
   end
 

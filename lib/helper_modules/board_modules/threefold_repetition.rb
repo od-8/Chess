@@ -1,7 +1,8 @@
 # Handles the checking for threefold repetition
 module ThreefoldRepetition
   # Checks if the same board has appeared three times
-  def threefold_repetition?(fen_str)
+  def threefold_repetition?
+    fen_str = previous_boards[-1]
     board_counter = 0
 
     previous_boards.each do |prev_board|

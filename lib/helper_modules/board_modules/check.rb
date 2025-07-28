@@ -13,8 +13,13 @@ module Check
   include DiagonalPositions
   include InlinePositions
 
+  def in_check?(board, color)
+    king_cords = find_king_coordinates(board, color)
+    king_is_in_check?(board, king_cords, color)
+  end
+
   # Checks if the king is in check
-  def in_check?(board, cords, color)
+  def king_is_in_check?(board, cords, color)
     return true if pawn_check?(board, cords, color) ||
                    knight_check?(board, cords, color) ||
                    diagonal_check?(board, cords, color) ||

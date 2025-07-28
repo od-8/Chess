@@ -1,7 +1,7 @@
 # This handles converting a fen str to a new board
 module ConvertFromFen
   # Converts the board from a fen string to a 2d array
-  def convert_from_fen(fen_str)
+  def convert_board_from_fen(fen_str)
     new_fen_str = convert_nums_to_dots(fen_str)
     create_new_board(new_fen_str)
   end

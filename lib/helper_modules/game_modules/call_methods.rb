@@ -7,13 +7,13 @@ module CallMethods
   end
 
   # Checks if the player is in check
-  def in_check?(board_arr, cords, color)
-    board.in_check?(board_arr, cords, color)
+  def in_check?(board_arr, color)
+    board.in_check?(board_arr, color)
   end
 
   # Checks if the player is in checkmate
-  def in_checkmate?(king_cords, color)
-    board.checkmate?(king_cords, color)
+  def in_checkmate?(color)
+    board.in_checkmate?(color)
   end
 
   # Checks if there arent enough pieces
@@ -23,6 +23,6 @@ module CallMethods
 
   # Checks if the same board has appeared three times
   def draw_by_repetition?
-    board.threefold_repetition?(board.previous_boards[-1])
+    board.threefold_repetition?
   end
 end

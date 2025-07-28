@@ -4,7 +4,6 @@ require_relative "helper_modules/game_modules/get_coordinates"
 require_relative "helper_modules/game_modules/load_game"
 require_relative "helper_modules/game_modules/print_information"
 require_relative "helper_modules/game_modules/save_game"
-require_relative "helper_modules/game_modules/update_cords"
 require "colorize"
 require "yaml"
 
@@ -16,19 +15,14 @@ class Game
   include LoadGame
   include PrintInfo
   include SaveGame
-  include UpdateCords
 
-  attr_accessor :board, :player1, :player2, :current_player, :white_king_cords, :black_king_cords, :current_king,
-                :invalid_moves
+  attr_accessor :board, :player1, :player2, :current_player, :invalid_moves
 
   def initialize(name1 = "Player1", name2 = "Player2")
     @board = Board.new
     @player1 = Player.new(name1, "white")
     @player2 = Player.new(name2, "black")
     @current_player = @player1
-    @white_king_cords = [7, 4]
-    @black_king_cords = [0, 4]
-    @current_king = [[7, 4], "white"]
     @invalid_moves = 20
   end
 
@@ -62,7 +56,6 @@ class Game
 
       add_to_prev_games
       update_current_player
-      update_current_king
     end
   end
 
@@ -75,11 +68,8 @@ class Game
 
       piece = board.board[piece_cords[0]][piece_cords[1]]
 
-      king_cords = handle_king_cords(piece, move_cords)
+      allowed_move?(piece_cords, move_cords, piece.color) ? board.move(piece_cords, move_cords) : next
 
-      allowed_move?(piece_cords, move_cords, king_cords, current_king[1]) ? board.move(piece_cords, move_cords) : next
-
-      update_king_cords(piece, move_cords)
       break
     end
   end
@@ -108,10 +98,10 @@ class Game
   end
 
   # Deep copys the board then makes the move, then checks if that move is legal, ie not in check
-  def allowed_move?(piece_cords, move_cords, king_cords, color)
+  def allowed_move?(piece_cords, move_cords, color)
     future_board = board.clone_and_update(piece_cords, move_cords)
 
-    return false if current_player.color == color && in_check?(future_board, king_cords, color)
+    return false if current_player.color == color && in_check?(future_board, color)
 
     true
   end
@@ -138,7 +128,11 @@ class Game
   end
 
   def add_to_prev_games
-    fen = board.convert_to_fen(board.board, white_king_cords, black_king_cords, current_player.color)
+    fen = board.convert_to_fen(board.board, current_player.color)
     board.previous_boards << fen
+  end
+
+  def update_current_player
+    @current_player = current_player == player1 ? player2 : player1
   end
 end

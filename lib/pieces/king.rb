@@ -17,7 +17,7 @@ class King
   # Checks if the king can move to where the player wants it to move
   def legal_move?(board, piece_cords, move_cords)
     legal_moves = possible_king_moves(piece_cords[0], piece_cords[1])
-    castling(board, piece_cords[0], piece_cords[1]).each { |move| legal_moves << move }
+    # castling(board, piece_cords[0], piece_cords[1]).each { |move| legal_moves << move }
 
     return true if legal_moves.include?(move_cords)
 
