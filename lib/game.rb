@@ -54,8 +54,8 @@ class Game
 
       check?
 
-      update_prev_board(current_player.color)
       update_current_player
+      update_prev_boards(current_player.color)
     end
   end
 
@@ -122,5 +122,9 @@ class Game
   # Updates the current player
   def update_current_player
     @current_player = current_player == player1 ? player2 : player1
+  end
+
+  def setup_board()
+    
   end
 end

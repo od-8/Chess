@@ -1,0 +1,17 @@
+---
+- :board: 'rnbqkbnr/pp1p1ppp/8/2pPp3/8/8/PPP1PPPP/RNBQKBNR w '
+  :previous_boards:
+  - rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - -
+  - 'rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b '
+  - 'rnbqkbnr/pppp1ppp/8/4p3/3P4/8/PPP1PPPP/RNBQKBNR w '
+  - 'rnbqkbnr/pppp1ppp/8/3Pp3/8/8/PPP1PPPP/RNBQKBNR b '
+  - 'rnbqkbnr/pp1p1ppp/8/2pPp3/8/8/PPP1PPPP/RNBQKBNR w '
+  :passantable_pawn_cords:
+  - 3
+  - 2
+- :player1:
+  - jim
+  - white
+  :player2:
+  - bob
+  - black

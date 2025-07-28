@@ -34,11 +34,10 @@ class Board
 
   attr_accessor :board, :previous_boards, :passantable_pawn_cords
 
-  def initialize(board = Array.new(8) { Array.new(8) })
-    @board = board
+  def initialize(board = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR")
+    @board = convert_board_from_fen(board)
     @passantable_pawn_cords = nil
-    @previous_boards = ["rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w -"]
-    add_peices
+    @previous_boards = ["rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - -"]
   end
 
   # Prints the board like a chess board
@@ -132,8 +131,12 @@ class Board
     end
   end
 
-  def update_previous_board(color)
+  def update_previous_boards(color)
     fen = convert_to_fen(board, color)
     @previous_boards << fen
+  end
+
+  def update_board_info(previous_boards, passant_cords)
+    @previous_boards = previous_boards
   end
 end

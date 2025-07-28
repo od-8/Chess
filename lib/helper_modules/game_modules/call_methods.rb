@@ -2,8 +2,8 @@
 # It makes reading game.rb easier and feel less clustered
 module CallMethods
   # Updates the previous boards instance variable in Board
-  def update_prev_board(color)
-    board.update_previous_board(color)
+  def update_prev_boards(color)
+    board.update_previous_boards(color)
   end
 
   # Moves the piece
