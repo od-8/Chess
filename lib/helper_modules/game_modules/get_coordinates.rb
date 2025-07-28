@@ -6,10 +6,10 @@ module GetCoordinates
 
     loop do
       cords = take_input
-      @invalid_moves += 3
+      @lines_to_clear += 3
 
       return "quit" if cords == "quit"
-      next unless legal_coordinates?(cords)
+      next unless valid_coordinates?(cords)
 
       cords.map! { |position| to_cords(position) }
 
@@ -31,8 +31,17 @@ module GetCoordinates
     [piece_cords, move_cords]
   end
 
-  # Makes sure both cords are valid and have a length of 2
   def valid_coordinates?(cords)
+    return false if cords[0] == "" || cords[1] == ""
+
+    return true if legal_coordinates?(cords[0]) &&
+                   legal_coordinates?(cords[1])
+
+    false
+  end
+
+  # Makes sure both cords are valid and have a length of 2
+  def legal_coordinates?(cords)
     letter = cords[0]
     number = 8 - cords[1].to_i
 
@@ -51,15 +60,6 @@ module GetCoordinates
   # Checks to make sure the player is choosing their color pieces only
   def correct_color?(piece_cords)
     return true if board.board[piece_cords[0]][piece_cords[1]]&.color == current_player.color
-
-    false
-  end
-
-  def legal_coordinates?(cords)
-    return false if cords[0] == "" || cords[1] == ""
-
-    return true if valid_coordinates?(cords[0]) &&
-                   valid_coordinates?(cords[1])
 
     false
   end

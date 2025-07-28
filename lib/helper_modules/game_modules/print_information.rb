@@ -11,7 +11,7 @@ module PrintInfo
   def print_check?(color)
     return false unless in_check?(board.board, color)
 
-    @invalid_moves += 2
+    @lines_to_clear += 2
     puts " #{color.capitalize} king is in check".colorize(:green)
     puts ""
   end

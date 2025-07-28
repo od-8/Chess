@@ -16,19 +16,19 @@ class Game
   include PrintInfo
   include SaveGame
 
-  attr_accessor :board, :player1, :player2, :current_player, :invalid_moves
+  attr_accessor :board, :player1, :player2, :current_player, :lines_to_clear
 
   def initialize(name1 = "Player1", name2 = "Player2")
     @board = Board.new
     @player1 = Player.new(name1, "white")
     @player2 = Player.new(name2, "black")
     @current_player = @player1
-    @invalid_moves = 20
+    @lines_to_clear = 20
   end
 
   # Method for playing the game, handles the game loop and asks for another game
   def play_game
-    board.print_board
+    print_board
 
     if game_loop == "quit"
       end_the_game
@@ -48,13 +48,13 @@ class Game
       return "quit" if move == "quit"
 
       # clear_screen
-      board.print_board
+      print_board
 
       break if game_over?
 
       check?
 
-      add_to_prev_games
+      update_prev_board(current_player.color)
       update_current_player
     end
   end
@@ -62,20 +62,19 @@ class Game
   # Gets cords and move then checks to make sure this doesnt inflict check on the current palyer
   def move_loop
     loop do
-      piece_cords, move_cords = legal_piece_move
+      piece, piece_cords, move_cords = legal_move
 
-      return "quit" if piece_cords == "quit"
+      return "quit" if piece == "quit"
 
-      piece = board.board[piece_cords[0]][piece_cords[1]]
+      next unless valid_move?(piece_cords, move_cords, piece.color)
 
-      allowed_move?(piece_cords, move_cords, piece.color) ? board.move(piece_cords, move_cords) : next
-
+      move(piece, piece_cords, move_cords)
       break
     end
   end
 
   # Gets the cords then checks if the piece the player has chosen can make that move
-  def legal_piece_move
+  def legal_move
     loop do
       piece_cords, move_cords, = legal_input
 
@@ -83,14 +82,14 @@ class Game
 
       piece = board.board[piece_cords[0]][piece_cords[1]]
 
-      next unless valid_move?(piece, piece_cords, move_cords)
+      next unless legal_piece_move?(piece, piece_cords, move_cords)
 
-      return [piece_cords, move_cords]
+      return [piece, piece_cords, move_cords]
     end
   end
 
   # Makes sure the piece can move there and the square is unnocupied
-  def valid_move?(piece, piece_cords, move_cords)
+  def legal_piece_move?(piece, piece_cords, move_cords)
     return true if piece.legal_move?(board.board, piece_cords, move_cords) &&
                    unnocupied_square?(piece, move_cords)
 
@@ -98,7 +97,7 @@ class Game
   end
 
   # Deep copys the board then makes the move, then checks if that move is legal, ie not in check
-  def allowed_move?(piece_cords, move_cords, color)
+  def valid_move?(piece_cords, move_cords, color)
     future_board = board.clone_and_update(piece_cords, move_cords)
 
     return false if current_player.color == color && in_check?(future_board, color)
@@ -108,16 +107,9 @@ class Game
 
   # Removes the board from the screen so tons of board dont stack up over and over
   def clear_screen
-    print "\e[#{@invalid_moves}A\e[J"
+    print "\e[#{lines_to_clear}A\e[J"
 
-    @invalid_moves = 20
-  end
-
-  # This handles which color to print the board for
-  def print_board_color
-    return "black" if current_player.color == "white"
-
-    "white"
+    @lines_to_clear = 20
   end
 
   # Checks if there is a reason to end the game
@@ -127,11 +119,7 @@ class Game
     false
   end
 
-  def add_to_prev_games
-    fen = board.convert_to_fen(board.board, current_player.color)
-    board.previous_boards << fen
-  end
-
+  # Updates the current player
   def update_current_player
     @current_player = current_player == player1 ? player2 : player1
   end

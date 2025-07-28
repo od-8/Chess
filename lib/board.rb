@@ -58,9 +58,7 @@ class Board
   end
 
   # Does stuff for before a move like when castling it handles moving the rook, handles promotion and en passant
-  def move(piece_cords, move_cords)
-    piece = board[piece_cords[0]][piece_cords[1]]
-
+  def move(piece, piece_cords, move_cords)
     piece = handle_piece(piece, piece_cords, move_cords)
 
     move_piece(piece, piece_cords, move_cords)
@@ -132,5 +130,10 @@ class Board
         return [row_index, piece_index] if piece&.name == "king" && piece&.color == color
       end
     end
+  end
+
+  def update_previous_board(color)
+    fen = convert_to_fen(board, color)
+    @previous_boards << fen
   end
 end

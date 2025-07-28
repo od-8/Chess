@@ -4,7 +4,7 @@ module AnotherGame
   def another_game
     return unless another_game?
 
-    @invalid_moves = 26
+    @lines_to_clear = 26
     clear_screen
     new_game = Game.new(@player1.name, @player2.name)
     new_game.play_game
