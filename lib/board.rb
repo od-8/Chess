@@ -61,7 +61,7 @@ class Board
   def move(piece_cords, move_cords)
     piece = board[piece_cords[0]][piece_cords[1]]
 
-    # piece = handle_piece(piece, piece_cords, move_cords)
+    piece = handle_piece(piece, piece_cords, move_cords)
 
     move_piece(piece, piece_cords, move_cords)
   end

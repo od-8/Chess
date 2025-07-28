@@ -13,8 +13,8 @@ module Check
   include DiagonalPositions
   include InlinePositions
 
-  def in_check?(board, color)
-    king_cords = find_king_coordinates(board, color)
+  def in_check?(board, color, king_cords = nil)
+    king_cords = find_king_coordinates(board, color) if king_cords.nil?
     king_is_in_check?(board, king_cords, color)
   end
 
@@ -29,11 +29,11 @@ module Check
   end
 
   # Checks if there is a check from a pawn
-  def pawn_check?(board, piece_cords, color)
+  def pawn_check?(board, king_cords, color)
     pawn_check_positions = if color == "white"
-                             white_take_positions(board, piece_cords[0], piece_cords[1])
+                             white_take_positions(board, king_cords[0], king_cords[1])
                            else
-                             black_take_positions(board, piece_cords[0], piece_cords[1])
+                             black_take_positions(board, king_cords[0], king_cords[1])
                            end
 
     pawn_check_positions.each do |check_position|
@@ -46,8 +46,8 @@ module Check
   end
 
   # Checks if there is a check from a knight
-  def knight_check?(board, piece_cords, color)
-    knight_check_positions = possible_knight_moves(piece_cords[0], piece_cords[1])
+  def knight_check?(board, king_cords, color)
+    knight_check_positions = possible_knight_moves(king_cords[0], king_cords[1])
 
     knight_check_positions.each do |check_position|
       piece = board[check_position[0]][check_position[1]]

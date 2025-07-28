@@ -17,7 +17,7 @@ class King
   # Checks if the king can move to where the player wants it to move
   def legal_move?(board, piece_cords, move_cords)
     legal_moves = possible_king_moves(piece_cords[0], piece_cords[1])
-    # castling(board, piece_cords[0], piece_cords[1]).each { |move| legal_moves << move }
+    castling(board, piece_cords[0], piece_cords[1]).each { |move| legal_moves << move }
 
     return true if legal_moves.include?(move_cords)
 
@@ -34,9 +34,9 @@ class King
 
   # Checks if king isde castling is legal
   def king_side_is_legal?(board, x, y) # rubocop:disable Naming/MethodParameterName,Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
-    return true if has_moved == false && in_check?(board, [x, y], color) == false &&
-                   board[x][y + 1].nil? && in_check?(board, [x, y + 1], color) == false &&
-                   board[x][y + 2].nil? && in_check?(board, [x, y + 2], color) == false &&
+    return true if has_moved == false && in_check?(board, color) == false &&
+                   board[x][y + 1].nil? && in_check?(board, color, [x, y + 1]) == false &&
+                   board[x][y + 2].nil? && in_check?(board, color, [x, y + 2]) == false &&
                    board[x][y + 3]&.name == "rook" && board[x][y + 3].has_moved == false
 
     false
@@ -44,11 +44,11 @@ class King
 
   # Checks if queen side castling is legal
   def queen_side_is_legal?(board, x, y) # rubocop:disable Naming/MethodParameterName,Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
-    return true if has_moved == false && in_check?(board, [x, y], color) == false &&
-                   board[x][y - 1].nil? && in_check?(board, [x, y - 1], color) == false &&
-                   board[x][y - 2].nil? && in_check?(board, [x, y - 2], color) == false &&
-                   board[x][y - 4]&.name == "rook" && board[x][y - 4].has_moved == false &&
-                   board[x][y - 3].nil?
+    return true if has_moved == false && in_check?(board, color) == false &&
+                   board[x][y - 1].nil? && in_check?(board, color, [x, y + 2]) == false &&
+                   board[x][y - 2].nil? && in_check?(board, color, [x, y + 2]) == false &&
+                   board[x][y - 3].nil? &&
+                   board[x][y - 4]&.name == "rook" && board[x][y - 4].has_moved == false
 
     false
   end
