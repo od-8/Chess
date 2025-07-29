@@ -8,7 +8,8 @@ module GetCoordinates
       cords = take_input
       @lines_to_clear += 3
 
-      return "quit" if cords == "quit"
+      return cords if draw_or_quit?(cords)
+
       next unless valid_coordinates?(cords)
 
       cords.map! { |position| to_cords(position) }
@@ -60,6 +61,13 @@ module GetCoordinates
   # Checks to make sure the player is choosing their color pieces only
   def correct_color?(piece_cords)
     return true if board.board[piece_cords[0]][piece_cords[1]]&.color == current_player.color
+
+    false
+  end
+
+  def draw_or_quit?(cords)
+    return true if cords == "quit" ||
+                   (cords == "draw" && board.half_moves > 99)
 
     false
   end

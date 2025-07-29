@@ -40,4 +40,8 @@ module CallMethods
   def draw_by_repetition?
     board.threefold_repetition?
   end
+
+  def draw_by_fifty_moves_rule?
+    board.fifty_move_rule?
+  end
 end

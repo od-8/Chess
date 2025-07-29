@@ -71,4 +71,13 @@ module PrintInfo
 
     true
   end
+
+  def fifty_move_rule?
+    return false unless draw_by_fifty_moves_rule?
+
+    puts " 50 move rule. Draw".colorize(:red)
+    puts ""
+
+    true
+  end
 end

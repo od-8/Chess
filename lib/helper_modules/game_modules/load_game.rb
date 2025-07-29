@@ -21,8 +21,6 @@ module LoadGame
     board_info = board_info[:board].split
 
     @board = Board.new(board_info[0])
-
-    # board.update_board_info(:)
   end
 
   # Adds the players to the game, this will recieve info on player 1 and info on player 2

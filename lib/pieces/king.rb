@@ -34,7 +34,7 @@ class King
 
   # Checks if king isde castling is legal
   def king_side_is_legal?(board, x, y) # rubocop:disable Naming/MethodParameterName,Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
-    return true if has_moved == false && in_check?(board, color) == false &&
+    return true if has_moved == false && in_check?(board, color, [x, y]) == false &&
                    board[x][y + 1].nil? && in_check?(board, color, [x, y + 1]) == false &&
                    board[x][y + 2].nil? && in_check?(board, color, [x, y + 2]) == false &&
                    board[x][y + 3]&.name == "rook" && board[x][y + 3].has_moved == false
@@ -44,7 +44,7 @@ class King
 
   # Checks if queen side castling is legal
   def queen_side_is_legal?(board, x, y) # rubocop:disable Naming/MethodParameterName,Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
-    return true if has_moved == false && in_check?(board, color) == false &&
+    return true if has_moved == false && in_check?(board, color, [x, y]) == false &&
                    board[x][y - 1].nil? && in_check?(board, color, [x, y + 2]) == false &&
                    board[x][y - 2].nil? && in_check?(board, color, [x, y + 2]) == false &&
                    board[x][y - 3].nil? &&

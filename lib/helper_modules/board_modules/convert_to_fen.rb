@@ -4,7 +4,8 @@ module ConvertToFen
   def convert_to_fen(board, color)
     fen_str = convert_board_to_fen(board)
     fen_str += " #{color[0]} "
-    # fen_str += fen_castling(white_king_cords, black_king_cords)
+    fen_str += fen_castling
+    fen_str += fen_move_counts
     fen_str
   end
 
@@ -59,12 +60,11 @@ module ConvertToFen
   end
 
   # Converts the castling rights to fen
-  def fen_castling(white_king_cords, black_king_cords) # rubocop:disable Metrics/AbcSize
-    wx, wy = white_king_cords
-    bx, by = black_king_cords
+  def fen_castling # rubocop:disable Metrics/AbcSize
+    wx, wy = find_king_coordinates(board, "white")
+    bx, by = find_king_coordinates(board, "black")
 
     fen_str = ""
-
     fen_str += "K" if board[wx][wy].king_side_is_legal?(board, wx, wy)
     fen_str += "Q" if board[wx][wy].queen_side_is_legal?(board, wx, wy)
     fen_str += "k" if board[bx][by].king_side_is_legal?(board, bx, by)
@@ -73,5 +73,12 @@ module ConvertToFen
     return fen_str if fen_str.length.positive?
 
     "-"
+  end
+
+  def fen_move_counts
+    fen_str = ""
+    fen_str += " #{half_moves}"
+    fen_str += " #{full_moves}"
+    fen_str
   end
 end

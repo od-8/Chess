@@ -1,5 +1,4 @@
 # Helper stuff
-require_relative "helper_modules/board_modules/add_pieces_to_board"
 require_relative "helper_modules/board_modules/castling"
 require_relative "helper_modules/board_modules/check"
 require_relative "helper_modules/board_modules/checkmate"
@@ -9,6 +8,7 @@ require_relative "helper_modules/board_modules/en_passant"
 require_relative "helper_modules/board_modules/insufficient_material"
 require_relative "helper_modules/board_modules/promotion"
 require_relative "helper_modules/board_modules/threefold_repetition"
+require_relative "helper_modules/board_modules/fifty_move_rule"
 
 # Peices
 require_relative "pieces/bishop"
@@ -21,7 +21,6 @@ require_relative "pieces/white_pawn"
 
 # Contains the board and all of its methods
 class Board
-  include AddPieces
   include Castling
   include Check
   include Checkmate
@@ -31,13 +30,16 @@ class Board
   include InsufficientMaterial
   include Promotion
   include ThreefoldRepetition
+  include FiftyMoveRule
 
-  attr_accessor :board, :previous_boards, :passantable_pawn_cords
+  attr_accessor :board, :previous_boards, :passantable_pawn_cords, :half_moves, :full_moves
 
   def initialize(board = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR")
     @board = convert_board_from_fen(board)
     @passantable_pawn_cords = nil
-    @previous_boards = ["rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - -"]
+    @previous_boards = ["rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 0"]
+    @half_moves = 0
+    @full_moves = 0
   end
 
   # Prints the board like a chess board
@@ -60,6 +62,7 @@ class Board
   def move(piece, piece_cords, move_cords)
     piece = handle_piece(piece, piece_cords, move_cords)
 
+    update_move_counters(piece, move_cords)
     move_piece(piece, piece_cords, move_cords)
   end
 
@@ -136,7 +139,7 @@ class Board
     @previous_boards << fen
   end
 
-  def update_board_info(previous_boards, passant_cords)
+  def update_board_info(previous_boards, _passant_cords)
     @previous_boards = previous_boards
   end
 end

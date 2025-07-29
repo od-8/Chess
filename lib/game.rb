@@ -64,7 +64,7 @@ class Game
     loop do
       piece, piece_cords, move_cords = legal_move
 
-      return "quit" if piece == "quit"
+      return piece_cords if %w[quit draw].include?(piece_cords)
 
       next unless valid_move?(piece_cords, move_cords, piece.color)
 
@@ -78,7 +78,7 @@ class Game
     loop do
       piece_cords, move_cords, = legal_input
 
-      return "quit" if piece_cords == "quit"
+      return piece_cords if %w[quit draw].include?(piece_cords)
 
       piece = board.board[piece_cords[0]][piece_cords[1]]
 
@@ -122,9 +122,5 @@ class Game
   # Updates the current player
   def update_current_player
     @current_player = current_player == player1 ? player2 : player1
-  end
-
-  def setup_board()
-    
   end
 end
