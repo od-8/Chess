@@ -38,7 +38,7 @@ class Board
     @board = convert_board_from_fen(board)
     @passantable_pawn_cords = nil
     @previous_boards = ["rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 0"]
-    @half_moves = 0
+    @half_moves = 99
     @full_moves = 0
   end
 

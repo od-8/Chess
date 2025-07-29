@@ -29,8 +29,11 @@ class Game
   # Method for playing the game, handles the game loop and asks for another game
   def play_game
     print_board
+    game_result = game_loop
 
-    if game_loop == "quit"
+    fifty_move_rule? if game_result == "draw"
+
+    if game_result == "quit"
       end_the_game
       return
     end
@@ -45,7 +48,7 @@ class Game
   def game_loop
     loop do
       move = move_loop
-      return "quit" if move == "quit"
+      return move if %w[quit draw].include?(move)
 
       # clear_screen
       print_board
@@ -64,7 +67,7 @@ class Game
     loop do
       piece, piece_cords, move_cords = legal_move
 
-      return piece_cords if %w[quit draw].include?(piece_cords)
+      return piece if %w[quit draw].include?(piece)
 
       next unless valid_move?(piece_cords, move_cords, piece.color)
 

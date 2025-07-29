@@ -23,7 +23,7 @@ module GetCoordinates
   def take_input
     print " #{current_player.name}, input the position of the piece you would like to move: "
     piece_cords = gets.chomp.downcase
-    return "quit" if piece_cords == "q"
+    return piece_cords if %w[quit draw].include?(piece_cords)
 
     print " #{current_player.name}, input the position of where you would like to move that peice: "
     move_cords = gets.chomp.downcase
