@@ -58,7 +58,7 @@ class Game
       check?
 
       update_current_player
-      update_prev_boards(current_player.color)
+      board.update_previous_boards(current_player.color)
     end
   end
 

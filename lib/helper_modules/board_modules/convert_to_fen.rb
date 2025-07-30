@@ -60,15 +60,11 @@ module ConvertToFen
   end
 
   # Converts the castling rights to fen
-  def fen_castling # rubocop:disable Metrics/AbcSize
-    wx, wy = find_king_coordinates(board, "white")
-    bx, by = find_king_coordinates(board, "black")
-
+  def fen_castling
     fen_str = ""
-    fen_str += "K" if board[wx][wy].king_side_is_legal?(board, wx, wy)
-    fen_str += "Q" if board[wx][wy].queen_side_is_legal?(board, wx, wy)
-    fen_str += "k" if board[bx][by].king_side_is_legal?(board, bx, by)
-    fen_str += "q" if board[bx][by].queen_side_is_legal?(board, bx, by)
+
+    fen_str += white_castling_moves
+    fen_str += black_castling_moves
 
     return fen_str if fen_str.length.positive?
 
@@ -79,6 +75,24 @@ module ConvertToFen
     fen_str = ""
     fen_str += " #{half_moves}"
     fen_str += " #{full_moves}"
+    fen_str
+  end
+
+  def white_castling_moves # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
+    return "" if board[7][4]&.name != "king" || board[7][4]&.has_moved == true
+
+    fen_str = ""
+    fen_str += "K" if board[7][7]&.name == "rook" && board[7][7]&.has_moved == false
+    fen_str += "Q" if board[7][0]&.name == "rook" && board[7][0]&.has_moved == false
+    fen_str
+  end
+
+  def black_castling_moves # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
+    return "" if board[0][4]&.name != "king" || board[0][4]&.has_moved == true
+
+    fen_str = ""
+    fen_str += "k" if board[0][7]&.name == "rook" && board[0][7]&.has_moved == false
+    fen_str += "q" if board[0][0]&.name == "rook" && board[0][0]&.has_moved == false
     fen_str
   end
 end

@@ -18,9 +18,17 @@ module LoadGame
 
   # Updates the Board, this will receive the fen version of the board, passantable cords and previous boards
   def update_board(board_info)
-    board_info = board_info[:board].split
+    fen_board = board_info[:board].split
 
-    @board = Board.new(board_info[0])
+    @board = Board.new(fen_board[0])
+
+    previous_boards = board_info[:previous_boards]
+    passant_cords = board_info[:passantable_pawn_cords]
+    castling = fen_board[2]
+    half_moves = fen_board[3]
+    full_moves = fen_board[4]
+
+    board.update_board_info(previous_boards, passant_cords, castling, half_moves, full_moves)
   end
 
   # Adds the players to the game, this will recieve info on player 1 and info on player 2

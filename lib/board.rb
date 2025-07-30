@@ -37,8 +37,8 @@ class Board
   def initialize(board = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR")
     @board = convert_board_from_fen(board)
     @passantable_pawn_cords = nil
-    @previous_boards = ["rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 0"]
-    @half_moves = 99
+    @previous_boards = ["rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq 00 0"]
+    @half_moves = 0
     @full_moves = 0
   end
 
@@ -135,11 +135,27 @@ class Board
   end
 
   def update_previous_boards(color)
-    fen = convert_to_fen(board, color)
-    @previous_boards << fen
+    fen_board = convert_to_fen(board, color)
+    @previous_boards << fen_board
   end
 
-  def update_board_info(previous_boards, _passant_cords)
+  def update_board_info(previous_boards, passant_cords, castling, half_moves, full_moves)
     @previous_boards = previous_boards
+
+    @passantable_pawn_cords = passant_cords
+    board[passant_cords[0]][passant_cords[1]]&.can_be_passanted = true
+
+    @half_moves = half_moves.to_i
+    @full_moves = full_moves.to_i
+
+    update_castling_rights(castling)
+  end
+
+  def update_castling_rights(castling)
+    # something
   end
 end
+
+# if both are unavailabe set king_moved to true
+# if one is availabe set the other rooks moved status to true
+# if both are available do nothing

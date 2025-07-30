@@ -1,11 +1,6 @@
 # This just has all methdos the Game class calls on the Board class
 # It makes reading game.rb easier and feel less clustered
 module CallMethods
-  # Updates the previous boards instance variable in Board
-  def update_prev_boards(color)
-    board.update_previous_boards(color)
-  end
-
   # Moves the piece
   def move(piece, piece_cords, move_cords)
     board.move(piece, piece_cords, move_cords)
