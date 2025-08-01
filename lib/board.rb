@@ -46,18 +46,29 @@ class Board
 
   # Prints the board like a chess board
   def print_board # rubocop:disable Metrics/MethodLength
+    i = 0
     puts ""
-    puts "   +---+---+---+---+---+---+---+---+"
     board.each_with_index do |row, index|
-      print " #{8 - index} |"
-      row.each do |piece|
-        print piece.nil? ? "   |" : " #{piece&.symbol} |"
+      print " #{8 - index} "
+      row.each_with_index do |piece, _piece_index|
+        print print_piece(piece, i)
+
+        i += 1
       end
+
+      i += 1
       puts ""
-      puts "   +---+---+---+---+---+---+---+---+"
     end
-    puts "     a   b   c   d   e   f   g   h"
+    puts "    a  b  c  d  e  f  g  h"
     puts ""
+  end
+
+  def print_piece(piece, square)
+    if piece.nil?
+      square.even? ? "\e[48;2;106;106;106m   \e[0m" : "\e[48;2;55;55;55m   \e[0m"
+    else
+      square.even? ? "\e[48;2;106;106;106m #{piece&.symbol} \e[0m" : "\e[48;2;55;55;55m #{piece&.symbol} \e[0m"
+    end
   end
 
   # Does stuff for before a move like when castling it handles moving the rook, handles promotion and en passant
