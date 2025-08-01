@@ -4,7 +4,7 @@ module LoadPreviousGame
     @previous_boards = previous_boards
 
     @passantable_pawn_cords = passant_cords
-    board[passant_cords[0]][passant_cords[1]]&.can_be_passanted = true
+    board[passant_cords[0]][passant_cords[1]]&.can_be_passanted = true unless passant_cords.nil?
 
     @half_moves = half_moves.to_i
     @full_moves = full_moves.to_i
@@ -14,7 +14,7 @@ module LoadPreviousGame
 
   # will receive KQkq or something like
   def update_castling_rights(castling)
-    # return if castling.length == 4
+    return if castling.length == 4
 
     white_castling, black_castling = seperate_castling_chars(castling)
 
@@ -34,7 +34,7 @@ module LoadPreviousGame
   end
 
   # Updates the white king has_moved status to true if there are no castling options or sets had_moved to true for rook
-  def update_white_castling_vars(castling) # rubocop:disable Metrics/AbcSize
+  def update_white_castling_vars(castling) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
     return if castling.length == 2
 
     # this receives either K or Q
@@ -42,7 +42,7 @@ module LoadPreviousGame
       rook = find_rook("white", [7, 7]) if castling == "K"
       rook = find_rook("white", [7, 0]) if castling == "Q"
 
-      rook.has_moved == "true"
+      rook.has_moved = "true" unless rook.nil?
     elsif castling.empty?
       king_cords = find_king_coordinates(board, "white")
 
@@ -51,15 +51,14 @@ module LoadPreviousGame
   end
 
   # Updates the black king has_moved status to true if there are no castling options or sets had_moved to true for rook
-  def update_black_castling_vars(castling) # rubocop:disable Metrics/AbcSize
+  def update_black_castling_vars(castling) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
     return if castling.length == 2
 
-    # this receives either K or Q
     if castling.length == 1
       rook = find_rook("black", [0, 7]) if castling == "k"
       rook = find_rook("black", [0, 0]) if castling == "q"
 
-      rook.has_moved == "true"
+      rook.has_moved = "true" unless rook.nil?
     elsif castling.empty?
       king_cords = find_king_coordinates(board, "black")
 

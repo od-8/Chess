@@ -49,7 +49,7 @@ class Board
     i = 0
     puts ""
     board.each_with_index do |row, index|
-      print " #{8 - index} "
+      print " #{(8 - index).to_s.colorize(:yellow)} "
       row.each_with_index do |piece, _piece_index|
         print print_piece(piece, i)
 
@@ -59,7 +59,7 @@ class Board
       i += 1
       puts ""
     end
-    puts "    a  b  c  d  e  f  g  h"
+    puts "    a  b  c  d  e  f  g  h".colorize(:yellow)
     puts ""
   end
 
