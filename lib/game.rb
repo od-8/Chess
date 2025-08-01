@@ -23,7 +23,7 @@ class Game
     @player1 = Player.new(name1, "white")
     @player2 = Player.new(name2, "black")
     @current_player = @player1
-    @lines_to_clear = 20
+    @lines_to_clear = 11
   end
 
   # Method for playing the game, handles the game loop and asks for another game
@@ -50,7 +50,7 @@ class Game
       move = move_loop
       return move if %w[quit draw].include?(move)
 
-      # clear_screen
+      clear_screen
       print_board
 
       break if game_over?
@@ -112,7 +112,7 @@ class Game
   def clear_screen
     print "\e[#{lines_to_clear}A\e[J"
 
-    @lines_to_clear = 20
+    @lines_to_clear = 11
   end
 
   # Checks if there is a reason to end the game
