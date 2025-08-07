@@ -1,5 +1,4 @@
-# require_relative "../../../lib/helper_modules/board_modules/checkmate"
-# require_relative "../../../lib/helper_modules/board_modules/check"
+require_relative "../../../lib/helper_modules/board_modules/checkmate"
 require_relative "../../../lib/board"
 require_relative "../../../lib/pieces/white_pawn"
 require_relative "../../../lib/pieces/bishop"
