@@ -28,15 +28,33 @@ module Promotion
   end
 
   def make_new_piece(piece, color)
+    new_white_piece(piece) if color == "white"
+    new_black_piece(piece) if color == "black"
+  end
+
+  def new_white_piece(piece)
     case piece
-    when "queen"
-      Queen.new("queen", "\u265b", color)
-    when "rook"
-      Rook.new("rook", "\u265b", color)
+    when "knight"
+      Knight.new("knight", "\u265e", "white")
     when "bishop"
-      Bishop.new("bishop", "\u265b", color)
-    when "kngight"
-      Knight.new("knight", "\u265b", color)
+      Bishop.new("bishop", "\u265d", "white")
+    when "rook"
+      Rook.new("rook", "\u265c", "white")
+    when "queen"
+      Queen.new("queen", "\u265b", "white")
+    end
+  end
+
+  def new_black_piece(piece)
+    case piece
+    when "knight"
+      Knight.new("knight", "\u2658", "black")
+    when "bishop"
+      Bishop.new("bishop", "\u2657", "black")
+    when "rook"
+      Rook.new("rook", "\u2656", "black")
+    when "queen"
+      Queen.new("queen", "\u2655", "black")
     end
   end
 end
