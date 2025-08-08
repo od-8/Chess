@@ -31,10 +31,13 @@ module InsufficientMaterial
   end
 
   # This checks if there is only a king left and 1 bishop or 1 or 2 knights
-  def not_enough_material?(bishops, knights, other)
-    return true if (other.length == 1 && bishops.length == 1) ||
-                   (other.length == 1 && knights.length < 3) ||
-                   (other.length == 1)
+  def not_enough_material?(bishops, knights, others) # rubocop:disable Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
+    return true if others.length == 1 && (
+      (bishops.empty? && knights.empty?) ||
+      (bishops.length == 1 && knights.empty?) ||
+      (bishops.empty? && knights.length == 1) ||
+      (bishops.empty? && knights.length.between?(1, 2))
+    )
 
     false
   end
