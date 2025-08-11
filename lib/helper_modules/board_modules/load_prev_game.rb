@@ -42,11 +42,11 @@ module LoadPreviousGame
       rook = find_rook("white", [7, 7]) if castling == "K"
       rook = find_rook("white", [7, 0]) if castling == "Q"
 
-      rook.has_moved = "true" unless rook.nil?
+      rook.has_moved = true unless rook.nil?
     elsif castling.empty?
       king_cords = find_king_coordinates(board, "white")
 
-      board[king_cords[0]][king_cords[1]]&.has_moved == false
+      board[king_cords[0]][king_cords[1]]&.has_moved = true
     end
   end
 
@@ -58,11 +58,11 @@ module LoadPreviousGame
       rook = find_rook("black", [0, 7]) if castling == "k"
       rook = find_rook("black", [0, 0]) if castling == "q"
 
-      rook.has_moved = "true" unless rook.nil?
+      rook.has_moved = true unless rook.nil?
     elsif castling.empty?
       king_cords = find_king_coordinates(board, "black")
 
-      board[king_cords[0]][king_cords[1]]&.has_moved == false
+      board[king_cords[0]][king_cords[1]]&.has_moved = true
     end
   end
 
