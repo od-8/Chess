@@ -1,0 +1,15 @@
+---
+- :board: &1
+  - rnbqkbnr/ppp1pppp/8/3p4/3P4/8/PPP1PPPP/RNBQKBNR b KQkq 0 1
+  :previous_boards:
+  - - 'rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq 0 1 '
+  - *1
+  :passantable_pawn_cords:
+  - 3
+  - 3
+- :player1:
+  - player1
+  - white
+  :player2:
+  - player2
+  - black
