@@ -145,6 +145,8 @@ class Board
         return [row_index, piece_index] if piece&.name == "king" && piece&.color == color
       end
     end
+
+    nil
   end
 
   def update_previous_boards(color)

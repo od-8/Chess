@@ -54,17 +54,17 @@ module ConvertFromFen
   def handle_white_piece(piece) # rubocop:disable Metrics/MethodLength
     case piece
     when "P"
-      WhitePawn.new("pawn", "\u265f", "white")
+      WhitePawn.new("pawn", "\u2659", "white")
     when "N"
-      Knight.new("knight", "\u265e", "white")
+      Knight.new("knight", "\u2658", "white")
     when "B"
-      Bishop.new("bishop", "\u265d", "white")
+      Bishop.new("bishop", "\u2657", "white")
     when "R"
-      Rook.new("rook", "\u265c", "white")
+      Rook.new("rook", "\u2656", "white")
     when "Q"
-      Queen.new("queen", "\u265b", "white")
+      Queen.new("queen", "\u2655", "white")
     when "K"
-      King.new("king", "\u265a", "white")
+      King.new("king", "\u2654", "white")
     end
   end
 
@@ -72,17 +72,17 @@ module ConvertFromFen
   def handle_black_piece(piece) # rubocop:disable Metrics/MethodLength
     case piece
     when "p"
-      BlackPawn.new("pawn", "\u2659", "black")
+      BlackPawn.new("pawn", "\u265f", "black")
     when "n"
-      Knight.new("knight", "\u2658", "black")
+      Knight.new("knight", "\u265e", "black")
     when "b"
-      Bishop.new("bishop", "\u2657", "black")
+      Bishop.new("bishop", "\u265d", "black")
     when "r"
-      Rook.new("rook", "\u2656", "black")
+      Rook.new("rook", "\u265c", "black")
     when "q"
-      Queen.new("queen", "\u2655", "black")
+      Queen.new("queen", "\u265b", "black")
     when "k"
-      King.new("king", "\u2654", "black")
+      King.new("king", "\u265a", "black")
     end
   end
 end
