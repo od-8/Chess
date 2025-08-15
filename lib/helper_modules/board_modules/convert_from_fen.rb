@@ -19,7 +19,7 @@ module ConvertFromFen
     new_fen_str
   end
 
-  # Gets a number and returns the same number of dots
+  # Converts a number back into dots
   def convert_char(char)
     yield char if char.to_i.zero?
 
@@ -28,7 +28,7 @@ module ConvertFromFen
     end
   end
 
-  # Loop through the fen string and updates and adds the piece to its correct position
+  # Loop through the fen string and adds the pieces to their position on the board
   def create_new_board(fen_str)
     board = Array.new(8) { Array.new(8) }
 
@@ -41,7 +41,7 @@ module ConvertFromFen
     board
   end
 
-  # Convers the character into is piece
+  # Converts the character into its piece
   def convert_piece(piece)
     return nil if piece == "."
 

@@ -2,7 +2,7 @@ require_relative "helper_modules/game_modules/another_game"
 require_relative "helper_modules/game_modules/call_methods"
 require_relative "helper_modules/game_modules/get_coordinates"
 require_relative "helper_modules/game_modules/load_game"
-require_relative "helper_modules/game_modules/print_information"
+require_relative "helper_modules/game_modules/game_over"
 require_relative "helper_modules/game_modules/save_game"
 require "colorize"
 require "yaml"
@@ -13,7 +13,7 @@ class Game
   include CallMethods
   include GetCoordinates
   include LoadGame
-  include PrintInfo
+  include GameOver
   include SaveGame
 
   attr_accessor :board, :player1, :player2, :current_player, :lines_to_clear
@@ -31,10 +31,10 @@ class Game
     print_board
     game_result = game_loop
 
-    fifty_move_rule? if game_result == "draw"
+    if %w[save quit draw].include?(game_result)
+      save_game if game_result == "save"
+      draw_game if game_result == "draw"
 
-    if game_result == "quit"
-      end_the_game
       return
     end
 
@@ -48,7 +48,7 @@ class Game
   def game_loop
     loop do
       move = move_loop
-      return move if %w[quit draw].include?(move)
+      return move if %w[save quit draw].include?(move)
 
       clear_screen
       print_board
@@ -58,7 +58,7 @@ class Game
       check?
 
       update_current_player
-      board.update_previous_boards(current_player.color)
+      update_previous_boards
     end
   end
 
@@ -67,11 +67,12 @@ class Game
     loop do
       piece, piece_cords, move_cords = legal_move
 
-      return piece if %w[quit draw].include?(piece)
+      return piece if %w[save quit draw].include?(piece)
 
-      next unless valid_move?(piece_cords, move_cords, piece.color)
+      next unless valid_move?(piece, piece_cords, move_cords)
 
       move(piece, piece_cords, move_cords)
+
       break
     end
   end
@@ -81,7 +82,7 @@ class Game
     loop do
       piece_cords, move_cords, = legal_input
 
-      return piece_cords if %w[quit draw].include?(piece_cords)
+      return piece_cords if %w[save quit draw].include?(piece_cords)
 
       piece = board.board[piece_cords[0]][piece_cords[1]]
 
@@ -100,12 +101,14 @@ class Game
   end
 
   # Deep copys the board then makes the move, then checks if that move is legal, ie not in check
-  def valid_move?(piece_cords, move_cords, color)
+  def valid_move?(piece, piece_cords, move_cords)
+    piece_color = piece.color
+
     future_board = board.clone_and_update(piece_cords, move_cords)
 
-    return false if current_player.color == color && in_check?(future_board, color)
+    return true unless in_check?(future_board, piece_color)
 
-    true
+    false
   end
 
   # Removes the board from the screen so tons of board dont stack up over and over
@@ -125,5 +128,21 @@ class Game
   # Updates the current player
   def update_current_player
     @current_player = current_player == player1 ? player2 : player1
+  end
+
+  # Checks if check is true
+  def check?
+    return true if print_check?("white") || print_check?("black")
+
+    false
+  end
+
+  # Print statement for when either king is in check
+  def print_check?(color)
+    return false unless in_check?(board.board, color)
+
+    @lines_to_clear += 2
+    puts " #{color.capitalize} king is in check".colorize(:green)
+    puts ""
   end
 end

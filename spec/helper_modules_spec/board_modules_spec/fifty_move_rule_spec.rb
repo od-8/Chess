@@ -9,30 +9,6 @@ RSpec.describe FiftyMoveRule do
   let(:dummy_knight) { instance_double(Knight) }
   let(:dummy_pawn) { instance_double(WhitePawn) }
 
-  describe "#fifty_move_rule?" do
-    context "when half_moves is equal to 100" do
-      before do
-        board.half_moves = 100
-      end
-
-      it "returns true" do
-        over_fifty_moves = board.fifty_move_rule?
-        expect(over_fifty_moves).to be(true)
-      end
-    end
-
-    context "when half_moves i less than 100" do
-      before do
-        board.half_moves = 55
-      end
-
-      it "returns false" do
-        over_fifty_moves = board.fifty_move_rule?
-        expect(over_fifty_moves).to be(false)
-      end
-    end
-  end
-
   describe "#update_half_moves" do
     before do
       allow(dummy_knight).to receive(:name).and_return("knight")

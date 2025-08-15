@@ -1,6 +1,6 @@
 # Gets the coordinates from the current player then turns them into usable cords ("a1" = [0, 0])
 module GetCoordinates
-  # This repeats until a players cords are valid then turns them into usable coordinates
+  # This checks if cords are valid, converts them to usable cords then checks if the player is moving their pieces
   def legal_input
     cords = []
 
@@ -8,7 +8,7 @@ module GetCoordinates
       cords = take_input
       @lines_to_clear += 3
 
-      return cords if draw_or_quit?(cords)
+      return cords if stopping_game?(cords)
 
       next unless valid_coordinates?(cords)
 
@@ -16,14 +16,15 @@ module GetCoordinates
 
       break if correct_color?(cords[0])
     end
+
     cords
   end
 
-  # Gets the chess cords of the piece the player is moving and where theyd like to move it
+  # Gets the piece cords and the move cords
   def take_input
     print " #{current_player.name}, input the position of the piece you would like to move: "
     piece_cords = gets.chomp.downcase
-    return piece_cords if %w[quit draw].include?(piece_cords)
+    return piece_cords if %w[save quit draw].include?(piece_cords)
 
     print " #{current_player.name}, input the position of where you would like to move that peice: "
     move_cords = gets.chomp.downcase
@@ -32,6 +33,7 @@ module GetCoordinates
     [piece_cords, move_cords]
   end
 
+  # Checks if cords are valid
   def valid_coordinates?(cords)
     return false if cords[0] == "" || cords[1] == ""
 
@@ -65,8 +67,9 @@ module GetCoordinates
     false
   end
 
-  def draw_or_quit?(cords)
-    return true if cords == "quit" ||
+  # Checks if the player is trying to the end the game by quitting, saving or claiming a draw
+  def stopping_game?(cords)
+    return true if cords == "quit" || cords == "save" ||
                    (cords == "draw" && board.half_moves > 99)
 
     false

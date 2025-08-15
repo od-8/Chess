@@ -1,28 +1,13 @@
 # methods for save and quit or quit without saving
 module SaveGame
-  # Ends the game but with different results depending on a players answer
-  def end_the_game
-    choice = end_game_choice
-    return "quit" if choice == "quit"
-
-    file_name = acquire_new_file_name
+  # Gets the name and creates a new file
+  def save_game
+    file_name = new_file_name
     create_new_file(file_name)
   end
 
-  # Sees if the player wants to save and quit or quit without saving
-  def end_game_choice
-    loop do
-      puts ""
-      print " Enter #{'save'.colorize(:green)} to save and quit or #{'quit'.colorize(:green)} to quit without saving: "
-      choice = gets.chomp.downcase
-      return choice if %w[save quit].include?(choice)
-
-      puts " Enter either the word save or the word quit".colorize(:red)
-    end
-  end
-
   # Gets the new file name
-  def acquire_new_file_name
+  def new_file_name
     Dir.chdir("lib/saved_games")
     loop do
       puts ""

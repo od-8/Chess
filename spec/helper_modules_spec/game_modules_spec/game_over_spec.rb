@@ -1,9 +1,9 @@
-require_relative "../../../lib/helper_modules/game_modules/print_information"
+require_relative "../../../lib/helper_modules/game_modules/game_over"
 require_relative "../../../lib/board"
 require_relative "../../../lib/game"
 require_relative "../../../lib/player"
 
-RSpec.describe PrintInfo do
+RSpec.describe GameOver do
   subject(:test_game) do
     game = Game.new
     game.instance_variable_set(:@board, test_board)

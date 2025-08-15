@@ -1,5 +1,6 @@
 # Has the methods that handle en passant, checking if its leagl, removing the previous peice, moving to an empty square
 module EnPassant
+  # Updates the pawns can_be_passanted status and passantable_pawn_cords
   def update_passantable_status(piece, piece_cords, move_cords)
     return unless piece.name == "pawn"
 
@@ -15,7 +16,7 @@ module EnPassant
     @passantable_pawn_cords = nil
   end
 
-  # Sets a pawns can be passanted status to true if the board just did a double forward
+  # Sets a pawns can be passanted status to true if the pawn just just moved moved forward twice
   def set_passantable_status_to_true(piece, piece_cords, move_cords)
     return unless piece_cords[0] + 2 == move_cords[0] ||
                   piece_cords[0] - 2 == move_cords[0]

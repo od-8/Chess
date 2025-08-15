@@ -4,12 +4,6 @@ require_relative "../../../lib/board"
 require_relative "../../../lib/player"
 require_relative "../../../lib/pieces/bishop"
 
-# valid_coordinates?
-# legal_coordinates?
-# correct_color?
-# draw_or_quit?
-# to_cords
-
 RSpec.describe GetCoordinates do
   subject(:test_game) do
     game = Game.new

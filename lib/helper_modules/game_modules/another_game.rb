@@ -1,6 +1,6 @@
 # Methods for asking and starting a new game
 module AnotherGame
-  # Based on player inputs it either starts a new game or says thank you message
+  # Starts a new game if the player wants to play again
   def another_game
     return unless another_game?
 

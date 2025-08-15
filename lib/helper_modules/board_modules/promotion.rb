@@ -1,6 +1,14 @@
 # Handles promotion. It checks if promotion is legal and makes a new piece depending on what the player asks for.
 module Promotion
-  # Gets the piece the player would like to promote to
+  # Returns the piece that the pawn promoted to
+  def promotion(piece, move_cords)
+    return piece if (piece.color == "white" && move_cords[0] != 0) ||
+                    (piece.color == "black" && move_cords[0] != 7)
+
+    make_new_piece(ask_for_piece, piece.color)
+  end
+
+  # Gets the name of the piece the player would like to promote to
   def ask_for_piece
     piece = nil
 
@@ -9,29 +17,24 @@ module Promotion
       piece = gets.chomp.downcase
       break if legal_piece?(piece)
     end
+
     piece
   end
 
-  # Checks if user input is a valid piece
+  # Creates a new piece depending on color
+  def make_new_piece(piece, color)
+    new_white_piece(piece) if color == "white"
+    new_black_piece(piece) if color == "black"
+  end
+
+  # Checks if the user inputed a valid name of a piece you can promote to
   def legal_piece?(piece)
     return true if %w[queen rook bishop knight].include?(piece)
 
     false
   end
 
-  # Returns the piece that the pawn promoted to or the passed piece if the pawn isnt promoting
-  def promotion(piece, move_cords)
-    return piece if (piece.color == "white" && move_cords[0] != 0) ||
-                    (piece.color == "black" && move_cords[0] != 7)
-
-    make_new_piece(ask_for_piece, piece.color)
-  end
-
-  def make_new_piece(piece, color)
-    new_white_piece(piece) if color == "white"
-    new_black_piece(piece) if color == "black"
-  end
-
+  # Creates a new white piece
   def new_white_piece(piece)
     case piece
     when "knight"
@@ -45,6 +48,7 @@ module Promotion
     end
   end
 
+  # Creates a new black piece
   def new_black_piece(piece)
     case piece
     when "knight"

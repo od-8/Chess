@@ -23,7 +23,7 @@ module Checkmate
     false
   end
 
-  # Loops through board and calls #piece_handler on all the piece that are the same color as the king
+  # Gets all piece that have are the same color as the one passed then it gets all of their legal moves
   def stop_check_positions(color)
     valid_moves = []
 
@@ -38,7 +38,7 @@ module Checkmate
     valid_moves
   end
 
-  # Determines which method to call by their name
+  # Get the legal moves for that specific piece
   def piece_handler(piece, piece_cords, color) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/MethodLength,Metrics/PerceivedComplexity
     valid_moves = []
 
@@ -82,7 +82,7 @@ module Checkmate
     valid_moves
   end
 
-  # Gets all the moves that can block check
+  # Gets all legal moves
   def move_places(piece_cords, possible_moves, color)
     valid_moves = []
 

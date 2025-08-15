@@ -47,9 +47,12 @@ class Board
   # Prints the board like a chess board
   def print_board # rubocop:disable Metrics/MethodLength
     i = 0
+
     puts ""
+
     board.each_with_index do |row, index|
       print " #{8 - index} "
+
       row.each_with_index do |piece, _piece_index|
         print print_piece(piece, i)
 
@@ -57,8 +60,10 @@ class Board
       end
 
       i += 1
+
       puts ""
     end
+
     puts "    a  b  c  d  e  f  g  h"
     puts ""
   end
@@ -100,7 +105,6 @@ class Board
 
     update_passantable_status(piece, piece_cords, move_cords)
     remove_passant_pawn(piece, piece_cords, move_cords)
-
     promotion(piece, move_cords)
   end
 
