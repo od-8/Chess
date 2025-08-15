@@ -36,11 +36,6 @@ module CallMethods
     board.threefold_repetition?
   end
 
-  # Checks if the fifty move rule enforcable
-  def draw_by_fifty_moves_rule?
-    board.fifty_move_rule?
-  end
-
   # Updates board.previous_boards
   def update_previous_boards
     board.update_previous_boards(current_player.color)

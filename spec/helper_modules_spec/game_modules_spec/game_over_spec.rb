@@ -14,146 +14,252 @@ RSpec.describe GameOver do
   let(:test_player) { instance_double(Player) }
   let(:test_board) { instance_double(Board) }
 
-  describe "#print_checkmate?" do
-    context "when white king is in checkmate" do
+  describe "#checkmate?" do
+    context "when checkmate is true for white" do
       before do
-        allow(test_board).to receive(:board).and_return(nil)
-        allow(test_board).to receive(:in_checkmate?).with("white").and_return(true)
         allow(test_board).to receive(:in_check?).with(nil, "white").and_return(true)
+        allow(test_board).to receive(:in_checkmate?).with("white").and_return(true)
+        allow(test_board).to receive(:in_check?).with(nil, "black").and_return(false)
+        allow(test_board).to receive(:in_checkmate?).with("black").and_return(false)
+        allow(test_board).to receive(:board)
         allow(test_game).to receive(:puts) # rubocop:disable RSpec/SubjectStub
       end
 
+      it "print in checkmate statement for white" do
+        test_game.checkmate?
+
+        checkmate_line = "\e[0;31;49m White king is in checkmate\e[0m"
+        expect(test_game).to have_received(:puts).with(checkmate_line).once # rubocop:disable RSpec/SubjectStub
+      end
+
       it "returns true" do
-        color = "white"
-        checkmate = test_game.print_checkmate?(color)
+        checkmate = test_game.checkmate?
+
         expect(checkmate).to be(true)
       end
     end
 
-    context "when black king isnt in checkmate" do
+    context "when checkmate is true for black" do
       before do
-        allow(test_board).to receive(:board).and_return(nil)
-        allow(test_board).to receive(:in_checkmate?).with("black").and_return(false)
+        allow(test_board).to receive(:in_check?).with(nil, "white").and_return(false)
+        allow(test_board).to receive(:in_checkmate?).with("white").and_return(false)
         allow(test_board).to receive(:in_check?).with(nil, "black").and_return(true)
+        allow(test_board).to receive(:in_checkmate?).with("black").and_return(true)
+        allow(test_board).to receive(:board)
         allow(test_game).to receive(:puts) # rubocop:disable RSpec/SubjectStub
       end
 
+      it "print in checkmate statement for black" do
+        test_game.checkmate?
+
+        checkmate_line = "\e[0;31;49m Black king is in checkmate\e[0m"
+        expect(test_game).to have_received(:puts).with(checkmate_line).once # rubocop:disable RSpec/SubjectStub
+      end
+
+      it "returns true" do
+        result = test_game.checkmate?
+
+        expect(result).to be(true)
+      end
+    end
+
+    context "when checkmate isnt true" do
+      before do
+        allow(test_board).to receive_messages(in_check?: false, in_checkmate?: false)
+        allow(test_board).to receive(:board)
+        allow(test_game).to receive(:print_checkmate) # rubocop:disable RSpec/SubjectStub
+      end
+
       it "returns false" do
-        color = "black"
-        checkmate = test_game.print_checkmate?(color)
-        expect(checkmate).to be(false)
+        result = test_game.checkmate?
+
+        expect(result).to be(false)
       end
     end
   end
 
-  describe "#print_stalemate?" do
-    context "when black king is in stalemate" do
+  describe "#checkmate_for?" do
+    context "when white is in checkmate" do
       before do
-        allow(test_board).to receive(:board).and_return(nil)
-        allow(test_board).to receive(:in_checkmate?).with("black").and_return(true)
-        allow(test_board).to receive(:in_check?).with(nil, "black").and_return(false)
-        allow(test_player).to receive(:color).and_return("white")
-        allow(test_game).to receive(:puts) # rubocop:disable RSpec/SubjectStub
+        allow(test_board).to receive_messages(in_check?: true, in_checkmate?: true)
+        allow(test_board).to receive(:board)
       end
 
       it "returns true" do
-        color = "black"
-        stalemate = test_game.print_stalemate?(color)
-        expect(stalemate).to be(true)
+        result = test_game.checkmate_for?("white")
+
+        expect(result).to be(true)
       end
     end
 
-    context "when white king isnt in stalemate" do
+    context "when black isnt in checkmate" do
       before do
-        allow(test_board).to receive(:board).and_return(nil)
+        allow(test_board).to receive_messages(in_check?: true, in_checkmate?: false)
+        allow(test_board).to receive(:board)
+      end
+
+      it "returns false" do
+        result = test_game.checkmate_for?("black")
+
+        expect(result).to be(false)
+      end
+    end
+  end
+
+  describe "#stalemate?" do
+    context "when white is in stalemate" do
+      before do
+        allow(test_board).to receive(:board)
+        allow(test_board).to receive(:in_check?).with(nil, "white").and_return(false)
         allow(test_board).to receive(:in_checkmate?).with("white").and_return(true)
-        allow(test_board).to receive(:in_check?).with(nil, "white").and_return(true)
+        allow(test_board).to receive(:in_check?).with(nil, "black").and_return(false)
+        allow(test_board).to receive(:in_checkmate?).with("black").and_return(false)
         allow(test_player).to receive(:color).and_return("black")
         allow(test_game).to receive(:puts) # rubocop:disable RSpec/SubjectStub
       end
 
+      it "print in stalemate statement" do
+        test_game.stalemate?
+
+        stalemate_line = "\e[0;31;49m Stalemate. Draw\e[0m"
+        expect(test_game).to have_received(:puts).with(stalemate_line).once # rubocop:disable RSpec/SubjectStub
+      end
+
+      it "returns true" do
+        result = test_game.stalemate?
+        expect(result).to be(true)
+      end
+    end
+
+    context "when black is in stalemate" do
+      before do
+        allow(test_board).to receive(:board)
+        allow(test_board).to receive(:in_check?).with(nil, "white").and_return(false)
+        allow(test_board).to receive(:in_checkmate?).with("white").and_return(false)
+        allow(test_board).to receive(:in_check?).with(nil, "black").and_return(false)
+        allow(test_board).to receive(:in_checkmate?).with("black").and_return(true)
+        allow(test_player).to receive(:color).and_return("white")
+        allow(test_game).to receive(:puts) # rubocop:disable RSpec/SubjectStub
+      end
+
+      it "print in stalemate statement" do
+        test_game.stalemate?
+
+        stalemate_line = "\e[0;31;49m Stalemate. Draw\e[0m"
+        expect(test_game).to have_received(:puts).with(stalemate_line).once # rubocop:disable RSpec/SubjectStub
+      end
+
+      it "returns true" do
+        result = test_game.stalemate?
+        expect(result).to be(true)
+      end
+    end
+
+    context "when neither are in stalemate" do
+      before do
+        allow(test_board).to receive(:board)
+        allow(test_board).to receive_messages(in_check?: false, in_checkmate?: false)
+        allow(test_player).to receive(:color)
+        allow(test_game).to receive(:puts) # rubocop:disable RSpec/SubjectStub
+      end
+
       it "returns false" do
-        color = "white"
-        stalemate = test_game.print_stalemate?(color)
-        expect(stalemate).to be(false)
+        result = test_game.stalemate?
+        expect(result).to be(false)
+      end
+    end
+  end
+
+  describe "#in_stalemate?" do
+    context "when white is in stalemate" do
+      before do
+        allow(test_board).to receive(:board)
+        allow(test_board).to receive_messages(in_check?: false, in_checkmate?: true)
+        allow(test_player).to receive(:color).and_return("black")
+      end
+
+      it "returns true" do
+        result = test_game.in_stalemate?("white")
+        expect(result).to be(true)
+      end
+    end
+
+    context "when black isnt in stalemate" do
+      before do
+        allow(test_board).to receive(:board)
+        allow(test_board).to receive_messages(in_check?: true, in_checkmate?: true)
+        allow(test_player).to receive(:color).and_return("white")
+      end
+
+      it "returns false" do
+        result = test_game.in_stalemate?("black")
+        expect(result).to be(false)
       end
     end
   end
 
   describe "#insufficient_material?" do
-    context "when there is enough material on the board" do
+    context "when insufficent material is true" do
       before do
         allow(test_board).to receive(:insufficient_material?).and_return(true)
         allow(test_game).to receive(:puts) # rubocop:disable RSpec/SubjectStub
       end
 
+      it "prints insufficient material statement" do
+        test_game.insufficient_material?
+
+        insufficient_material_line = "\e[0;31;49m Insufficinet material. Draw\e[0m"
+        expect(test_game).to have_received(:puts).with(insufficient_material_line).once # rubocop:disable RSpec/SubjectStub
+      end
+
       it "returns true" do
-        insufficient_material = test_game.insufficient_material?
-        expect(insufficient_material).to be(true)
+        result = test_game.insufficient_material?
+
+        expect(result).to be(true)
       end
     end
 
-    context "when there isnt enough material on the board" do
+    context "when insufficient material is false" do
       before do
         allow(test_board).to receive(:insufficient_material?).and_return(false)
-        allow(test_game).to receive(:puts) # rubocop:disable RSpec/SubjectStub
       end
 
       it "returns false" do
-        insufficient_material = test_game.insufficient_material?
-        expect(insufficient_material).to be(false)
+        result = test_game.insufficient_material?
+
+        expect(result).to be(false)
       end
     end
   end
 
-  describe "#threefold_repitition?" do
-    context "when there is threefold reptetition" do
+  describe "threefold_repetition?" do
+    context "when threefold repetition is true" do
       before do
         allow(test_board).to receive(:threefold_repetition?).and_return(true)
         allow(test_game).to receive(:puts) # rubocop:disable RSpec/SubjectStub
       end
 
+      it "print threefold repetition statement" do
+        test_game.threefold_repetition?
+
+        threefold_repetition_line = "\e[0;31;49m Threefold repetition. Draw\e[0m"
+        expect(test_game).to have_received(:puts).with(threefold_repetition_line) # rubocop:disable RSpec/SubjectStub
+      end
+
       it "returns true" do
-        threefold_repitition = test_game.threefold_repetition?
-        expect(threefold_repitition).to be(true)
+        result = test_game.threefold_repetition?
+        expect(result).to be(true)
       end
     end
 
-    context "when there isnt threefold repetition" do
+    context "when threefold_repitition is false" do
       before do
         allow(test_board).to receive(:threefold_repetition?).and_return(false)
-        allow(test_game).to receive(:puts) # rubocop:disable RSpec/SubjectStub
       end
 
       it "returns false" do
-        insufficient_material = test_game.threefold_repetition?
-        expect(insufficient_material).to be(false)
-      end
-    end
-  end
-
-  describe "#fifty_move_rule?" do
-    context "when the game has reached the 50 move mark" do
-      before do
-        allow(test_board).to receive(:fifty_move_rule?).and_return(true)
-        allow(test_game).to receive(:puts) # rubocop:disable RSpec/SubjectStub
-      end
-
-      it "returns true" do
-        fifty_move_rule = test_game.fifty_move_rule?
-        expect(fifty_move_rule).to be(true)
-      end
-    end
-
-    context "when the game hasnt reached the 50 move mark" do
-      before do
-        allow(test_board).to receive(:fifty_move_rule?).and_return(false)
-        allow(test_game).to receive(:puts) # rubocop:disable RSpec/SubjectStub
-      end
-
-      it "returns false" do
-        fifty_move_rule = test_game.fifty_move_rule?
-        expect(fifty_move_rule).to be(false)
+        result = test_game.threefold_repetition?
+        expect(result).to be(false)
       end
     end
   end

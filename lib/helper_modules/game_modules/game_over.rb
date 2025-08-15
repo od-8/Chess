@@ -3,6 +3,7 @@ module GameOver
   # Handles Checkmate
   def checkmate?
     color = nil
+
     color = "white" if checkmate_for?("white")
     color = "black" if checkmate_for?("black")
 
@@ -47,7 +48,7 @@ module GameOver
   end
 
   # Print statement for when either king is in stalemate
-  def print_stalemate?
+  def print_stalemate
     puts " Stalemate. Draw".colorize(:red)
     puts ""
   end
