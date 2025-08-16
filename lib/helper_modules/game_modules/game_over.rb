@@ -1,5 +1,23 @@
 # Handles all the print statement for different conditions
 module GameOver
+  # Checks if check is true
+  def check?
+    return true if print_check?("white") || print_check?("black")
+
+    false
+  end
+
+  # Print statement for when either king is in check
+  def print_check?(color)
+    return false unless in_check?(board.board, color)
+
+    @lines_to_clear += 2
+    puts " #{color.capitalize} king is in check".colorize(:green)
+    puts ""
+
+    true
+  end
+
   # Handles Checkmate
   def checkmate?
     color = nil

@@ -14,6 +14,63 @@ RSpec.describe GameOver do
   let(:test_player) { instance_double(Player) }
   let(:test_board) { instance_double(Board) }
 
+  describe "#check?" do
+    context "when check is true for white" do
+      before do
+        allow(test_board).to receive(:board)
+        allow(test_board).to receive(:in_check?).with(nil, "white").and_return(true)
+        allow(test_board).to receive(:in_check?).with(nil, "black").and_return(false)
+        allow(test_game).to receive(:puts) # rubocop:disable RSpec/SubjectStub
+      end
+
+      it "print in check statement for white" do
+        test_game.check?
+
+        check_line = "\e[0;32;49m White king is in check\e[0m"
+        expect(test_game).to have_received(:puts).with(check_line) # rubocop:disable RSpec/SubjectStub
+      end
+
+      it "returns true" do
+        result = test_game.check?
+        expect(result).to be(true)
+      end
+    end
+
+    context "when check is true for black" do
+      before do
+        allow(test_board).to receive(:board)
+        allow(test_board).to receive(:in_check?).with(nil, "black").and_return(true)
+        allow(test_board).to receive(:in_check?).with(nil, "white").and_return(false)
+        allow(test_game).to receive(:puts) # rubocop:disable RSpec/SubjectStub
+      end
+
+      it "print in check statement for black" do
+        test_game.check?
+
+        check_line = "\e[0;32;49m Black king is in check\e[0m"
+        expect(test_game).to have_received(:puts).with(check_line) # rubocop:disable RSpec/SubjectStub
+      end
+
+      it "returns true" do
+        result = test_game.check?
+        expect(result).to be(true)
+      end
+    end
+
+    context "when neither are in check" do
+      before do
+        allow(test_board).to receive(:board)
+        allow(test_board).to receive(:in_check?).and_return(false)
+        allow(test_game).to receive(:puts) # rubocop:disable RSpec/SubjectStub
+      end
+
+      it "returns false" do
+        result = test_game.check?
+        expect(result).to be(false)
+      end
+    end
+  end
+
   describe "#checkmate?" do
     context "when checkmate is true for white" do
       before do

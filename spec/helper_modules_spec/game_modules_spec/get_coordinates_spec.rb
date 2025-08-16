@@ -40,7 +40,7 @@ RSpec.describe GetCoordinates do
         test_board.board[7][0] = test_bishop
         allow(test_bishop).to receive(:color).and_return("white")
         allow(test_player).to receive(:color).and_return("white")
-        allow(test_game).to receive(:take_input).and_return(["a1", "h8"]) # rubocop:disable RSpec/SubjectStub
+        allow(test_game).to receive(:take_input).and_return(%w[a1 h8]) # rubocop:disable RSpec/SubjectStub
       end
 
       it "returns valid coordiantes as integers in an array" do

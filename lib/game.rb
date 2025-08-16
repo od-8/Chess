@@ -65,11 +65,13 @@ class Game
   # Gets cords and move then checks to make sure this doesnt inflict check on the current palyer
   def move_loop
     loop do
-      piece, piece_cords, move_cords = legal_move
+      piece_cords, move_cords = legal_input
 
-      return piece if %w[save quit draw].include?(piece)
+      return piece_cords if %w[save quit draw].include?(piece_cords)
 
-      next unless valid_move?(piece, piece_cords, move_cords)
+      piece = board.board[piece_cords[0]][piece_cords[1]]
+
+      next unless allowed_move?(piece, piece_cords, move_cords)
 
       move(piece, piece_cords, move_cords)
 
@@ -77,19 +79,11 @@ class Game
     end
   end
 
-  # Gets the cords then checks if the piece the player has chosen can make that move
-  def legal_move
-    loop do
-      piece_cords, move_cords, = legal_input
+  def allowed_move?(piece, piece_cords, move_cords)
+    return true if legal_piece_move?(piece, piece_cords, move_cords) &&
+                   valid_move?(piece, piece_cords, move_cords)
 
-      return piece_cords if %w[save quit draw].include?(piece_cords)
-
-      piece = board.board[piece_cords[0]][piece_cords[1]]
-
-      next unless legal_piece_move?(piece, piece_cords, move_cords)
-
-      return [piece, piece_cords, move_cords]
-    end
+    false
   end
 
   # Makes sure the piece can move there and the square is unnocupied
@@ -128,21 +122,5 @@ class Game
   # Updates the current player
   def update_current_player
     @current_player = current_player == player1 ? player2 : player1
-  end
-
-  # Checks if check is true
-  def check?
-    return true if print_check?("white") || print_check?("black")
-
-    false
-  end
-
-  # Print statement for when either king is in check
-  def print_check?(color)
-    return false unless in_check?(board.board, color)
-
-    @lines_to_clear += 2
-    puts " #{color.capitalize} king is in check".colorize(:green)
-    puts ""
   end
 end
