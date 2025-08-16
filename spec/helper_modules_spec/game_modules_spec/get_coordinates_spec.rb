@@ -15,6 +15,64 @@ RSpec.describe GetCoordinates do
   let(:test_player) { instance_double(Player) }
   let(:test_board) { Board.new("8/8/8/8/8/8/8/8") }
 
+  describe "#legal_input" do
+    context "when stopping game is false once" do
+      before do
+        allow(test_game).to receive(:take_input).and_return(%w[a9 b7], "quit") # rubocop:disable RSpec/SubjectStub
+        allow(test_game).to receive(:valid_coordinates?) # rubocop:disable RSpec/SubjectStub
+      end
+
+      it "calls #take_input twice" do
+        test_game.legal_input
+        expect(test_game).to have_received(:valid_coordinates?).with(%w[a9 b7]).once # rubocop:disable RSpec/SubjectStub
+      end
+
+      it "returns quit" do
+        result = test_game.legal_input
+        expect(result).to eq("quit")
+      end
+    end
+
+    context "when inputed cords are valid" do
+      let(:test_bishop) { instance_double(Bishop) }
+
+      before do
+        test_board.board[7][0] = test_bishop
+        allow(test_bishop).to receive(:color).and_return("white")
+        allow(test_player).to receive(:color).and_return("white")
+        allow(test_game).to receive(:take_input).and_return(["a1", "h8"]) # rubocop:disable RSpec/SubjectStub
+      end
+
+      it "returns valid coordiantes as integers in an array" do
+        result = test_game.legal_input
+        expect(result).to eq([[7, 0], [0, 7]])
+      end
+    end
+  end
+
+  describe "#valid_coordiantes?" do
+    context "when the cords are valid" do
+      it "returns true" do
+        result = test_game.valid_coordinates?(%w[a1 h8])
+        expect(result).to be(true)
+      end
+    end
+
+    context "when one of the cords are an empty string" do
+      it "returns false" do
+        result = test_game.valid_coordinates?(["b4", ""])
+        expect(result).to be(false)
+      end
+    end
+
+    context "when one of the cords are invalid" do
+      it "returns false" do
+        result = test_game.valid_coordinates?(%w[b4 a9])
+        expect(result).to be(false)
+      end
+    end
+  end
+
   describe "#legal_coordiantes?" do
     context "when coordiantes are legal" do
       it "returns true" do
@@ -82,32 +140,43 @@ RSpec.describe GetCoordinates do
     end
   end
 
-  describe "#draw_or_quit?" do
-    context "when player inputs draw" do
+  describe "stopping the game" do
+    context "when the word is save" do
+      it "returns true" do
+        result = test_game.stopping_game?("save")
+        expect(result).to be(true)
+      end
+    end
+
+    context "when the word is quit" do
+      it "returns true" do
+        result = test_game.stopping_game?("quit")
+        expect(result).to be(true)
+      end
+    end
+
+    context "when the word is draw and half moves is over 99" do
       before do
-        test_board.half_moves = 100
+        allow(test_board).to receive(:half_moves).and_return(100)
       end
 
       it "returns true" do
-        cords = "draw"
-        draw_or_quit = test_game.draw_or_quit?(cords)
-        expect(draw_or_quit).to be(true)
+        result = test_game.stopping_game?("draw")
+        expect(result).to be(true)
       end
     end
 
-    context "when player inputs quit" do
-      it "returns true" do
-        cords = "quit"
-        draw_or_quit = test_game.draw_or_quit?(cords)
-        expect(draw_or_quit).to be(true)
-      end
-    end
-
-    context "when player inputs neither quit nor draw" do
+    context "when the word is draw and half moves is less than 99" do
       it "returns false" do
-        cords = ""
-        draw_or_quit = test_game.draw_or_quit?(cords)
-        expect(draw_or_quit).to be(false)
+        result = test_game.stopping_game?("draw")
+        expect(result).to be(false)
+      end
+    end
+
+    context "when the word is not save, draw or quit" do
+      it "returns false" do
+        result = test_game.stopping_game?("ahhh")
+        expect(result).to be(false)
       end
     end
   end
