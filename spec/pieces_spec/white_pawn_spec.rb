@@ -20,7 +20,7 @@ describe WhitePawn do
     context "when move is invalid" do
       let(:move_cords) { [5, 5] }
 
-      it "returns true" do
+      it "returns false" do
         legal_move = test_pawn.legal_move?(board, piece_cords, move_cords)
         expect(legal_move).to be(false)
       end

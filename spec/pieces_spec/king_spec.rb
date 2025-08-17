@@ -75,7 +75,7 @@ describe King do
         allow(castling_rook).to receive_messages(name: "rook", color: "white", has_moved: false)
       end
 
-      it "returns true" do
+      it "returns false" do
         legal_castling = test_king.king_side_is_legal?(board, piece_cords[0], piece_cords[1])
         expect(legal_castling).to be(false)
       end
