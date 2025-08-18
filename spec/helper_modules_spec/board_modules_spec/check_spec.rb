@@ -10,7 +10,31 @@ RSpec.describe Check do
   let(:board) { Array.new(8) { Array.new(8) } }
   let(:test_dummy) { Class.new { extend Check } }
 
-  describe "#pawn_check" do
+  describe "#king_is_in_check?" do
+    let(:white_bishop) { instance_double(Bishop) }
+    let(:king_cords) { [3, 3] }
+
+    context "when black king is in check from a white bishop" do
+      before do
+        allow(white_bishop).to receive_messages(name: "bishop", color: "white")
+        board[7][7] = white_bishop
+      end
+
+      it "returns true" do
+        result = test_dummy.king_is_in_check?(board, king_cords, "black")
+        expect(result).to be(true)
+      end
+    end
+
+    context "when white king isnt in check" do
+      it "returns false" do
+        result = test_dummy.king_is_in_check?(board, king_cords, "white")
+        expect(result).to be(false)
+      end
+    end
+  end
+
+  describe "#pawn_check?" do
     context "when a black king is in check from a white pawn" do
       let(:white_pawn) { instance_double(WhitePawn) }
       let(:king_cords) { [4, 6] }
@@ -40,6 +64,15 @@ RSpec.describe Check do
         expect(pawn_check).to be(true)
       end
     end
+
+    context "when black king isnt in check from a white pawn" do
+      let(:king_cords) { [2, 1] }
+
+      it "returns false" do
+        pawn_check = test_dummy.pawn_check?(board, king_cords, "black")
+        expect(pawn_check).to be(false)
+      end
+    end
   end
 
   describe "#knight_check?" do
@@ -55,6 +88,15 @@ RSpec.describe Check do
       it "returns true" do
         knight_check = test_dummy.knight_check?(board, king_cords, "white")
         expect(knight_check).to be(true)
+      end
+    end
+
+    context "when black king isnt in check from a white knight" do
+      let(:king_cords) { [1, 6] }
+
+      it "returns false" do
+        pawn_check = test_dummy.pawn_check?(board, king_cords, "black")
+        expect(pawn_check).to be(false)
       end
     end
   end
@@ -89,9 +131,18 @@ RSpec.describe Check do
         expect(bishop_check).to be(true)
       end
     end
+
+    context "when black king isnt in check from a white queen or rook" do
+      let(:king_cords) { [2, 1] }
+
+      it "returns false" do
+        pawn_check = test_dummy.pawn_check?(board, king_cords, "black")
+        expect(pawn_check).to be(false)
+      end
+    end
   end
 
-  describe "#inline_check" do
+  describe "#inline_check?" do
     context "when black king is in check from a white rook" do
       let(:rook) { instance_double(Rook) }
       let(:king_cords) { [6, 3] }
@@ -119,6 +170,15 @@ RSpec.describe Check do
       it "returns true" do
         queen_check = test_dummy.inline_check?(board, king_cords, "white")
         expect(queen_check).to be(true)
+      end
+    end
+
+    context "when black king isnt in check from a white queen or rook" do
+      let(:king_cords) { [4, 0] }
+
+      it "returns false" do
+        pawn_check = test_dummy.pawn_check?(board, king_cords, "black")
+        expect(pawn_check).to be(false)
       end
     end
   end
