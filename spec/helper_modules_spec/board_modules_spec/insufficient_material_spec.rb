@@ -4,46 +4,123 @@ require_relative "../../../lib/pieces/bishop"
 require_relative "../../../lib/pieces/knight"
 
 RSpec.describe InsufficientMaterial do
-  subject(:board) { Board.new("8/8/8/8/8/8/8/8/") }
+  subject(:test_board) { Board.new("8/8/8/8/8/8/8/8/") }
 
-  let(:king_arr) { [instance_double(King)] }
+  let(:test_white_king) { King.new("king", "\u2654", "white") }
+  let(:test_black_king) { King.new("king", "\u265a", "black") }
+  let(:test_bishop) { Bishop.new("bishop", "\u2657", "white") }
+  let(:test_knight) { Knight.new("knight", "\u265e", "black") }
+
+  describe "#insufficent_material?" do
+    context "when neither side has enough material" do
+      before do
+        test_board.board[3][5] = test_white_king
+        test_board.board[4][6] = test_bishop
+        test_board.board[6][5] = test_black_king
+        test_board.board[1][2] = test_knight
+      end
+
+      it "returns true" do
+        result = test_board.insufficient_material?
+        expect(result).to be(true)
+      end
+    end
+
+    context "when black doesnt have enough material" do
+      let(:test_white_pawn) { WhitePawn.new("pawn", "\u2659", "white") }
+
+      before do
+        test_board.board[3][5] = test_white_king
+        test_board.board[4][6] = test_bishop
+        test_board.board[2][7] = test_white_pawn
+        test_board.board[6][5] = test_black_king
+        test_board.board[1][2] = test_knight
+      end
+
+      it "returns false" do
+        result = test_board.insufficient_material?
+        expect(result).to be(false)
+      end
+    end
+
+    context "when white doesnt have enough material" do
+      let(:test_black_pawn) { BlackPawn.new("pawn", "\u265f", "black") }
+
+      before do
+        test_board.board[3][5] = test_white_king
+        test_board.board[4][6] = test_bishop
+        test_board.board[6][5] = test_black_king
+        test_board.board[1][2] = test_knight
+        test_board.board[3][5] = test_black_pawn
+      end
+
+      it "returns false" do
+        result = test_board.insufficient_material?
+        expect(result).to be(false)
+      end
+    end
+  end
+
+  describe "#insufficient_color_material?" do
+    context "when there is a white king and a white bishop" do
+      before do
+        test_board.board[5][6] = test_white_king
+        test_board.board[3][4] = test_bishop
+      end
+
+      it "returns true" do
+        result = test_board.insufficient_color_material?("white")
+        expect(result).to be(true)
+      end
+    end
+
+    context "when there is a black king, 1 black bishop and a 1 black knight" do
+      let(:test_bishop) { Bishop.new("bishop", "\u265d", "black") }
+
+      before do
+        test_board.board[4][7] = test_black_king
+        test_board.board[3][0] = test_bishop
+        test_board.board[1][7] = test_knight
+      end
+
+      it "returns false" do
+        result = test_board.insufficient_color_material?("black")
+        expect(result).to be(false)
+      end
+    end
+  end
 
   describe "#not_enough_material" do
     context "when there is 1 white king and 1 white bishop" do
-      let(:dummy_bishop) { instance_double(Bishop) }
-
       it "returns true" do
-        bishops = [dummy_bishop]
-        insufficient_material = board.not_enough_material?(bishops, [], king_arr)
+        insufficient_material = test_board.not_enough_material?([test_bishop], [], [test_white_king])
         expect(insufficient_material).to be(true)
       end
     end
 
     context "when there is 1 black kings and 2 black knights" do
-      let(:dummy_knight_one) { instance_double(Knight) }
-      let(:dummy_knight_two) { instance_double(Knight) }
+      let(:test_knight_two) { Knight.new("knight", "\u265e", "black") }
 
       it "returns true" do
-        knights = [dummy_knight_one, dummy_knight_two]
-        insufficient_material = board.not_enough_material?([], knights, king_arr)
+        knights = [test_knight, test_knight_two]
+        insufficient_material = test_board.not_enough_material?([], knights, [test_black_king])
         expect(insufficient_material).to be(true)
       end
     end
 
     context "when there is 1 white king" do
-      it "retunrs true" do
-        insufficient_material = board.not_enough_material?([], [], king_arr)
+      it "returns true" do
+        insufficient_material = test_board.not_enough_material?([], [], [test_white_king])
         expect(insufficient_material).to be(true)
       end
     end
 
-    context "when there is 1 black king and 2 black bishop" do
-      let(:dummy_bishop_one) { instance_double(Bishop) }
-      let(:dummy_bishop_two) { instance_double(Bishop) }
+    context "when there is 1 black king, 1 black bishop and 1 black knight" do
+      let(:test_black_bishop) { Bishop.new("bishop", "\u265d", "black") }
 
       it "returns false" do
-        bishops = [dummy_bishop_one, dummy_bishop_two]
-        insufficient_material = board.not_enough_material?(bishops, [], king_arr)
+        bishops = [test_black_bishop, test_knight]
+        insufficient_material = test_board.not_enough_material?(bishops, [], [test_black_king])
         expect(insufficient_material).to be(false)
       end
     end
