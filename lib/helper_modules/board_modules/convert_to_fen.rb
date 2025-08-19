@@ -57,7 +57,16 @@ module ConvertToFen
 
       fen_arr << counter if fen_board.chars[index + 1] != "."
     end
+
     fen_arr
+  end
+
+  # Adds the move counters to the fen string
+  def fen_move_counts
+    fen_str = ""
+    fen_str += " #{half_moves}"
+    fen_str += " #{full_moves}"
+    fen_str
   end
 
   # Converts the castling rights to fen
@@ -72,31 +81,30 @@ module ConvertToFen
     "-"
   end
 
-  # Adds the move counters to the fen string
-  def fen_move_counts
-    fen_str = ""
-    fen_str += " #{half_moves}"
-    fen_str += " #{full_moves}"
-    fen_str
-  end
-
   # Gets all legal castling moves for white
-  def white_castling_moves # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
+  def white_castling_moves
     return "" if board[7][4]&.name != "king" || board[7][4]&.has_moved == true
 
     fen_str = ""
-    fen_str += "K" if board[7][7]&.name == "rook" && board[7][7]&.has_moved == false
-    fen_str += "Q" if board[7][0]&.name == "rook" && board[7][0]&.has_moved == false
+    fen_str += "K" if legal_castling?(7, 7)
+    fen_str += "Q" if legal_castling?(7, 0)
     fen_str
   end
 
   # Gets all legal castling moves for black
-  def black_castling_moves # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
+  def black_castling_moves
     return "" if board[0][4]&.name != "king" || board[0][4]&.has_moved == true
 
     fen_str = ""
-    fen_str += "k" if board[0][7]&.name == "rook" && board[0][7]&.has_moved == false
-    fen_str += "q" if board[0][0]&.name == "rook" && board[0][0]&.has_moved == false
+    fen_str += "k" if legal_castling?(0, 7)
+    fen_str += "q" if legal_castling?(0, 0)
     fen_str
+  end
+
+  # Makes sure the rook hasnt moved
+  def legal_castling?(row, column)
+    return true if board[row][column]&.name == "rook" && board[row][column]&.has_moved == false
+
+    false
   end
 end
