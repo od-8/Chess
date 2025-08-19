@@ -23,7 +23,10 @@ module Promotion
 
   # Creates a new piece depending on color
   def make_new_piece(piece, color)
-    new_white_piece(piece) if color == "white"
+    # p piece
+    # p new_white_piece(piece)
+    return new_white_piece(piece) if color == "white"
+
     new_black_piece(piece) if color == "black"
   end
 
