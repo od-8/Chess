@@ -1,5 +1,8 @@
 require_relative "../../../lib/helper_modules/board_modules/convert_to_fen"
 require_relative "../../../lib/board"
+require_relative "../../../lib/pieces/bishop"
+require_relative "../../../lib/pieces/knight"
+require_relative "../../../lib/pieces/black_pawn"
 
 RSpec.describe ConvertToFen do
   subject(:test_board) { Board.new("8/8/8/8/8/8/8/8/") }
@@ -91,7 +94,41 @@ RSpec.describe ConvertToFen do
   end
 
   describe "#convert_piece_to_fen" do
-    
+    context "when the piece is a white knight" do
+      let(:test_white_knight) { Knight.new("knight", "\u2658", "white") }
+
+      it "returns N" do
+        letter = test_board.convert_piece_to_fen(test_white_knight)
+        expect(letter).to eq("N")
+      end
+    end
+
+    context "when the piece is a black knight" do
+      let(:test_black_knight) { Knight.new("knight", "\u265e", "black") }
+
+      it "returns n" do
+        letter = test_board.convert_piece_to_fen(test_black_knight)
+        expect(letter).to eq("n")
+      end
+    end
+
+    context "when the piece is a white bishop" do
+      let(:test_white_bishop) { Bishop.new("bishop", "\u2657", "white") }
+
+      it "returns B" do
+        letter = test_board.convert_piece_to_fen(test_white_bishop)
+        expect(letter).to eq("B")
+      end
+    end
+
+    context "when the piece is a black pawn" do
+      let(:test_black_pawn) { BlackPawn.new("pawn", "\u265f", "black") }
+
+      it "returns p" do
+        letter = test_board.convert_piece_to_fen(test_black_pawn)
+        expect(letter).to eq("p")
+      end
+    end
   end
 
   describe "#convert_to_fen_arr" do
