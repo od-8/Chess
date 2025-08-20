@@ -1,0 +1,19 @@
+---
+- :board: rnbqkbnr/pppp1ppp/8/4p3/3P4/8/PPP1PPPP/RNBQKBNR w - 4 3
+  :previous_boards:
+  - rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq 0 0
+  - rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR b KQkq 0 1
+  - rnbqkbnr/pppp1ppp/8/4p3/3P4/8/PPP1PPPP/RNBQKBNR w KQkq 0 1
+  - rnbqkbnr/pppp1ppp/8/4p3/3P4/8/PPPKPPPP/RNBQ1BNR b kq 1 2
+  - rnbq1bnr/ppppkppp/8/4p3/3P4/8/PPPKPPPP/RNBQ1BNR w - 2 2
+  - rnbq1bnr/ppppkppp/8/4p3/3P4/8/PPP1PPPP/RNBQKBNR b - 3 3
+  - rnbqkbnr/pppp1ppp/8/4p3/3P4/8/PPP1PPPP/RNBQKBNR w - 4 3
+  :passantable_pawn_cords:
+  - 3
+  - 4
+- :player1:
+  - Jimbo
+  - white
+  :player2:
+  - Jeremy
+  - black

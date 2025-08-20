@@ -10,21 +10,18 @@ module Promotion
 
   # Gets the name of the piece the player would like to promote to
   def ask_for_piece
-    piece = nil
-
     loop do
       puts " What piece would you like to promote to"
       piece = gets.chomp.downcase
-      break if legal_piece?(piece)
-    end
+      return piece if legal_piece?(piece)
 
-    piece
+      puts "Enter either queen, rook, bishop or knight".colorize(:red)
+      puts ""
+    end
   end
 
   # Creates a new piece depending on color
   def make_new_piece(piece, color)
-    # p piece
-    # p new_white_piece(piece)
     return new_white_piece(piece) if color == "white"
 
     new_black_piece(piece) if color == "black"

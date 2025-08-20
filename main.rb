@@ -8,9 +8,7 @@ class Chess # rubocop:disable Metrics/ClassLength
   attr_accessor :invalid_moves
 
   def initialize
-    @invalid_moves = -1
-    print_logo
-    game_options
+    @invalid_moves = 3
   end
 
   def print_logo
@@ -23,34 +21,53 @@ class Chess # rubocop:disable Metrics/ClassLength
     puts ""
   end
 
-  # Starts a new game automatically if there are no saved games otherwise gives option
-  def game_options
+  # Print the options of what to do
+  def print_game_options
+    puts "====================================="
+    puts " Enter #{'1'.colorize(:green)} for a new game"
+    puts "------------------------------------"
+    puts " Enter #{'2'.colorize(:green)} to load a game"
+    puts "====================================="
+    puts ""
+  end
+
+  def print_game_info
+    puts "================================================================"
+    puts "  Enter any of these words to do their respective functions"
+    puts '    "save" --> Save and quit the game'
+    puts '    "quit" --> Quit the game without saving'
+    puts '    "draw" --> Claim draw after the fify move rule is reached'
+    puts "================================================================="
+  end
+
+  def start
+    print_logo
     result = `ls lib/saved_games`
-    result.empty? ? start_new_game : give_options
+    result.empty? ? start_new_game : give_game_options
+    print_end_message
   end
 
   def start_new_game
-    # player1, player2 = acquire_valid_names
+    puts " Welcome to chess, please enter the name of each of the players below:"
+    player1, player2 = acquire_valid_names
 
     clear_screen
 
-    # new_game = Game.new(player1, player2)
-    new_game = Game.new("jim", "bob")
-    new_game.play_game
+    print_game_info
 
-    print_end_message
+    new_game = Game.new(player1, player2)
+    new_game.play_game
   end
 
   def acquire_valid_names
     loop do
-      print " Enter the name of player 1: "
+      print " Player 1 name: "
       player1 = gets.chomp.downcase.capitalize
-      print " Enter the name of player 2: "
+      print " Player 2 name: "
       player2 = gets.chomp.downcase.capitalize
 
       @invalid_moves += 4
 
-      # Makes sures the player names arent the same
       return [player1, player2] unless player1 == player2
 
       puts " Your names cannot be the same".colorize(:red)
@@ -58,14 +75,8 @@ class Chess # rubocop:disable Metrics/ClassLength
     end
   end
 
-  def game_choice
-    result = `ls lib/saved_games`
-    result.empty? ? start_new_game : give_options
-  end
-
-  def give_options
-    @invalid_moves += 8
-    print_options
+  def give_game_options
+    print_game_options
 
     num = acquire_game_choice
 
@@ -79,6 +90,10 @@ class Chess # rubocop:disable Metrics/ClassLength
 
     new_game = Game.new
 
+    clear_screen
+
+    print_game_info
+
     new_game.load_prev_game(file_name)
     new_game.play_game
   end
@@ -90,9 +105,12 @@ class Chess # rubocop:disable Metrics/ClassLength
 
     prev_games.split.each do |game|
       puts " - #{game}".colorize(:green)
+      @invalid_moves += 1
     end
 
     puts ""
+
+    @invalid_moves += 4
   end
 
   def acquire_prev_file_name
@@ -101,22 +119,13 @@ class Chess # rubocop:disable Metrics/ClassLength
     loop do
       print "Enter the name of the file you would like to load: "
       file_name = gets.chomp.downcase
-      puts ""
       return file_name if games.include?("#{file_name}.yaml")
 
-      puts "Enter a name of one of the files".colorize(:red)
+      @invalid_moves += 3
+
+      puts "Enter a name of one of the files (without extension)".colorize(:red)
       puts ""
     end
-  end
-
-  # Print the options of what to do
-  def print_options
-    puts "+---+---+---+---+---+---+---+"
-    puts "|  Enter #{'1'.colorize(:green)} for a new game   |"
-    puts "+---+---+---+---+---+---+---+"
-    puts "|  Enter #{'2'.colorize(:green)} to load a game   |"
-    puts "+---+---+---+---+---+---+---+"
-    puts ""
   end
 
   # Gets the choice of what game they would like to play
@@ -124,11 +133,12 @@ class Chess # rubocop:disable Metrics/ClassLength
     loop do
       print "Enter the name of what you would like to do: "
       num = gets.chomp.downcase
-      puts ""
+
+      @invalid_moves += 3
 
       return num if %w[1 2].include?(num)
 
-      puts "Enter either 1 or 2"
+      puts "Enter either 1 or 2".colorize(:red)
       puts ""
     end
   end
@@ -148,4 +158,4 @@ class Chess # rubocop:disable Metrics/ClassLength
   end
 end
 
-Chess.new
+Chess.new.start

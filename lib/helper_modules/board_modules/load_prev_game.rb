@@ -17,10 +17,23 @@ module LoadPreviousGame
   def update_castling_rights(castling)
     return if castling.length == 4
 
+    if castling == "-"
+      update_king_castling
+      return
+    end
+
     white_castling, black_castling = seperate_castling_chars(castling)
 
     update_white_castling_vars(white_castling)
     update_black_castling_vars(black_castling)
+  end
+
+  def update_king_castling
+    white_king_cords = find_king_coordinates(board, "white")
+    black_king_cords = find_king_coordinates(board, "black")
+
+    board[white_king_cords[0]][white_king_cords[1]]&.has_moved = true
+    board[black_king_cords[0]][black_king_cords[1]]&.has_moved = true
   end
 
   # Seperate the black castling moves from the white ones
